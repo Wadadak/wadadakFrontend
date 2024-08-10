@@ -1,10 +1,14 @@
+import { TitleBanner } from '@/components/TitleBanner';
 import Wrapper from '@/components/Wrapper';
 
 const MyPage = () => {
   return (
     <div className="flex flex-col items-center w-full">
+      <TitleBanner>
+        <div className="py-16">🏃🏻내 정보</div>
+      </TitleBanner>
       <Wrapper>
-        <div className="flex flex-col w-full bg-rose-200">
+        <div className="flex flex-col w-full h-[300px] bg-green-200">
           <div>닉네임 프로필수정</div>
           <div className="w-full text-[128px] font-extrabold text-center">
             2453.3
@@ -14,7 +18,10 @@ const MyPage = () => {
       </Wrapper>
       <div className="w-full h-2 bg-gray-200"></div>
       <Wrapper>
-        <div className="flex justify-center"> 내 러닝 내 크루 내 활동</div>
+        <div className="flex justify-center bg-green-200">
+          {' '}
+          내 러닝 내 크루 내 활동
+        </div>
         <div className="flex flex-col w-full bg-green-200">
           <div>프로필 공개여부</div>
           <div className="flex justify-center grid-cols-3 gap-[100px]">
@@ -23,7 +30,7 @@ const MyPage = () => {
             <MyGoalItem title={'연간목표'} />
           </div>
         </div>
-        <div className="flex flex-col">
+        <div className="flex flex-col bg-green-200">
           <div>menu menu menu</div>
           <div className="flex flex-col space-y-4">
             <RunningRecordItem />
@@ -48,14 +55,6 @@ const MyPage = () => {
   );
 };
 export default MyPage;
-
-export async function getStaticProps() {
-  return {
-    props: {
-      commonTitle: '‍🏃️내 정보', // @서율님 제목 부분 여기 확인 부탁드립니다!
-    },
-  };
-}
 
 interface MyGoalItemProps {
   title: string;
