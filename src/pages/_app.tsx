@@ -18,7 +18,7 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
-        <Layout commonTitle={pageProps.commonTitle}>
+        <Layout>
           <Component {...pageProps} />
         </Layout>
       </RecoilRoot>
