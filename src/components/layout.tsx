@@ -1,4 +1,4 @@
-import Footer from '@/components/\bFooter';
+import Footer from '@/components/Footer';
 import Header from '@/components/Header';
 import { PropsWithChildren } from 'react';
 
