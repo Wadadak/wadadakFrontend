@@ -1,4 +1,7 @@
 // 공통 레이아웃
+
+'use client';
+
 import '../styles/globals.css';
 import 'normalize.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
