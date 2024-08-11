@@ -1,10 +1,9 @@
 // 공통 레이아웃
 import '../styles/globals.css';
 import 'normalize.css';
-import type { AppProps } from 'next/app';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RecoilRoot } from 'recoil';
-import Layout from '@/components/layout';
+import Layout from '../components/Layout';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -14,16 +13,19 @@ const queryClient = new QueryClient({
   },
 });
 
-function App({ Component, pageProps }: AppProps) {
+function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <QueryClientProvider client={queryClient}>
-      <RecoilRoot>
-        <Layout>
-          <Component {...pageProps} />
-        </Layout>
-      </RecoilRoot>
-    </QueryClientProvider>
+    <html lang="ko">
+      <head>{/* 메타 태그나 기타 head 요소들 */}</head>
+      <body>
+        <QueryClientProvider client={queryClient}>
+          <RecoilRoot>
+            <Layout>{children}</Layout>
+          </RecoilRoot>
+        </QueryClientProvider>
+      </body>
+    </html>
   );
 }
 
-export default App;
+export default RootLayout;
