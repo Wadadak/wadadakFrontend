@@ -1,6 +1,7 @@
 import React from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Wrapper from './Wrapper';
+import { faMagnifyingGlass } from '@fortawesome/free-solid-svg-icons';
 
 const Header = () => {
   return (
@@ -12,18 +13,27 @@ const Header = () => {
             <div>이름/닉네임</div>
           </div>
           <div className="flex space-x-4 items-center text-[16px] font-bold">
-            <button className="button cursor-pointer" onClick={() => {}}>
+            <button className="" onClick={() => {}}>
               Home
             </button>
-            <button className="button cursor-pointer" onClick={() => {}}>
+            <button className="" onClick={() => {}}>
               About
             </button>
-            <button className="button cursor-pointer" onClick={() => {}}>
+            <button className="" onClick={() => {}}>
               Crew
             </button>
-            <div className="flex items-center border rounded-md py-2 px-3">
-              <input type="text" placeholder="Search in site" className="" />
-              <div>Se</div>
+            <div className="relative flex items-center border rounded-md">
+              <input
+                type="text"
+                placeholder="Search in site"
+                className="py-2 pl-3 pr-8 rounded-md"
+              />
+              <div
+                className="absolute right-3"
+                onClick={() => alert('검색하기')}
+              >
+                <FontAwesomeIcon icon={faMagnifyingGlass} />
+              </div>
             </div>
           </div>
         </div>
