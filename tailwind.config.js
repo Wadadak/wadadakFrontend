@@ -18,8 +18,8 @@ module.exports = {
       {
         mytheme: {
           primary: '#BEE5FA', // 와다닥 메인 컬러
-          secondary: '#ffed4a', // 보조 컬러
-          accent: '#3FBCFF', // 강조 색상
+          secondary: '#aac7e7', // 보조 컬러
+          accent: '#9fa8d0', // 강조 색상
           neutral: '#2a2e37', // 중립 색상
           'base-100': '#FFFFFF', // 기본 배경 색상
 
