@@ -5,7 +5,7 @@ import '../styles/globals.css';
 import 'normalize.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RecoilRoot } from 'recoil';
-import Layout from '@/components/Layout';
+import Layout from '../components/Layout';
 
 const queryClient = new QueryClient({
   defaultOptions: {
