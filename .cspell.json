@@ -9,7 +9,9 @@
     "MyCustomWord",
     "tailwind",
     "tailwindcss",
-    "daisyui"
+    "daisyui",
+    "mytheme",
+    "tanstack"
   ],
   "ignorePaths": [
     // 스펠링 검사를 무시할 파일 및 경로 패턴
