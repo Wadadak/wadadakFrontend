@@ -1,7 +1,14 @@
 import React from 'react';
+import CrewList from '@/components/crew/CrewList';
+import Wrapper from '@/components/Wrapper';
+import { mockCrewList } from '@/mock/mockCrewList';
 
-const CrewPage = () => {
-  return <div>page</div>;
+const ExploreCrewsPage: React.FC = () => {
+  return (
+    <Wrapper>
+      <CrewList crews={mockCrewList} />
+    </Wrapper>
+  );
 };
 
-export default CrewPage;
+export default ExploreCrewsPage;
