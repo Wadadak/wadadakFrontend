@@ -1,4 +1,5 @@
 // 공통 레이아웃
+
 'use client';
 
 import '../styles/globals.css';
