@@ -3,10 +3,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Wrapper from './Wrapper';
 import {
   faBell,
-  faMagnifyingGlass,
   faPersonRunning,
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
+import Avatar from '../common/Avatar';
 
 const Header = () => {
   return (
@@ -17,19 +17,22 @@ const Header = () => {
           <div className="flex items-center space-x-3">
             <FontAwesomeIcon icon={faPersonRunning} className="w-8 h-8" />
             {/* 검색창 */}
-            <div className="relative flex items-center border rounded-md">
-              <input
-                type="text"
-                placeholder="크루 검색하기"
-                className="py-2 pl-3 pr-8 rounded-md"
-              />
-              <div
-                className="absolute right-3"
+            <label className="input input-bordered input-sm flex items-center gap-2">
+              <input type="text" className="grow" placeholder="크루 검색하기" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 16 16"
+                fill="currentColor"
+                className="h-4 w-4 opacity-70"
                 onClick={() => alert('검색하기')}
               >
-                <FontAwesomeIcon icon={faMagnifyingGlass} />
-              </div>
-            </div>
+                <path
+                  fillRule="evenodd"
+                  d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </label>
           </div>
           {/* 오른쪽 레이아웃 */}
           <div className="flex space-x-6">
@@ -40,7 +43,7 @@ const Header = () => {
             />
             <HeaderMenu name={'메시지'} icon={faBell} onMenuClick={() => {}} />
             <HeaderMenu name={'알림'} icon={faBell} onMenuClick={() => {}} />
-            <div className="bg-gray-200 rounded-full w-9 h-9"></div>
+            <Avatar />
           </div>
         </div>
       </Wrapper>
