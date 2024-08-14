@@ -4,7 +4,7 @@ import Wrapper from '@/components/layout/Wrapper';
 import { mockCrewList } from '@/mock/mockCrewList';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 
-const ExploreCrewsPage: React.FC = () => {
+const ExploreCrewsPage = () => {
   return (
     <>
       <TitleBanner>크루 탐색</TitleBanner>
