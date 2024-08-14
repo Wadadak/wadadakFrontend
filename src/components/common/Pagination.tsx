@@ -9,12 +9,12 @@ interface PaginationProps {
   onPageChange: (page: number) => void;
 }
 
-const Pagination: React.FC<PaginationProps> = ({
+const Pagination = ({
   totalItems,
   itemsPerPage,
   currentPage,
   onPageChange,
-}) => {
+}: PaginationProps) => {
   const pageRangeDisplayed = useRecoilValue(pageRangeDisplayedState); // Recoil에서 페이지 범위 값 가져오기
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 

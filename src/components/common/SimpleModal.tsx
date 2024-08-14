@@ -8,12 +8,12 @@ interface SimpleModalProps {
   children: React.ReactNode;
 }
 
-const SimpleModal: React.FC<SimpleModalProps> = ({
+const SimpleModal = ({
   isOpen,
   onClose,
   title,
   children,
-}) => {
+}: SimpleModalProps) => {
   if (!isOpen) return null;
 
   return (
