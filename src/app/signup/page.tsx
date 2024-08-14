@@ -1,6 +1,8 @@
 'use client';
 
-import { TitleBanner } from '@/components/TitleBanner';
+import NumberInput from '@/components/common/NumberInput';
+import TextInput from '@/components/common/TextInput';
+import { TitleBanner } from '@/components/layout/TitleBanner';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 
@@ -179,6 +181,8 @@ const SignUpPage = () => {
                   </button>
                 </div>
               </div>
+              {/* gender */}
+              <Title title={'성별'} htmlFor={''} required={true} />
             </div>
             {/* sign up */}
             <div className="form-control mt-8">
@@ -198,7 +202,7 @@ export default SignUpPage;
 interface TitleProps {
   title: string;
   htmlFor: string;
-  required: boolean; //필수값인지 여부
+  required: boolean;
 }
 const Title = ({ title, htmlFor, required }: TitleProps) => {
   return (
