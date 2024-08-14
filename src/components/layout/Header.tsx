@@ -10,7 +10,7 @@ import {
 
 const Header = () => {
   return (
-    <div className="sticky top-0 flex items-center justify-center h-20 bg-white">
+    <div className="fixed top-0 left-0 w-full z-10 flex items-center justify-center h-20 bg-white shadow-sm">
       <Wrapper>
         <div className="flex justify-between w-full px-8">
           {/* 왼쪽 레이아웃 */}
