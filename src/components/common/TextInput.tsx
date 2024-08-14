@@ -15,24 +15,22 @@ interface TextInputProps {
 }
 
 const TextInput = ({
-  labelClassName = '',
-  inputClassName = '',
-  width = 'xs',
   label,
   value,
   onChange,
   placeholder = '',
   required = false,
   maxLength,
+  labelClassName = '',
+  inputClassName = '',
+  width = 'xs',
   as = 'input',
   rows = 5,
 }: TextInputProps) => {
   const widthClass = `max-w-${width}`;
 
   return (
-    <label
-      className={`form-control w-full py-2 ${widthClass} ${labelClassName}`}
-    >
+    <label className={`form-control w-full py-2 ${labelClassName}`}>
       <div className="label">
         <span className="label-text">
           {label}
@@ -42,7 +40,7 @@ const TextInput = ({
       </div>
       {as === 'textarea' ? (
         <textarea
-          className="textarea textarea-bordered"
+          className="textarea textarea-bordered w-1/2"
           value={value}
           onChange={(e) => onChange(e.target.value)}
           placeholder={placeholder}
