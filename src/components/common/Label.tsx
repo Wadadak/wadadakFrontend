@@ -12,7 +12,7 @@ const Label = ({ label, required = false, children }: LabelProps) => {
   return (
     <label className="form-control w-full py-2">
       <div className="label">
-        <span className="label-text">
+        <span className="label-text text-lg">
           {label}
           {/* 필수 표시 */}
           {required && <span className="text-red-500"> *</span>}
