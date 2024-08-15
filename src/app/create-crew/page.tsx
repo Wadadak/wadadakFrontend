@@ -7,12 +7,25 @@ import TextInput from '@/components/common/TextInput';
 import NumberInput from '@/components/common/NumberInput';
 import Dropdown from '@/components/common/Dropdown';
 import Label from '@/components/common/Label';
+import CheckBox from '@/components/common/CheckBox';
+import { useState } from 'react';
 
 const CreateCrewPage = () => {
+  const [selectedValues, setSelectedValues] = useState<string[]>([]);
+
   const handleChange = (value: string | number) => {
     console.log(value);
   };
 
+  const handleChanges = (newSelectedValues: string[]) => {
+    setSelectedValues(newSelectedValues);
+  };
+
+  const options = [
+    { id: '1', label: 'Option 1' },
+    { id: '2', label: 'Option 2' },
+    { id: '3', label: 'Option 3' },
+  ];
   return (
     <>
       <TitleBanner>크루 만들기</TitleBanner>
@@ -45,6 +58,14 @@ const CreateCrewPage = () => {
         </Label>
         <Label label="크루명을 조회한다면?">
           <p>와다닥</p>
+        </Label>
+        <Label label="응어">
+          <CheckBox
+            options={options}
+            selectedValues={selectedValues}
+            onChange={handleChanges}
+            multiple={true}
+          />
         </Label>
       </Wrapper>
     </>
