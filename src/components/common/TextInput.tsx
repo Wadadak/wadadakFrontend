@@ -1,8 +1,6 @@
 import React from 'react';
-import Label from './Label';
 
 interface TextInputProps {
-  label: string;
   value: string;
   onChange: (value: string) => void;
   type?: string; // input 타입
@@ -15,7 +13,6 @@ interface TextInputProps {
 }
 
 const TextInput = ({
-  label,
   value,
   onChange,
   type = 'text',
@@ -28,31 +25,26 @@ const TextInput = ({
 }: TextInputProps) => {
   const widthClass = `max-w-${width}`;
 
-  return (
-    <label className={`form-control w-full py-2 `}>
-      <Label label={label} required={required} />
-      {as === 'textarea' ? (
-        <textarea
-          className="textarea textarea-bordered w-1/2"
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          maxLength={maxLength}
-          required={required}
-          rows={rows}
-        />
-      ) : (
-        <input
-          className={`input input-bordered w-full ${widthClass}`}
-          type={type}
-          value={value}
-          onChange={(e) => onChange(e.target.value)}
-          placeholder={placeholder}
-          required={required}
-          maxLength={maxLength}
-        />
-      )}
-    </label>
+  return as === 'textarea' ? (
+    <textarea
+      className="textarea textarea-bordered w-1/2"
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      maxLength={maxLength}
+      required={required}
+      rows={rows}
+    />
+  ) : (
+    <input
+      className={`input input-bordered w-full ${widthClass}`}
+      type={type}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+      placeholder={placeholder}
+      required={required}
+      maxLength={maxLength}
+    />
   );
 };
 

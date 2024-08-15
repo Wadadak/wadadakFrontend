@@ -1,8 +1,6 @@
 import React from 'react';
-import Label from './Label';
 
 interface NumberInputProps {
-  label: string;
   value: number;
   onChange: (value: number) => void;
   placeholder?: string;
@@ -12,7 +10,6 @@ interface NumberInputProps {
 }
 
 const NumberInput = ({
-  label,
   value,
   onChange,
   placeholder = '',
@@ -37,17 +34,14 @@ const NumberInput = ({
   };
 
   return (
-    <label className={`form-control w-full py-2 `}>
-      <Label label={label} required={required} />
-      <input
-        className={`input input-bordered w-full ${widthClass} }`}
-        type="text"
-        value={value}
-        onChange={handleChange}
-        placeholder={placeholder}
-        required={required}
-      />
-    </label>
+    <input
+      className={`input input-bordered w-full ${widthClass} }`}
+      type="text"
+      value={value}
+      onChange={handleChange}
+      placeholder={placeholder}
+      required={required}
+    />
   );
 };
 

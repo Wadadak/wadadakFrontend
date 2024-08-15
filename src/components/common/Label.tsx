@@ -5,17 +5,21 @@ import React from 'react';
 interface LabelProps {
   label: string;
   required?: boolean;
+  children: React.ReactNode;
 }
 
-const Label = ({ label, required = false }: LabelProps) => {
+const Label = ({ label, required = false, children }: LabelProps) => {
   return (
-    <div className="label">
-      <span className="label-text">
-        {label}
-        {/* 필수 표시 */}
-        {required && <span className="text-red-500"> *</span>}
-      </span>
-    </div>
+    <label className="form-control w-full py-2">
+      <div className="label">
+        <span className="label-text">
+          {label}
+          {/* 필수 표시 */}
+          {required && <span className="text-red-500"> *</span>}
+        </span>
+      </div>
+      {children} {/* 입력 폼이나 텍스트 렌더링 */}
+    </label>
   );
 };
 
