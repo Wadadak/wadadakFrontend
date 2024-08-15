@@ -5,6 +5,8 @@ import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
 import TextInput from '@/components/common/TextInput';
 import NumberInput from '@/components/common/NumberInput';
+import Dropdown from '@/components/common/Dropdown';
+import Label from '@/components/common/Label';
 
 const CreateCrewPage = () => {
   const handleChange = (value: string | number) => {
@@ -15,30 +17,35 @@ const CreateCrewPage = () => {
     <>
       <TitleBanner>크루 만들기</TitleBanner>
       <Wrapper>
-        <TextInput
-          label="크루명"
-          value=""
-          onChange={handleChange}
-          placeholder="name"
-          required={true}
-          maxLength={30}
-        />
-        <TextInput
-          label="크루 소개"
-          value=""
-          onChange={handleChange}
-          placeholder="description"
-          required={true}
-          maxLength={500}
-          width="xl"
-          as="textarea"
-        />
-        <NumberInput
-          label="크루 정원"
-          value={100}
-          onChange={handleChange}
-          placeholder="capacity"
-        />
+        <Label label="크루명" required={true}>
+          <TextInput
+            value=""
+            onChange={handleChange}
+            placeholder="name"
+            required={true}
+            maxLength={30}
+          />
+        </Label>
+        <Label label="크루 소개" required={true}>
+          <TextInput
+            value=""
+            onChange={handleChange}
+            placeholder="description"
+            required={true}
+            maxLength={500}
+            as="textarea"
+          />
+        </Label>
+        <Label label="크루 정원">
+          <NumberInput
+            value={100}
+            onChange={handleChange}
+            placeholder="capacity"
+          />
+        </Label>
+        <Label label="크루명을 조회한다면?">
+          <p>와다닥</p>
+        </Label>
       </Wrapper>
     </>
   );
