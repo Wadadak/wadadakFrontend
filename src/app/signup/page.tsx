@@ -1,6 +1,8 @@
 'use client';
 
+import Avatar from '@/components/common/Avatar';
 import Dropdown from '@/components/common/Dropdown';
+import { ToggleButton } from '@/components/common/ToggleButtion';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -13,13 +15,40 @@ const SignUpPage = () => {
   const [nickName, setNickName] = useState<string>('');
   const [profileImage, setProfileImage] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>();
+  const [gender, setGender] = useState<string>('');
 
   const router = useRouter();
-  const [isOn, setIsOn] = useState<boolean>(false);
-  const [isOn2, setIsOn2] = useState<boolean>(false);
-  const [isOn3, setIsOn3] = useState<boolean>(false);
-  const [isOn4, setIsOn4] = useState<boolean>(false);
+  const [isNameOn, setIsNameOn] = useState<boolean>(false);
+  const [isProfileOn, setIsProfileOn] = useState<boolean>(false);
+  const [isPhoneNumberOn, setIsPhoneNumberOn] = useState<boolean>(false);
+  const [isGenderOn, setIsGenderOn] = useState<boolean>(false);
+  const [isAgeOn, setIsAgeOn] = useState<boolean>(false);
 
+  const yearList = Array.from({ length: 2024 - 1924 + 1 }, (_, i) => 1924 + i);
+  const regionList = [
+    '전국',
+    '서울특별시',
+    '부산광역시',
+    '대구광역시',
+    '인천광역시',
+    '광주광역시',
+    '대전광역시',
+    '울산광역시',
+    '세종특별자치시',
+    '경기도',
+    '강원도',
+    '충청북도',
+    '충청남도',
+    '전라북도',
+    '전라남도',
+    '경상북도',
+    '경상남도',
+    '제주특별자치도',
+  ];
+
+  const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setGender(event.target.value);
+  };
   const handleSignUp = () => {};
 
   return (
@@ -90,18 +119,10 @@ const SignUpPage = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="text-[12px] font-semibold">프로필 공개</div>
-                  <button
-                    onClick={() => setIsOn(!isOn)}
-                    className={`flex items-center w-11 h-6 p-1 rounded-full transition-colors ${
-                      isOn ? 'bg-primary' : 'bg-gray-300'
-                    }`}
-                  >
-                    <div
-                      className={`w-3 h-3 bg-white rounded-full shadow-md transform transition-transform ${
-                        isOn ? 'translate-x-6' : 'translate-x-1'
-                      }`}
-                    />
-                  </button>
+                  <ToggleButton
+                    onButtonClick={() => setIsNameOn(!isNameOn)}
+                    isOn={isNameOn}
+                  />
                 </div>
               </div>
               {/* nickName */}
@@ -124,27 +145,16 @@ const SignUpPage = () => {
                     htmlFor={'profileImage'}
                     required={true}
                   />
-                  <div className="bg-gray-200 rounded-full w-20 h-20"></div>
+                  <Avatar size="w-24" />
                   <div className="flex items-center space-x-2">
                     <div className="text-[12px] font-semibold">프로필 공개</div>
-                    <button
-                      onClick={() => setIsOn2(!isOn2)}
-                      className={`flex items-center w-11 h-6 p-1 rounded-full transition-colors ${
-                        isOn2 ? 'bg-primary' : 'bg-gray-300'
-                      }`}
-                    >
-                      <div
-                        className={`w-3 h-3 bg-white rounded-full shadow-md transform transition-transform ${
-                          isOn2 ? 'translate-x-6' : 'translate-x-1'
-                        }`}
-                      />
-                    </button>
+                    <ToggleButton
+                      onButtonClick={() => setIsProfileOn(!isProfileOn)}
+                      isOn={isProfileOn}
+                    />
                   </div>
                 </div>
-                <button
-                  className="border-2 border-gray-600 p-2 rounded-lg text-[15px] font-semibold hover:bg-gray-100"
-                  onClick={() => {}}
-                >
+                <button className="btn btn-outline btn-secondary btn-sm">
                   이미지 업로드
                 </button>
               </div>
@@ -167,18 +177,10 @@ const SignUpPage = () => {
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="text-[12px] font-semibold">프로필 공개</div>
-                  <button
-                    onClick={() => setIsOn3(!isOn3)}
-                    className={`flex items-center w-11 h-6 p-1 rounded-full transition-colors ${
-                      isOn3 ? 'bg-primary' : 'bg-gray-300'
-                    }`}
-                  >
-                    <div
-                      className={`w-3 h-3 bg-white rounded-full shadow-md transform transition-transform ${
-                        isOn3 ? 'translate-x-6' : 'translate-x-1'
-                      }`}
-                    />
-                  </button>
+                  <ToggleButton
+                    onButtonClick={() => setIsPhoneNumberOn(!isPhoneNumberOn)}
+                    isOn={isPhoneNumberOn}
+                  />
                 </div>
               </div>
               {/* gender */}
@@ -187,38 +189,83 @@ const SignUpPage = () => {
                   <Title title={'성별'} htmlFor={''} required={true} />
                   <div className="flex space-x-10 pl-1">
                     <div className="flex space-x-3">
-                      <input type="radio" className="cursor-pointer" />
+                      <input
+                        type="radio"
+                        name="gender"
+                        value={'M'}
+                        className="cursor-pointer"
+                        onChange={handleGenderChange}
+                      />
                       <span>남</span>
                     </div>
                     <div className="flex space-x-3">
-                      <input type="radio" className="cursor-pointer" />
+                      <input
+                        type="radio"
+                        name="gender"
+                        value={'F'}
+                        className="cursor-pointer"
+                        onChange={handleGenderChange}
+                      />
                       <span>여</span>
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="text-[12px] font-semibold">프로필 공개</div>
-                  <button
-                    onClick={() => setIsOn4(!isOn4)}
-                    className={`flex items-center w-11 h-6 p-1 rounded-full transition-colors ${
-                      isOn4 ? 'bg-primary' : 'bg-gray-300'
-                    }`}
-                  >
-                    <div
-                      className={`w-3 h-3 bg-white rounded-full shadow-md transform transition-transform ${
-                        isOn4 ? 'translate-x-6' : 'translate-x-1'
-                      }`}
-                    />
-                  </button>
+                  <ToggleButton
+                    onButtonClick={() => setIsGenderOn(!isGenderOn)}
+                    isOn={isGenderOn}
+                  />
                 </div>
               </div>
               {/* age */}
-              <div>
+              <div className="flex flex-col space-y-1">
                 <Title title={'나이'} htmlFor={''} required={true} />
+                <div className="dropdown dropdown-hover">
+                  <div tabIndex={0} role="button" className="btn m-1">
+                    나이를 선택해 주세요.
+                  </div>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+                  >
+                    {yearList.map((year) => {
+                      return (
+                        <li>
+                          <a>{year}</a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="text-[12px] font-semibold">프로필 공개</div>
+                  <ToggleButton
+                    onButtonClick={() => setIsAgeOn(!isAgeOn)}
+                    isOn={isAgeOn}
+                  />
+                </div>
               </div>
               {/* activity area */}
               <div>
                 <Title title={'활동지역'} htmlFor={''} required={true} />
+                <div className="dropdown dropdown-hover">
+                  <div tabIndex={0} role="button" className="btn m-1">
+                    활동지역을 선택해 주세요.
+                  </div>
+                  <ul
+                    tabIndex={0}
+                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+                  >
+                    {regionList.map((region) => {
+                      return (
+                        <li>
+                          <a>{region}</a>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
               </div>
             </div>
             {/* sign up */}
