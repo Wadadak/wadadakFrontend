@@ -1,4 +1,5 @@
 import React from 'react';
+import Label from './Label';
 
 interface NumberInputProps {
   label: string;
@@ -7,8 +8,6 @@ interface NumberInputProps {
   placeholder?: string;
   required?: boolean;
   min?: number; // 최소값 제한
-  labelClassName?: string; // <label> 요소의 추가 클래스
-  inputClassName?: string; // <input> 요소의 추가 클래스
   width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
 }
 
@@ -19,8 +18,6 @@ const NumberInput = ({
   placeholder = '',
   required = false,
   min = 1,
-  labelClassName = '',
-  inputClassName = '',
   width = 'xs',
 }: NumberInputProps) => {
   const widthClass = `max-w-${width}`;
@@ -40,17 +37,10 @@ const NumberInput = ({
   };
 
   return (
-    <label className={`form-control w-full py-2 ${labelClassName}`}>
-      <div className="label">
-        <span className="label-text">
-          {label}
-          {/* 필수 표시 */}
-          {required && <span className="text-red-500"> *</span>}
-        </span>
-      </div>
-
+    <label className={`form-control w-full py-2 `}>
+      <Label label={label} required={required} />
       <input
-        className={`input input-bordered w-full ${widthClass} ${inputClassName}`}
+        className={`input input-bordered w-full ${widthClass} }`}
         type="text"
         value={value}
         onChange={handleChange}

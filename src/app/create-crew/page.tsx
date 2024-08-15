@@ -5,6 +5,7 @@ import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
 import TextInput from '@/components/common/TextInput';
 import NumberInput from '@/components/common/NumberInput';
+import Dropdown from '@/components/common/Dropdown';
 
 const CreateCrewPage = () => {
   const handleChange = (value: string | number) => {
@@ -30,7 +31,6 @@ const CreateCrewPage = () => {
           placeholder="description"
           required={true}
           maxLength={500}
-          width="xl"
           as="textarea"
         />
         <NumberInput
