@@ -1,19 +1,50 @@
 import React from 'react';
 
-const CheckBox = () => {
+interface CheckBoxProps {
+  options: { id: string; label: string }[]; // 옵션 배열 프롭스
+  selectedValues: string[];
+  onChange: (selectedValues: string[]) => void;
+  multiple?: boolean; // 다중 선택 가능 여부
+  size?: 'xs' | 'sm' | 'md' | 'lg'; // 사이즈를 위한 프롭
+}
+
+const CheckBox = ({
+  options,
+  selectedValues,
+  onChange,
+  multiple = false,
+}: CheckBoxProps) => {
+  const handleCheckBoxChange = (id: string, checked: boolean) => {
+    let newSelectedValues: string[];
+
+    if (multiple) {
+      newSelectedValues = checked
+        ? [...selectedValues, id]
+        : selectedValues.filter((value) => value !== id);
+    } else {
+      newSelectedValues = checked ? [id] : [];
+    }
+
+    onChange(newSelectedValues);
+  };
+
   return (
-    <label className="form-control w-full py-2">
-      <div className="form-control">
-        <label className="label cursor-pointer">
-          <span className="label-text">Remember me</span>
+    <div className="form-control">
+      {options.map((option) => (
+        <label
+          key={option.id}
+          className="flex items-center space-x-2 cursor-pointer"
+        >
           <input
             type="checkbox"
-            defaultChecked
-            className="checkbox checkbox-primary"
+            className="checkbox checkbox-primary checkbox-xs"
+            checked={selectedValues.includes(option.id)}
+            onChange={(e) => handleCheckBoxChange(option.id, e.target.checked)}
           />
+          <span className="label-text">{option.label}</span>
         </label>
-      </div>
-    </label>
+      ))}
+    </div>
   );
 };
 
