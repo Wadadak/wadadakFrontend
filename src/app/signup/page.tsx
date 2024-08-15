@@ -1,7 +1,6 @@
 'use client';
 
-import NumberInput from '@/components/common/NumberInput';
-import TextInput from '@/components/common/TextInput';
+import Dropdown from '@/components/common/Dropdown';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
@@ -19,6 +18,7 @@ const SignUpPage = () => {
   const [isOn, setIsOn] = useState<boolean>(false);
   const [isOn2, setIsOn2] = useState<boolean>(false);
   const [isOn3, setIsOn3] = useState<boolean>(false);
+  const [isOn4, setIsOn4] = useState<boolean>(false);
 
   const handleSignUp = () => {};
 
@@ -149,7 +149,7 @@ const SignUpPage = () => {
                 </button>
               </div>
               {/* phoneNumber */}
-              <div className="flex flex-col space-y-4">
+              <div className="flex flex-col space-y-3">
                 <div className="form-control">
                   <Title
                     title={'휴대전화'}
@@ -182,7 +182,44 @@ const SignUpPage = () => {
                 </div>
               </div>
               {/* gender */}
-              <Title title={'성별'} htmlFor={''} required={true} />
+              <div className="flex flex-col space-y-3">
+                <div className="flex flex-col space-y-3">
+                  <Title title={'성별'} htmlFor={''} required={true} />
+                  <div className="flex space-x-10 pl-1">
+                    <div className="flex space-x-3">
+                      <input type="radio" className="cursor-pointer" />
+                      <span>남</span>
+                    </div>
+                    <div className="flex space-x-3">
+                      <input type="radio" className="cursor-pointer" />
+                      <span>여</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <div className="text-[12px] font-semibold">프로필 공개</div>
+                  <button
+                    onClick={() => setIsOn4(!isOn4)}
+                    className={`flex items-center w-11 h-6 p-1 rounded-full transition-colors ${
+                      isOn4 ? 'bg-primary' : 'bg-gray-300'
+                    }`}
+                  >
+                    <div
+                      className={`w-3 h-3 bg-white rounded-full shadow-md transform transition-transform ${
+                        isOn4 ? 'translate-x-6' : 'translate-x-1'
+                      }`}
+                    />
+                  </button>
+                </div>
+              </div>
+              {/* age */}
+              <div>
+                <Title title={'나이'} htmlFor={''} required={true} />
+              </div>
+              {/* activity area */}
+              <div>
+                <Title title={'활동지역'} htmlFor={''} required={true} />
+              </div>
             </div>
             {/* sign up */}
             <div className="form-control mt-8">

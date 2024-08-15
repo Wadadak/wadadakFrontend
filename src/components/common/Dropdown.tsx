@@ -38,9 +38,9 @@ const Dropdown = ({
       </div>
 
       <select className="select select-bordered">
-        <option disabled selected>
+        {/* <option disabled selected>
           {p}
-        </option>
+        </option> */}
         <option>Star Wars</option>
         <option>Harry Potter</option>
         <option>Lord of the Rings</option>
