@@ -7,7 +7,7 @@ interface DropdownOption {
 
 interface DropdownProps {
   options: DropdownOption[]; // 드롭다운에 표시할 옵션 배열
-  onChange: (value: string | string[]) => void;
+  onChange: (value: string | string[] | number) => void;
   placeholder?: string;
   required?: boolean;
   multiple?: boolean; // 다중 선택 가능 여부
