@@ -5,14 +5,22 @@ import React from 'react';
 interface LabelProps {
   label: string;
   required?: boolean;
+  textSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | string;
   children: React.ReactNode;
 }
 
-const Label = ({ label, required = false, children }: LabelProps) => {
+const Label = ({
+  label,
+  required = false,
+  textSize = 'lg',
+  children,
+}: LabelProps) => {
+  const textSizeClass = `text-${textSize}`;
+
   return (
     <label className="form-control w-full py-2">
       <div className="label">
-        <span className="label-text text-lg">
+        <span className={`label-text ${textSizeClass}`}>
           {label}
           {/* 필수 표시 */}
           {required && <span className="text-red-500"> *</span>}
