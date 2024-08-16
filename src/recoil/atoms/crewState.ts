@@ -40,11 +40,11 @@ export const crewGenderRestrictionState = atom<string | ''>({
   default: '', //
 });
 
-export const crewMinAgeState = atom<number | ''>({
+export const crewMinAgeState = atom<number | null>({
   key: 'crewMinAgeState',
-  default: '',
+  default: null,
 });
-export const crewMaxAgeState = atom<number | ''>({
+export const crewMaxAgeState = atom<number | null>({
   key: 'crewMinAgeState',
-  default: '',
+  default: null,
 });

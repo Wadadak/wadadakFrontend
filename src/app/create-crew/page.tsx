@@ -12,6 +12,7 @@ import Dropdown from '@/components/common/Dropdown';
 import Label from '@/components/common/Label';
 import CheckBox from '@/components/common/CheckBox';
 import Button from '@/components/common/Button';
+import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
 
 const CreateCrewPage = () => {
   const {
@@ -109,7 +110,12 @@ const CreateCrewPage = () => {
             onChange={(values) => setGenderRestriction(values[0])}
           />
         </Label>
-
+        <MinMaxYearSelector
+          minYear={minAge}
+          maxYear={maxAge}
+          onMinYearChange={setMinAge}
+          onMaxYearChange={setMaxAge}
+        />
         <Button outline={true}>하이</Button>
       </Wrapper>
     </>
