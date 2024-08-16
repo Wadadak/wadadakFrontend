@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface CheckBoxProps {
-  options: { id: string; label: string }[]; // 옵션 배열 프롭스
+  options: { id: string; name: string }[]; // 옵션 배열 프롭스
   selectedValues: string[];
   onChange: (selectedValues: string[]) => void;
   multiple?: boolean; // 다중 선택 가능 여부
@@ -41,7 +41,7 @@ const CheckBox = ({
             checked={selectedValues.includes(option.id)}
             onChange={(e) => handleCheckBoxChange(option.id, e.target.checked)}
           />
-          <span className="label-text">{option.label}</span>
+          <span className="label-text">{option.name}</span>
         </label>
       ))}
     </div>
