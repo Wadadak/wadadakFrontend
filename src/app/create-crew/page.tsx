@@ -8,7 +8,11 @@ import TextInput from '@/components/common/TextInput';
 import NumberInput from '@/components/common/NumberInput';
 import Dropdown from '@/components/common/Dropdown';
 import Label from '@/components/common/Label';
+<<<<<<< HEAD
 import CheckBox from '@/components/common/CheckBox';
+=======
+import Button from '@/components/common/Button';
+>>>>>>> 52d75970f7020897765ca50462c98e759fea49b3
 
 const CreateCrewPage = () => {
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
@@ -59,6 +63,7 @@ const CreateCrewPage = () => {
         <Label label="크루명을 조회한다면?">
           <p>와다닥</p>
         </Label>
+<<<<<<< HEAD
         <Label label="응어">
           <CheckBox
             options={options}
@@ -67,6 +72,9 @@ const CreateCrewPage = () => {
             multiple={true}
           />
         </Label>
+=======
+        <Button outline={true}>하이</Button>
+>>>>>>> 52d75970f7020897765ca50462c98e759fea49b3
       </Wrapper>
     </>
   );
