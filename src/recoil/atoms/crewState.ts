@@ -20,19 +20,19 @@ export const crewLocationState = atom<string>({
 });
 export const runningRecordRequiredState = atom<boolean>({
   key: 'crewPublicRecordState',
-  default: false,
+  default: true,
 });
 export const crewApprovalRequiredState = atom<boolean>({
   key: 'crewApprovalRequiredState',
-  default: false,
+  default: true,
 });
 export const crewImageState = atom<File | null>({
   key: 'crewImageState',
   default: null,
 });
-export const crewCapacityState = atom<number | ''>({
+export const crewCapacityState = atom<number | undefined>({
   key: 'crewCapacityState',
-  default: '',
+  default: undefined,
 });
 
 export const crewGenderRestrictionState = atom<string | ''>({

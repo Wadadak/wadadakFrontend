@@ -55,14 +55,25 @@ export const useCreateCrew = () => {
 
   return {
     name,
+    setName,
     description,
+    setDescription,
     location,
+    setLocation,
     recordRequired,
+    setRecordRequired,
     approvalRequired,
+    setApprovalRequired,
     image,
+    handleImageUpload,
     capacity,
+    setCapacity,
     genderRestriction,
+    setGenderRestriction,
     maxAge,
+    setMaxAge,
     minAge,
+    setMinAge,
+    handleSubmit, // 폼 제출 핸들러
   };
 };
