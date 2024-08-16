@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { useCreateCrew } from '@/hooks/useCreateCrew';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
 import TextInput from '@/components/common/TextInput';
@@ -8,7 +9,6 @@ import NumberInput from '@/components/common/NumberInput';
 import Dropdown from '@/components/common/Dropdown';
 import Label from '@/components/common/Label';
 import CheckBox from '@/components/common/CheckBox';
-import { useState } from 'react';
 
 const CreateCrewPage = () => {
   const [selectedValues, setSelectedValues] = useState<string[]>([]);
