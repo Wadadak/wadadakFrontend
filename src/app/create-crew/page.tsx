@@ -102,9 +102,8 @@ const CreateCrewPage = () => {
         <Label label="성별 제한">
           <CheckBox
             options={[
-              { id: 'none', name: '제한 없음' },
-              { id: 'male', name: '남성만' },
-              { id: 'female', name: '여성만' },
+              { id: 'male', name: '남성' },
+              { id: 'female', name: '여성' },
             ]}
             selectedValues={[genderRestriction]}
             onChange={(values) => setGenderRestriction(values[0])}
