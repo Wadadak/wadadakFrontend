@@ -1,10 +1,10 @@
 import React from 'react';
 import CrewList from '@/components/crew/CrewList';
 import Wrapper from '@/components/layout/Wrapper';
-import { mockCrewList } from '@/mock/mockCrewList';
+import { mockCrewList } from '@/mocks/mockData/mockCrewList';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 
-const ExploreCrewsPage: React.FC = () => {
+const ExploreCrewsPage = () => {
   return (
     <>
       <TitleBanner>크루 탐색</TitleBanner>
@@ -16,4 +16,3 @@ const ExploreCrewsPage: React.FC = () => {
 };
 
 export default ExploreCrewsPage;
-›
