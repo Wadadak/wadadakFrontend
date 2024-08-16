@@ -17,16 +17,18 @@ const MinMaxYearSelector = ({
 }: MinMaxYearProps) => {
   return (
     <Label label="연령대 제한">
-      <YearOfBirthDropdown
-        selectedYear={minYear}
-        onYearChange={onMinYearChange}
-        placeholder="최소 연령"
-      />
-      <YearOfBirthDropdown
-        selectedYear={maxYear}
-        onYearChange={onMaxYearChange}
-        placeholder="최대 연령"
-      />
+      <div className="flex flex-row space-x-4">
+        <YearOfBirthDropdown
+          selectedYear={minYear}
+          onYearChange={onMinYearChange}
+          placeholder="최소 연령"
+        />
+        <YearOfBirthDropdown
+          selectedYear={maxYear}
+          onYearChange={onMaxYearChange}
+          placeholder="최대 연령"
+        />
+      </div>
     </Label>
   );
 };
