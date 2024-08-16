@@ -11,7 +11,20 @@
     "tailwindcss",
     "daisyui",
     "mytheme",
-    "tanstack"
+    "tanstack",
+    "busan",
+    "daegu",
+    "incheon",
+    "daejeon",
+    "gyeonggi",
+    "gangwon",
+    "chungbuk",
+    "chungnam",
+    "jeonbuk",
+    "jeonnam",
+    "gyeongbuk",
+    "gyeongnam",
+    "jeju"
   ],
   "ignorePaths": [
     // 스펠링 검사를 무시할 파일 및 경로 패턴

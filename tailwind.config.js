@@ -21,6 +21,8 @@ module.exports = {
           secondary: '#aac7e7', // 보조 컬러
           accent: '#9fa8d0', // 강조 색상
           neutral: '#2a2e37', // 중립 색상
+          charcoal: '#333333', // 메인컬러와 어울리는 회색
+
           'base-100': '#FFFFFF', // 기본 배경 색상
           'base-200': '#F8F8F8', //회색 배경 색상
 
