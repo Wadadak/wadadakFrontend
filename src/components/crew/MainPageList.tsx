@@ -20,6 +20,10 @@ const MainPageList = ({ crews }: CrewListProps) => {
     setVisibleItemsCount((prevCount) => prevCount + itemsToAddLoadMore);
   };
 
+  const collapseItems = () => {
+    setVisibleItemsCount(itemsToShowInitially);
+  };
+
   const currentCards = crews.slice(0, visibleItemsCount);
 
   return (
@@ -38,13 +42,17 @@ const MainPageList = ({ crews }: CrewListProps) => {
         ))}
       </div>
 
-      {visibleItemsCount < crews.length && (
-        <div className="text-center mt-8">
+      <div className="text-center mt-8">
+        {visibleItemsCount < crews.length ? (
           <Button onClick={loadMoreItems} wide={true}>
             더보기
           </Button>
-        </div>
-      )}
+        ) : (
+          <Button onClick={collapseItems} wide={true}>
+            접기
+          </Button>
+        )}
+      </div>
     </div>
   );
 };
