@@ -48,8 +48,7 @@ export const useCreateCrew = () => {
     });
   };
 
-  const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0] || null;
+  const handleImageUpload = (file: File | null) => {
     setImage(file);
   };
 

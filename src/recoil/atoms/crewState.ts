@@ -45,6 +45,6 @@ export const crewMinAgeState = atom<number | null>({
   default: null,
 });
 export const crewMaxAgeState = atom<number | null>({
-  key: 'crewMinAgeState',
+  key: 'crewMaxAgeState',
   default: null,
 });

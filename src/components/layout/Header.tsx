@@ -7,23 +7,30 @@ import {
   IconDefinition,
 } from '@fortawesome/free-solid-svg-icons';
 import Avatar from '../common/Avatar';
+import { useRouter } from 'next/navigation';
 
 const Header = () => {
+  const router = useRouter();
+
   return (
-    <div className="fixed top-0 left-0 w-full z-10 flex items-center justify-center h-20 bg-white shadow-sm">
+    <div className="fixed top-0 left-0 z-10 flex items-center justify-center w-full h-20 bg-white shadow-sm">
       <Wrapper>
         <div className="flex justify-between w-full px-8">
           {/* 왼쪽 레이아웃 */}
           <div className="flex items-center space-x-3">
-            <FontAwesomeIcon icon={faPersonRunning} className="w-8 h-8" />
+            <FontAwesomeIcon
+              icon={faPersonRunning}
+              className="w-8 h-8"
+              onClick={() => router.push('/')}
+            />
             {/* 검색창 */}
-            <label className="input input-bordered input-sm flex items-center gap-2">
+            <label className="flex items-center gap-2 input input-bordered input-sm">
               <input type="text" className="grow" placeholder="크루 검색하기" />
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 16 16"
                 fill="currentColor"
-                className="h-4 w-4 opacity-70"
+                className="w-4 h-4 opacity-70"
                 onClick={() => alert('검색하기')}
               >
                 <path
@@ -35,14 +42,22 @@ const Header = () => {
             </label>
           </div>
           {/* 오른쪽 레이아웃 */}
-          <div className="flex space-x-6">
+          <div className="flex items-center space-x-6">
             <HeaderMenu
               name={'마이 크루'}
               icon={faBell}
-              onMenuClick={() => {}}
+              onMenuClick={() => router.push('/my')}
             />
-            <HeaderMenu name={'메시지'} icon={faBell} onMenuClick={() => {}} />
-            <HeaderMenu name={'알림'} icon={faBell} onMenuClick={() => {}} />
+            <HeaderMenu
+              name={'메시지'}
+              icon={faBell}
+              onMenuClick={() => router.push('/message')}
+            />
+            <HeaderMenu
+              name={'알림'}
+              icon={faBell}
+              onMenuClick={() => router.push('/alarm')}
+            />
             <Avatar />
           </div>
         </div>

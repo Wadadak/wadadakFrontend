@@ -1,16 +1,48 @@
 'use client';
 
 import React from 'react';
-import { TitleBanner } from '@/components/layout/TitleBanner';
-import Wrapper from '@/components/layout/Wrapper';
-import CreateCrew from '@/components/crew/CreateCrew';
+import { useRecoilValue } from 'recoil';
+import { useCreateCrew } from '@/hooks/useCreateCrew';
+import { activityRegionsState } from '@/recoil/atoms/activityRegionsState';
+import TextInput from '@/components/common/TextInput';
+import NumberInput from '@/components/common/NumberInput';
+import Dropdown from '@/components/common/Dropdown';
+import Label from '@/components/common/Label';
+import CheckBox from '@/components/common/CheckBox';
+import Button from '@/components/common/Button';
+import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
+import ImageUpload from '../common/ImageUpload';
 
-const CreateCrewPage = () => {
+const CreateCrew = () => {
+  const {
+    name,
+    setName,
+    description,
+    setDescription,
+    location,
+    setLocation,
+    recordRequired,
+    setRecordRequired,
+    approvalRequired,
+    setApprovalRequired,
+    image,
+    handleImageUpload,
+    capacity,
+    setCapacity,
+    genderRestriction,
+    setGenderRestriction,
+    maxAge,
+    setMaxAge,
+    minAge,
+    setMinAge,
+    handleSubmit,
+  } = useCreateCrew();
+
+  const regions = useRecoilValue(activityRegionsState);
+
   return (
     <>
-      <TitleBanner>크루 만들기</TitleBanner>
-      <Wrapper>
-<<<<<<< HEAD
+      <div className="pb-5">
         <Label label="크루명" required>
           <TextInput
             value={name}
@@ -76,19 +108,25 @@ const CreateCrewPage = () => {
             onChange={(values) => setGenderRestriction(values[0])}
           />
         </Label>
-        <MinMaxYearSelector
-          minYear={minAge}
-          maxYear={maxAge}
-          onMinYearChange={setMinAge}
-          onMaxYearChange={setMaxAge}
-        />
-        <Button outline={true}>하이</Button>
-=======
-        <CreateCrew />
->>>>>>> 63302d571d6faa4a7081f3ebd0944f97fbe4f1ed
-      </Wrapper>
+        <Label label="연령대 제한">
+          <MinMaxYearSelector
+            maxAge={maxAge}
+            minAge={minAge}
+            onMaxAgeChange={(age) => setMaxAge(age)}
+            onMinAgeChange={(age) => setMinAge(age)}
+          />
+        </Label>
+        <Label label="대표 이미지">
+          <ImageUpload onImageChange={handleImageUpload} />
+        </Label>
+      </div>
+      <div className="flex w-full justify-end">
+        <Button wide={true} color="secondary" onClick={handleSubmit}>
+          제출하기
+        </Button>
+      </div>
     </>
   );
 };
 
-export default CreateCrewPage;
+export default CreateCrew;
