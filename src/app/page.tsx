@@ -2,14 +2,15 @@
 import React from 'react';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
-import CrewCard from '@/components/crew/CrewCard';
+import MainPageList from '@/components/crew/MainPageList';
+import { mockCrewList } from '@/mocks/mockData/mockCrewList';
 
 const index = () => {
   return (
     <>
       <TitleBanner>ㅇㅇ</TitleBanner>
       <Wrapper>
-        <CrewCard />
+        <MainPageList crews={mockCrewList} />
       </Wrapper>
     </>
   );
