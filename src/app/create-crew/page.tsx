@@ -7,6 +7,7 @@ import TextInput from '@/components/common/TextInput';
 import NumberInput from '@/components/common/NumberInput';
 import Dropdown from '@/components/common/Dropdown';
 import Label from '@/components/common/Label';
+import Button from '@/components/common/Button';
 
 const CreateCrewPage = () => {
   const handleChange = (value: string | number) => {
@@ -46,6 +47,7 @@ const CreateCrewPage = () => {
         <Label label="크루명을 조회한다면?">
           <p>와다닥</p>
         </Label>
+        <Button outline={true}>하이</Button>
       </Wrapper>
     </>
   );

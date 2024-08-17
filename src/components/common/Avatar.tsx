@@ -3,7 +3,7 @@ import React from 'react';
 interface AvatarProps {
   src?: string;
   alt?: string;
-  size?: string; // 크기를 조절할 수 있도록 props 추가
+  size?: 'w-8' | 'w-12' | 'w-16' | 'w-24'; // 크기를 조절할 수 있도록 props 추가
   className?: string; // 추가적인 Tailwind 클래스명을 받기 위해 props 추가
 }
 

@@ -1,13 +1,19 @@
 import React from 'react';
 
+interface DropdownOption {
+  id: string;
+  name: string;
+}
+
 interface DropdownProps {
-  options: string[]; // 드롭다운에 표시할 옵션 배열
-  onChange: (value: string | string[]) => void;
+  options: DropdownOption[]; // 드롭다운에 표시할 옵션 배열
+  onChange: (value: string | string[] | number) => void;
   placeholder?: string;
   required?: boolean;
   multiple?: boolean; // 다중 선택 가능 여부
   selectedValues?: string[]; // 다중 선택일 경우 선택된 값들
   width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
+  disabled?: boolean;
 }
 
 const Dropdown = ({
@@ -18,6 +24,7 @@ const Dropdown = ({
   multiple = false,
   selectedValues = [],
   width = 'xs',
+  disabled = false,
 }: DropdownProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = multiple
@@ -35,21 +42,22 @@ const Dropdown = ({
       value={multiple ? undefined : selectedValues[0]}
       multiple={multiple}
       onChange={handleChange}
+      required={required}
     >
-      <option value="" disabled selected>
+      <option value="" selected disabled={disabled}>
         {placeholder}
       </option>
       {options.map((option) => (
         <option
-          key={option}
-          value={option}
+          key={option.id}
+          value={option.name}
           selected={
             multiple
-              ? selectedValues.includes(option)
-              : selectedValues[0] === option
+              ? selectedValues.includes(option.name)
+              : selectedValues[0] === option.name
           }
         >
-          {option}
+          {option.name}
         </option>
       ))}
     </select>
