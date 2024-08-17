@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import { useCreateCrew } from '@/hooks/useCreateCrew';
 import { activityRegionsState } from '@/recoil/atoms/activityRegionsState';
@@ -38,6 +38,8 @@ const CreateCrewPage = () => {
     setMinAge,
     handleSubmit,
   } = useCreateCrew();
+
+  const [year, setYear] = useState<number | null>(null);
 
   const regions = useRecoilValue(activityRegionsState);
 
@@ -93,13 +95,13 @@ const CreateCrewPage = () => {
             onChange={(values) => setApprovalRequired(values.includes('true'))}
           />
         </Label>
-        {/* <Label label="크루 정원">
+        <Label label="크루 정원">
           <NumberInput
-          value={capacity}
-          onChange={setCapacity}
-          placeholder="capacity"
+            value={capacity}
+            onChange={setCapacity}
+            placeholder="capacity"
           />
-        </Label> */}
+        </Label>
         <Label label="성별 제한">
           <CheckBox
             options={[
@@ -110,13 +112,16 @@ const CreateCrewPage = () => {
             onChange={(values) => setGenderRestriction(values[0])}
           />
         </Label>
-        <MinMaxYearSelector
-          minYear={minAge}
-          maxYear={maxAge}
-          onMinYearChange={setMinAge}
-          onMaxYearChange={setMaxAge}
-        />
-        <Button outline={true}>하이</Button>
+        <Label label="연령대 제한">
+          <MinMaxYearSelector
+            maxAge={maxAge}
+            minAge={minAge}
+            onMaxAgeChange={(age) => setMaxAge(age)}
+            onMinAgeChange={(age) => setMinAge(age)}
+          />
+        </Label>
+
+        <Button>제출하기</Button>
       </Wrapper>
     </>
   );

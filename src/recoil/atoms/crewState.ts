@@ -30,9 +30,9 @@ export const crewImageState = atom<File | null>({
   key: 'crewImageState',
   default: null,
 });
-export const crewCapacityState = atom<number | undefined>({
+export const crewCapacityState = atom<number | null>({
   key: 'crewCapacityState',
-  default: undefined,
+  default: null,
 });
 
 export const crewGenderRestrictionState = atom<string | ''>({
@@ -45,6 +45,6 @@ export const crewMinAgeState = atom<number | null>({
   default: null,
 });
 export const crewMaxAgeState = atom<number | null>({
-  key: 'crewMinAgeState',
+  key: 'crewMaxAgeState',
   default: null,
 });
