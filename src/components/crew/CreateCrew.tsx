@@ -4,8 +4,6 @@ import React from 'react';
 import { useRecoilValue } from 'recoil';
 import { useCreateCrew } from '@/hooks/useCreateCrew';
 import { activityRegionsState } from '@/recoil/atoms/activityRegionsState';
-import { TitleBanner } from '@/components/layout/TitleBanner';
-import Wrapper from '@/components/layout/Wrapper';
 import TextInput from '@/components/common/TextInput';
 import NumberInput from '@/components/common/NumberInput';
 import Dropdown from '@/components/common/Dropdown';
@@ -13,6 +11,7 @@ import Label from '@/components/common/Label';
 import CheckBox from '@/components/common/CheckBox';
 import Button from '@/components/common/Button';
 import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
+import ImageUpload from '../common/ImageUpload';
 
 const CreateCrew = () => {
   const {
@@ -117,8 +116,11 @@ const CreateCrew = () => {
             onMinAgeChange={(age) => setMinAge(age)}
           />
         </Label>
+        <Label label="대표 이미지">
+          <ImageUpload onImageChange={handleImageUpload} />
+        </Label>
       </div>
-      <div className="flex w-full justify-center">
+      <div className="flex w-full justify-end">
         <Button wide={true} color="secondary" onClick={handleSubmit}>
           제출하기
         </Button>
