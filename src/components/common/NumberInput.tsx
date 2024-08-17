@@ -2,7 +2,7 @@ import React from 'react';
 
 interface NumberInputProps {
   value: number | null;
-  onChange: (value: number) => void;
+  onChange: (value: number | null) => void;
   placeholder?: string;
   required?: boolean;
   min?: number; // 최소값 제한
@@ -23,6 +23,13 @@ const NumberInput = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 파싱 작업
     const inputValue = e.target.value.replace(/[^0-9]/g, ''); // 숫자만 남기기
+
+    // 입력값 비어질 때 상태 업데이트
+    if (inputValue === '') {
+      onChange(null);
+      return;
+    }
+
     const numericValue = parseInt(inputValue, 10);
 
     // 최소값
@@ -37,7 +44,7 @@ const NumberInput = ({
     <input
       className={`input input-bordered w-full ${widthClass} }`}
       type="text"
-      value={value}
+      value={value !== null ? value : ''}
       onChange={handleChange}
       placeholder={placeholder}
       required={required}
@@ -46,5 +53,3 @@ const NumberInput = ({
 };
 
 export default NumberInput;
-
-// max-w-xs
