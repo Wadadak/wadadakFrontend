@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface NumberInputProps {
-  value: number;
+  value: number | null;
   onChange: (value: number) => void;
   placeholder?: string;
   required?: boolean;
