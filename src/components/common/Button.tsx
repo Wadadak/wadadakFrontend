@@ -7,7 +7,7 @@ interface ButtonProps {
   size?: 'lg' | 'md' | 'sm' | 'xs';
   wide?: boolean;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: (e: React.FormEvent) => void;
   children: React.ReactNode;
 }
 
