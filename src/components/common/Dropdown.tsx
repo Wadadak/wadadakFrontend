@@ -13,6 +13,7 @@ interface DropdownProps {
   multiple?: boolean; // 다중 선택 가능 여부
   selectedValues?: string[]; // 다중 선택일 경우 선택된 값들
   width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
+  disabled?: boolean;
 }
 
 const Dropdown = ({
@@ -23,6 +24,7 @@ const Dropdown = ({
   multiple = false,
   selectedValues = [],
   width = 'xs',
+  disabled = false,
 }: DropdownProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = multiple
@@ -42,7 +44,7 @@ const Dropdown = ({
       onChange={handleChange}
       required={required}
     >
-      <option value="" disabled selected>
+      <option value="" selected disabled={disabled}>
         {placeholder}
       </option>
       {options.map((option) => (

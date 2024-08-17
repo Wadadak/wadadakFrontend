@@ -3,6 +3,7 @@ import React from 'react';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
 import CrewCard from '@/components/crew/CrewCard';
+import ImageUpload from '@/components/common/ImageUpload';
 
 const index = () => {
   return (
