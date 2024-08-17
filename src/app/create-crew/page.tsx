@@ -93,13 +93,13 @@ const CreateCrewPage = () => {
             onChange={(values) => setApprovalRequired(values.includes('true'))}
           />
         </Label>
-        {/* <Label label="크루 정원">
+        <Label label="크루 정원">
           <NumberInput
-          value={capacity}
-          onChange={setCapacity}
-          placeholder="capacity"
+            value={capacity}
+            onChange={setCapacity}
+            placeholder="capacity"
           />
-        </Label> */}
+        </Label>
         <Label label="성별 제한">
           <CheckBox
             options={[
