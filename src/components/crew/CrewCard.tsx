@@ -29,7 +29,7 @@ const CrewCard: React.FC<CrewCardProps> = ({
 
   return (
     <div
-      className="card bg-base-100 w-96 shadow-sm cursor-pointer focus:outline focus:outline-2  focus:outline-accent focus:outline-offset-0 hover:outline hover:outline-2 hover:outline-accent hover:outline-offset-0"
+      className="card bg-base-100 w-full sm:max-w-md md:max-w-lg lg:max-w-xl  shadow-sm cursor-pointer focus:outline focus:outline-2  focus:outline-accent focus:outline-offset-0 hover:outline hover:outline-2 hover:outline-accent hover:outline-offset-0"
       tabIndex={0}
     >
       <figure>

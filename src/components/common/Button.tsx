@@ -5,6 +5,7 @@ interface ButtonProps {
   color?: 'primary' | 'secondary' | 'accent' | string;
   textColor?: 'white' | 'black' | string;
   size?: 'lg' | 'md' | 'sm' | 'xs';
+  wide?: boolean;
   disabled?: boolean;
   onClick?: () => void;
   children: React.ReactNode;
@@ -15,6 +16,7 @@ const Button = ({
   color = 'primary',
   textColor = 'white',
   size = 'md',
+  wide = false,
   disabled = false,
   onClick,
   children,
@@ -23,10 +25,11 @@ const Button = ({
   const colorClass = `btn-${color}`;
   const textColorClass = `text-${textColor}`;
   const sizeClass = `btn-${size}`;
+  const wideClass = wide ? 'btn-wide' : '';
 
   return (
     <button
-      className={`btn ${outlineClass} ${colorClass} ${sizeClass} ${textColorClass}`}
+      className={`btn ${outlineClass} ${colorClass} ${sizeClass} ${textColorClass} ${wideClass}`}
       disabled={disabled}
       onClick={onClick}
     >
