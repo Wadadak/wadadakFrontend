@@ -40,7 +40,9 @@ const MainPageList = ({ crews }: CrewListProps) => {
 
       {visibleItemsCount < crews.length && (
         <div className="text-center mt-8">
-          <Button onClick={loadMoreItems}>더보기</Button>
+          <Button onClick={loadMoreItems} wide={true}>
+            더보기
+          </Button>
         </div>
       )}
     </div>

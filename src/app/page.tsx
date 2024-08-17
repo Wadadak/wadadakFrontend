@@ -8,7 +8,15 @@ import { mockCrewList } from '@/mocks/mockData/mockCrewList';
 const index = () => {
   return (
     <>
-      <TitleBanner>ㅇㅇ</TitleBanner>
+      <TitleBanner className="flex-col">
+        <div>@@ 님의 이번 달 누적 기록</div>
+        <p>0.0 km</p>
+        <div>
+          <span>0회</span>
+          <span>0'00"</span>
+          <span>0:00</span>
+        </div>
+      </TitleBanner>
       <Wrapper>
         <MainPageList crews={mockCrewList} />
       </Wrapper>
