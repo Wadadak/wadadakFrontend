@@ -29,7 +29,7 @@ const CheckBox = ({
   };
 
   return (
-    <div className="form-control">
+    <div className="form-control flex flex-row space-x-4">
       {options.map((option) => (
         <label
           key={option.id}
