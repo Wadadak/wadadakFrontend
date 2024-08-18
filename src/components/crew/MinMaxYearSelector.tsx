@@ -1,5 +1,4 @@
 import React from 'react';
-import Label from '../common/Label';
 import YearOfBirthDropdown from '../common/YearOfBirthDropdown';
 
 interface MinMaxYearProps {
