@@ -14,7 +14,6 @@ interface DropdownProps {
   selectedValues?: string[]; // 선택된 값들
   width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
   disabled?: boolean;
-  name?: string;
 }
 
 const Dropdown = ({
@@ -25,7 +24,7 @@ const Dropdown = ({
   multiple = false,
   selectedValues = [],
   width = 'xs',
-  disabled = false,
+  disabled = true,
 }: DropdownProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = multiple
