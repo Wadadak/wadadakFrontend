@@ -1,67 +1,99 @@
-import React from 'react';
+import React, { Children } from 'react';
 import { Crew } from '@/types/crewTypes';
 import Wrapper from '../layout/Wrapper';
+import Button from '../common/Button';
+import RegularRunningInfoTable from './RegularRunningInfoTable';
 
 interface CrewDetailInfoProps {
   crew: Crew;
+  buttonText?: React.ReactNode;
+  step?: boolean;
 }
 
-const CrewDetailInfo = ({ crew }: CrewDetailInfoProps) => {
+const CrewDetailInfo = ({
+  crew,
+  buttonText = '가입하기',
+  step = false,
+}: CrewDetailInfoProps) => {
   const defaultImage = '/images/default.png';
 
-  if (!crew) {
-    return <div>크루 정보를 불러오고 있습니다.</div>;
-  }
+  const renderAgeRange = () => {
+    if (crew.minAge !== null && crew.maxAge !== null) {
+      // 둘 다 선택된 경우
+      return (
+        <p className="text-lg">
+          연령대 : {crew.minAge}년생 ~ {crew.maxAge}년생
+        </p>
+      );
+    } else if (crew.minAge !== null && crew.maxAge === null) {
+      // 최소 연령만 선택된 경우
+      return <p className="text-lg">연령대 : {crew.minAge}년생 ~ </p>;
+    } else if (crew.minAge === null && crew.maxAge !== null) {
+      // 최대 연령만 선택된 경우
+      return <p className="text-lg">연령대 : {crew.maxAge}년생 ~</p>;
+    } else {
+      // 둘 다 선택되지 않은 경우
+      return <p className="text-lg">연령 제한 없음</p>;
+    }
+  };
+
+  const renderGender = crew.genderRestriction
+    ? `성별 : ${crew.genderRestriction}만`
+    : '성별 제한 없음';
+
   return (
     <Wrapper>
-      <div className="hero bg-base-200 min-h-screen">
-        <div className="hero-content flex-col lg:flex-row">
-          <img
-            src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
-            className="max-w-sm rounded-lg shadow-2xl"
-          />
-          <div>
-            <h1 className="text-5xl font-bold">Box Office News!</h1>
-            <p className="py-6">
-              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
-              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
-              et a id nisi.
-            </p>
-            <button className="btn btn-primary">Get Started</button>
+      <div className=" min-h-screen p-10 rounded-lg  border-4 border-secondary">
+        <div className="flex w-full items-center justify-between ">
+          <h1 className="text-5xl font-bold flex items-center gap-3">
+            {crew.crewName}
+            <div className="badge badge-secondary badge-lg">
+              {crew.activityRegion}
+            </div>
+          </h1>
+          <div className="flex gap-2">
+            <Button>{buttonText}</Button>
+            {step && <Button>수정하기</Button>}
           </div>
+        </div>
+        <div className="hero-content flex-col lg:flex-row w-full justify-start items-center gap-6 lg:gap-20 mb-4">
+          <img
+            src={crew.crewImage || defaultImage}
+            alt={crew.crewName}
+            className="max-w-sm rounded-lg shadow-sm"
+          />
+          <div className="flex flex-col gap-4">
+            <div className="flex flex-col items-start gap-2 pb-2">
+              <p className="text-lg">
+                인원 : {crew.crewOccupancy} / {crew.crewCapacity}
+              </p>
+              {renderAgeRange()}
+              <p className="text-lg">{renderGender}</p>
+              {crew.publicRecordRequired && (
+                <p className="text-lg">러닝 프로필 공개 필수</p>
+              )}
+              {crew.approvalRequired && (
+                <p className="text-lg" c>
+                  가입 승인 필요
+                </p>
+              )}
+            </div>
+            <div className="flex flex-col items-start gap-4 lg:gap-2">
+              <p className="card-title">크루 소개</p>
+              <p className="leading-loose text-justify">{crew.description}</p>
+            </div>
+          </div>
+        </div>
+        <div className="mb-4">
+          <p className="card-title pb-2 ">정기 러닝 정보</p>
+          <RegularRunningInfoTable
+            regularRunningInfo={crew.regularRunningInfo || []}
+          />
+        </div>
+        <div>
+          <p className="card-title pb-2">오프라인 러닝 일정</p>
         </div>
       </div>
-
-      {/* <div className="card card-side bg-base-100 shadow-sm">
-        <figure>
-          <img src={crew.crewImage || defaultImage} alt={crew.crewName} />
-        </figure>
-        <div className="card-body">
-          <h2 className="card-title">
-            {crew.crewName}
-            <div className="badge badge-secondary">{crew.activityRegion}</div>
-          </h2>
-          <div>
-            <p>
-              정원 : {crew.crewOccupancy} / {crew.crewCapacity}
-            </p>
-            {crew.minAge === null && crew.maxAge === null && (
-              <p>
-                연령대 : {crew.crewOccupancy} / {crew.crewCapacity}
-              </p>
-            )}
-            {crew.genderRestriction && (
-              <p>성별 제한 : {crew.genderRestriction}</p>
-            )}
-            <p></p>
-            <p></p>
-            <p></p>
-          </div>
-          <div className="card-actions justify-end">
-            <button className="btn btn-primary">가입 신청</button>
-          </div>
-        </div>
-      </div> */}
     </Wrapper>
   );
 };

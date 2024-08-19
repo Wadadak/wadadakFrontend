@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import SimpleModal from '../common/SimpleModal';
 import { RegularRunningInfo } from '@/types/crewTypes';
 import Link from 'next/link';
+import RegularRunningInfoTable from './RegularRunningInfoTable';
 
 interface CrewCardProps {
   crewId: number;
@@ -62,33 +63,9 @@ const CrewCard = ({
                 onClose={handleCloseModal}
                 title="정기 러닝 정보"
               >
-                {regularRunningInfo.length > 0 ? (
-                  <div className="overflow-x-auto">
-                    <table className="table">
-                      <thead>
-                        <tr>
-                          <th>지역</th>
-                          <th>주기</th>
-                          <th>요일</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {regularRunningInfo.map((info) => (
-                          <tr key={info.id}>
-                            <td>{info.location}</td>
-                            <td>
-                              {info.frequency.weeks}주에 {info.frequency.times}
-                              번
-                            </td>
-                            <td>{info.weekdays.join(', ')}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                ) : (
-                  <p>정기 러닝 정보가 없습니다.</p>
-                )}
+                <RegularRunningInfoTable
+                  regularRunningInfo={regularRunningInfo}
+                />
               </SimpleModal>
             )}
           </div>

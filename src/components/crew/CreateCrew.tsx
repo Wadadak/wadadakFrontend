@@ -10,7 +10,6 @@ import Button from '@/components/common/Button';
 import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
 import ImageUpload from '../common/ImageUpload';
 // TODO : API 함수들 import
-import { createCrew, fetchActivityRegions } from '@/apis/crew';
 
 interface CrewFormData {}
 

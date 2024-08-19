@@ -25,8 +25,8 @@ const CrewList: React.FC<CrewListProps> = ({ crews }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-items-center">
         {currentCards.map((crew) => (
           <CrewCard
-            key={crew.crew_id}
-            crewId={crew.crew_id}
+            key={crew.crewId}
+            crewId={crew.crewId}
             crewName={crew.crewName}
             crewOccupancy={crew.crewOccupancy}
             crewCapacity={crew.crewCapacity}
