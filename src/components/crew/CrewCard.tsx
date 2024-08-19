@@ -14,6 +14,7 @@ interface CrewCardProps {
   crewImage?: string | null;
   activityRegion: string;
   regularRunningInfo?: RegularRunningInfo[];
+  myCrew?: boolean;
 }
 
 const CrewCard = ({
@@ -24,6 +25,7 @@ const CrewCard = ({
   crewImage,
   activityRegion,
   regularRunningInfo = [],
+  myCrew = false,
 }: CrewCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = () => setIsModalOpen(true);
@@ -31,8 +33,16 @@ const CrewCard = ({
 
   const defaultImage = '/images/default.png';
 
+  const handleCardClick = () => {
+    if (myCrew) {
+      return `/my-crews/${crewId}`;
+    } else {
+      return `/crew/${crewId}`;
+    }
+  };
+
   return (
-    <Link href={`/crew/${crewId}`}>
+    <Link href={handleCardClick()}>
       <div
         className="card bg-base-100 w-full sm:max-w-md md:max-w-lg lg:max-w-xl  shadow-sm cursor-pointer focus:outline focus:outline-2  focus:outline-accent focus:outline-offset-0 hover:outline hover:outline-2 hover:outline-accent hover:outline-offset-0"
         tabIndex={0}

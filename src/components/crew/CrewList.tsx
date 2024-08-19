@@ -9,11 +9,12 @@ import Pagination from '../common/Pagination';
 
 interface CrewListProps {
   crews: Crew[];
+  myCrew?: boolean;
 }
 
 const itemsPerPage = 9;
 
-const CrewList: React.FC<CrewListProps> = ({ crews }) => {
+const CrewList = ({ crews, myCrew = false }: CrewListProps) => {
   const [currentPage, setCurrentPage] = useRecoilState(currentPageState);
 
   const endIndex = currentPage * itemsPerPage;
@@ -33,6 +34,7 @@ const CrewList: React.FC<CrewListProps> = ({ crews }) => {
             crewImage={crew.crewImage}
             activityRegion={crew.activityRegion}
             regularRunningInfo={crew.regularRunningInfo}
+            myCrew={myCrew}
           />
         ))}
       </div>

@@ -9,7 +9,7 @@ const MyCrewPage = () => {
     <>
       <TitleBanner>가입한 크루</TitleBanner>
       <Wrapper>
-        <CrewList crews={mockCrewList} />
+        <CrewList crews={mockCrewList} myCrew />
       </Wrapper>
     </>
   );
