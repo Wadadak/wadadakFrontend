@@ -1,9 +1,6 @@
 'use client';
 
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import { useCreateCrew } from '@/hooks/useCreateCrew';
-import { activityRegionsState } from '@/recoil/atoms/activityRegionsState';
 import TextInput from '@/components/common/TextInput';
 import NumberInput from '@/components/common/NumberInput';
 import Dropdown from '@/components/common/Dropdown';
@@ -12,6 +9,9 @@ import CheckBox from '@/components/common/CheckBox';
 import Button from '@/components/common/Button';
 import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
 import ImageUpload from '../common/ImageUpload';
+// TODO : API 함수들 import
+
+interface CrewFormData {}
 
 const CreateCrew = () => {
   const {

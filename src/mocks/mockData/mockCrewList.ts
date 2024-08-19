@@ -2,14 +2,20 @@ import { Crew } from '@/types/crewTypes';
 
 export const mockCrewList: Crew[] = [
   {
-    crew_id: 1,
+    crewId: 1,
     crewName: 'Crew 1',
-    description: '이것은 Crew 1입니다.',
-    // crewImage: 'https://example.com/images/crew1.jpg',
+    description:
+      '우리 러닝 크루는 함께 달리는 즐거움을 공유하고, 건강한 라이프스타일을 지향하는 열정적인 러너들의 모임입니다. 초보자부터 숙련된 러너까지 모두가 참여할 수 있으며, 서로의 목표를 응원하며 성취감을 나눕니다. 주기적인 러닝 세션과 다양한 이벤트를 통해 몸과 마음을 단련하고, 함께하는 시간을 통해 끈끈한 유대감을 형성합니다. 운동을 통해 새로운 도전을 하고자 하신다면, 우리 러닝 크루와 함께하세요. 모두가 주인공이 되는 이곳에서, 새로운 자신을 발견해보세요!',
+    crewImage: null, // 이미지가 없을 경우 null로 설정
     crewCapacity: 15,
     crewOccupancy: 10,
     leaderRequired: false,
     activityRegion: '서울',
+    genderRestriction: '', // 성별 제한 없음
+    minAge: null, // 최소 나이 제한 없음
+    maxAge: null, // 최대 나이 제한 없음
+    publicRecordRequired: true, // 공개 기록이 필요함
+    approvalRequired: true, // 가입 승인 필요함
     regularRunningInfo: [
       {
         id: 1,
@@ -23,25 +29,35 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 2,
+    crewId: 2,
     crewName: 'Crew 2',
     description: '이것은 Crew 2입니다.',
-    // crewImage: 'https://example.com/images/crew2.jpg',
+    crewImage: null,
     crewCapacity: 12,
     crewOccupancy: 8,
     leaderRequired: false,
     activityRegion: '부산',
+    genderRestriction: '',
+    minAge: null,
+    maxAge: null,
+    publicRecordRequired: true,
+    approvalRequired: true,
     regularRunningInfo: [],
   },
   {
-    crew_id: 3,
+    crewId: 3,
     crewName: 'Crew 3',
     description: '이것은 Crew 3입니다.',
-    // crewImage: 'https://example.com/images/crew3.jpg',
+    crewImage: null,
     crewCapacity: 15,
     crewOccupancy: 10,
     leaderRequired: true,
     activityRegion: '인천',
+    genderRestriction: '',
+    minAge: null,
+    maxAge: null,
+    publicRecordRequired: true,
+    approvalRequired: true,
     regularRunningInfo: [
       {
         id: 1,
@@ -55,14 +71,19 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 4,
+    crewId: 4,
     crewName: 'Crew 4',
     description: '이것은 Crew 4입니다.',
-    // crewImage: 'https://example.com/images/crew4.jpg',
+    crewImage: null,
     crewCapacity: 8,
     crewOccupancy: 5,
     leaderRequired: false,
     activityRegion: '대구',
+    genderRestriction: '',
+    minAge: null,
+    maxAge: null,
+    publicRecordRequired: true,
+    approvalRequired: true,
     regularRunningInfo: [
       {
         id: 1,
@@ -76,14 +97,19 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 5,
+    crewId: 5,
     crewName: 'Crew 5',
     description: '이것은 Crew 5입니다.',
-    // crewImage: 'https://example.com/images/crew5.jpg',
+    crewImage: null,
     crewCapacity: 20,
     crewOccupancy: 18,
     leaderRequired: true,
     activityRegion: '광주',
+    genderRestriction: '',
+    minAge: null,
+    maxAge: null,
+    publicRecordRequired: true,
+    approvalRequired: true,
     regularRunningInfo: [
       {
         id: 1,
@@ -97,14 +123,19 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 6,
+    crewId: 6,
     crewName: 'Crew 6',
     description: '이것은 Crew 6입니다.',
-    // crewImage: 'https://example.com/images/crew6.jpg',
+    crewImage: null,
     crewCapacity: 25,
     crewOccupancy: 20,
     leaderRequired: false,
     activityRegion: '대전',
+    genderRestriction: '',
+    minAge: null,
+    maxAge: null,
+    publicRecordRequired: true,
+    approvalRequired: true,
     regularRunningInfo: [
       {
         id: 1,
@@ -118,14 +149,19 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 7,
+    crewId: 7,
     crewName: 'Crew 7',
     description: '이것은 Crew 7입니다.',
-    // crewImage: 'https://example.com/images/crew7.jpg',
+    crewImage: null,
     crewCapacity: 10,
     crewOccupancy: 10,
     leaderRequired: true,
     activityRegion: '서울',
+    genderRestriction: '',
+    minAge: null,
+    maxAge: null,
+    publicRecordRequired: true,
+    approvalRequired: true,
     regularRunningInfo: [
       {
         id: 1,
@@ -139,14 +175,19 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 8,
+    crewId: 8,
     crewName: 'Crew 8',
     description: '이것은 Crew 8입니다.',
-    // crewImage: 'https://example.com/images/crew8.jpg',
+    crewImage: null,
     crewCapacity: 30,
     crewOccupancy: 25,
     leaderRequired: true,
     activityRegion: '인천',
+    genderRestriction: '',
+    minAge: null,
+    maxAge: null,
+    publicRecordRequired: true,
+    approvalRequired: true,
     regularRunningInfo: [
       {
         id: 1,
@@ -160,14 +201,19 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 9,
+    crewId: 9,
     crewName: 'Crew 9',
     description: '이것은 Crew 9입니다.',
-    // crewImage: 'https://example.com/images/crew9.jpg',
+    crewImage: null,
     crewCapacity: 18,
     crewOccupancy: 12,
     leaderRequired: false,
     activityRegion: '부산',
+    genderRestriction: '',
+    minAge: null,
+    maxAge: null,
+    publicRecordRequired: true,
+    approvalRequired: true,
     regularRunningInfo: [
       {
         id: 1,
@@ -181,14 +227,19 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 10,
+    crewId: 10,
     crewName: 'Crew 10',
     description: '이것은 Crew 10입니다.',
-    // crewImage: 'https://example.com/images/crew10.jpg',
+    crewImage: null,
     crewCapacity: 40,
     crewOccupancy: 35,
     leaderRequired: true,
     activityRegion: '전국',
+    genderRestriction: '',
+    minAge: null,
+    maxAge: null,
+    publicRecordRequired: true,
+    approvalRequired: true,
     regularRunningInfo: [
       {
         id: 1,
