@@ -43,17 +43,17 @@ const CrewDetailInfo = ({
 
   return (
     <Wrapper>
-      <div className=" min-h-screen p-10 rounded-lg  border-4 border-secondary">
+      <div className=" min-h-screen p-10 rounded-lg  border-4 border-primary">
         <div className="flex w-full items-center justify-between ">
           <h1 className="text-5xl font-bold flex items-center gap-3">
             {crew.crewName}
-            <div className="badge badge-secondary badge-lg">
+            <div className="badge badge-accent badge-lg">
               {crew.activityRegion}
             </div>
           </h1>
           <div className="flex gap-2">
-            <Button>{buttonText}</Button>
-            {step && <Button>수정하기</Button>}
+            <Button color="secondary">{buttonText}</Button>
+            {step && <Button color="secondary">수정하기</Button>}
           </div>
         </div>
         <div className="hero-content flex-col lg:flex-row w-full justify-start items-center gap-6 lg:gap-20 mb-4">
@@ -65,7 +65,7 @@ const CrewDetailInfo = ({
           <div className="flex flex-col gap-4 self-start lg:self-auto">
             <div className="flex flex-col gap-2 pb-2 ">
               <p className="text-lg">
-                인원 : {crew.crewOccupancy} / {crew.crewCapacity}
+                인원 : {crew.crewOccupancy}명 / {crew.crewCapacity}명
               </p>
               {renderAgeRange()}
               <p className="text-lg">{renderGender}</p>
