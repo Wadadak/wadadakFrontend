@@ -1,9 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import { useCreateCrew } from '@/hooks/useCreateCrew';
-import { activityRegionsState } from '@/recoil/atoms/activityRegionsState';
+import { useForm } from 'react-hook-form';
 import TextInput from '@/components/common/TextInput';
 import NumberInput from '@/components/common/NumberInput';
 import Dropdown from '@/components/common/Dropdown';
