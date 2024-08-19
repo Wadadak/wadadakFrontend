@@ -2,7 +2,7 @@ import { Crew } from '@/types/crewTypes';
 
 export const mockCrewList: Crew[] = [
   {
-    crew_id: 1,
+    crewId: 1,
     crewName: 'Crew 1',
     description: '이것은 Crew 1입니다.',
     crewImage: null, // 이미지가 없을 경우 null로 설정
@@ -28,7 +28,7 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 2,
+    crewId: 2,
     crewName: 'Crew 2',
     description: '이것은 Crew 2입니다.',
     crewImage: null,
@@ -44,7 +44,7 @@ export const mockCrewList: Crew[] = [
     regularRunningInfo: [],
   },
   {
-    crew_id: 3,
+    crewId: 3,
     crewName: 'Crew 3',
     description: '이것은 Crew 3입니다.',
     crewImage: null,
@@ -70,7 +70,7 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 4,
+    crewId: 4,
     crewName: 'Crew 4',
     description: '이것은 Crew 4입니다.',
     crewImage: null,
@@ -96,7 +96,7 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 5,
+    crewId: 5,
     crewName: 'Crew 5',
     description: '이것은 Crew 5입니다.',
     crewImage: null,
@@ -122,7 +122,7 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 6,
+    crewId: 6,
     crewName: 'Crew 6',
     description: '이것은 Crew 6입니다.',
     crewImage: null,
@@ -148,7 +148,7 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 7,
+    crewId: 7,
     crewName: 'Crew 7',
     description: '이것은 Crew 7입니다.',
     crewImage: null,
@@ -174,7 +174,7 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 8,
+    crewId: 8,
     crewName: 'Crew 8',
     description: '이것은 Crew 8입니다.',
     crewImage: null,
@@ -200,7 +200,7 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 9,
+    crewId: 9,
     crewName: 'Crew 9',
     description: '이것은 Crew 9입니다.',
     crewImage: null,
@@ -226,7 +226,7 @@ export const mockCrewList: Crew[] = [
     ],
   },
   {
-    crew_id: 10,
+    crewId: 10,
     crewName: 'Crew 10',
     description: '이것은 Crew 10입니다.',
     crewImage: null,

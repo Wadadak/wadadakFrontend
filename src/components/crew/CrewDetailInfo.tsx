@@ -9,9 +9,30 @@ interface CrewDetailInfoProps {
 const CrewDetailInfo = ({ crew }: CrewDetailInfoProps) => {
   const defaultImage = '/images/default.png';
 
+  if (!crew) {
+    return <div>크루 정보를 불러오고 있습니다.</div>;
+  }
   return (
     <Wrapper>
-      <div className="card card-side bg-base-100 shadow-sm">
+      <div className="hero bg-base-200 min-h-screen">
+        <div className="hero-content flex-col lg:flex-row">
+          <img
+            src="https://img.daisyui.com/images/stock/photo-1635805737707-575885ab0820.webp"
+            className="max-w-sm rounded-lg shadow-2xl"
+          />
+          <div>
+            <h1 className="text-5xl font-bold">Box Office News!</h1>
+            <p className="py-6">
+              Provident cupiditate voluptatem et in. Quaerat fugiat ut assumenda
+              excepturi exercitationem quasi. In deleniti eaque aut repudiandae
+              et a id nisi.
+            </p>
+            <button className="btn btn-primary">Get Started</button>
+          </div>
+        </div>
+      </div>
+
+      {/* <div className="card card-side bg-base-100 shadow-sm">
         <figure>
           <img src={crew.crewImage || defaultImage} alt={crew.crewName} />
         </figure>
@@ -37,10 +58,10 @@ const CrewDetailInfo = ({ crew }: CrewDetailInfoProps) => {
             <p></p>
           </div>
           <div className="card-actions justify-end">
-            <button className="btn btn-primary">Watch</button>
+            <button className="btn btn-primary">가입 신청</button>
           </div>
         </div>
-      </div>
+      </div> */}
     </Wrapper>
   );
 };

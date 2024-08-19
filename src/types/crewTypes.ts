@@ -6,11 +6,11 @@ export interface RegularRunningInfo {
 }
 
 export interface Crew {
-  crew_id: number;
+  crewId: number;
   crewName: string;
   description: string;
   crewImage?: string | null;
-  crewCapacity: number | null;
+  crewCapacity: number;
   crewOccupancy: number;
   leaderRequired: boolean;
   activityRegion: string;

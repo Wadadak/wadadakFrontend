@@ -26,6 +26,7 @@ const CrewList: React.FC<CrewListProps> = ({ crews }) => {
         {currentCards.map((crew) => (
           <CrewCard
             key={crew.crew_id}
+            crewId={crew.crew_id}
             crewName={crew.crewName}
             crewOccupancy={crew.crewOccupancy}
             crewCapacity={crew.crewCapacity}
