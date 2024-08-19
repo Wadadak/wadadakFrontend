@@ -14,6 +14,7 @@ interface DropdownProps {
   selectedValues?: string[]; // 다중 선택일 경우 선택된 값들
   width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
   disabled?: boolean;
+  name?: string;
 }
 
 const Dropdown = ({
