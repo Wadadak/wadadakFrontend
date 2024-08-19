@@ -10,10 +10,10 @@ const RegularRunningInfoTable = ({
   return (
     <div>
       {regularRunningInfo.length > 0 ? (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto rounded-lg border-2 border-accent">
           <table className="table">
             <thead>
-              <tr>
+              <tr className="border-b border-accent bg-accent text-white">
                 <th>지역</th>
                 <th>주기</th>
                 <th>요일</th>
