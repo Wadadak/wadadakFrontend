@@ -3,8 +3,10 @@
 import React, { useState } from 'react';
 import SimpleModal from '../common/SimpleModal';
 import { RegularRunningInfo } from '@/types/crewTypes';
+import { useRouter } from 'next/navigation';
 
 interface CrewCardProps {
+  crewId: number;
   crewName: string;
   crewOccupancy: number;
   crewCapacity: number;
@@ -14,6 +16,7 @@ interface CrewCardProps {
 }
 
 const CrewCard: React.FC<CrewCardProps> = ({
+  crewId,
   crewName,
   crewOccupancy,
   crewCapacity,
@@ -21,16 +24,23 @@ const CrewCard: React.FC<CrewCardProps> = ({
   activityRegion,
   regularRunningInfo = [],
 }) => {
+  const router = useRouter();
+
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
   const defaultImage = '/images/default.png';
 
+  const handleCardClick = () => {
+    router.push(`/crew/${crewId}`);
+  };
+
   return (
     <div
       className="card bg-base-100 w-full sm:max-w-md md:max-w-lg lg:max-w-xl  shadow-sm cursor-pointer focus:outline focus:outline-2  focus:outline-accent focus:outline-offset-0 hover:outline hover:outline-2 hover:outline-accent hover:outline-offset-0"
       tabIndex={0}
+      onClick={handleCardClick}
     >
       <figure>
         <img src={crewImage || defaultImage} alt={crewName} />
