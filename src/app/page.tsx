@@ -3,12 +3,17 @@ import React from 'react';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
 <<<<<<< HEAD
+<<<<<<< HEAD
 import MainPageList from '@/components/crew/MainPageList';
 import { mockCrewList } from '@/mocks/mockData/mockCrewList';
 =======
 import CrewCard from '@/components/crew/CrewCard';
 import ImageUpload from '@/components/common/ImageUpload';
 >>>>>>> 7521c7cf45ac5cb5bb596b69c831ab52acb9e41d
+=======
+import MainPageList from '@/components/crew/MainPageList';
+import { mockCrewList } from '@/mocks/mockData/mockCrewList';
+>>>>>>> dfa0ebb76a9a43f8da97817e9681f08751a928c6
 
 const index = () => {
   return (

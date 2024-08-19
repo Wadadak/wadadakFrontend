@@ -12,7 +12,7 @@ const YearOfBirthDropdown = ({
   onYearChange,
   placeholder = '',
 }: YearOfBirthDropdownProps) => {
-  const startYear = 1925;
+  const startYear = 1900;
   const endYear = new Date().getFullYear();
 
   const years = Array.from(
