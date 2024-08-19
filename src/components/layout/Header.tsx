@@ -46,7 +46,7 @@ const Header = () => {
             <HeaderMenu
               name={'마이 크루'}
               icon={faBell}
-              onMenuClick={() => router.push('/my')}
+              onMenuClick={() => router.push('/my-crews')}
             />
             <HeaderMenu
               name={'메시지'}
