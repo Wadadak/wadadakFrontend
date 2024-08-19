@@ -1,7 +1,6 @@
 'use client';
 
 import React from 'react';
-import { useForm } from 'react-hook-form';
 import TextInput from '@/components/common/TextInput';
 import NumberInput from '@/components/common/NumberInput';
 import Dropdown from '@/components/common/Dropdown';
@@ -10,6 +9,10 @@ import CheckBox from '@/components/common/CheckBox';
 import Button from '@/components/common/Button';
 import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
 import ImageUpload from '../common/ImageUpload';
+// TODO : API 함수들 import
+import { createCrew, fetchActivityRegions } from '@/apis/crew';
+
+interface CrewFormData {}
 
 const CreateCrew = () => {
   const {
