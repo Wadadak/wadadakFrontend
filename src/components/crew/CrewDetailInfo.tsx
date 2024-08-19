@@ -62,8 +62,8 @@ const CrewDetailInfo = ({
             alt={crew.crewName}
             className="max-w-sm rounded-lg shadow-sm"
           />
-          <div className="flex flex-col gap-4">
-            <div className="flex flex-col items-start gap-2 pb-2">
+          <div className="flex flex-col gap-4 self-start lg:self-auto">
+            <div className="flex flex-col gap-2 pb-2 ">
               <p className="text-lg">
                 인원 : {crew.crewOccupancy} / {crew.crewCapacity}
               </p>
