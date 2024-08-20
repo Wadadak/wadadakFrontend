@@ -7,10 +7,9 @@ import { useParams } from 'next/navigation';
 import Wrapper from '@/components/layout/Wrapper';
 
 const CrewDetailInfoPage = () => {
-  const { id } = useParams();
-  const crewId = parseInt(id as string, 10);
-  console.log(crewId);
-  const crew = mockCrewList.find((crew) => crew.crewId === crewId);
+  const { crewId } = useParams();
+  const id = parseInt(crewId as string, 10);
+  const crew = mockCrewList.find((crew) => crew.crewId === id);
 
   if (!crew) {
     return <Wrapper>크루 정보가 없습니다.</Wrapper>;

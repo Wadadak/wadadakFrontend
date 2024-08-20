@@ -73,9 +73,7 @@ const CrewDetailInfo = ({
                 <p className="text-lg">러닝 프로필 공개 필수</p>
               )}
               {crew.approvalRequired && (
-                <p className="text-lg" c>
-                  가입 승인 필요
-                </p>
+                <p className="text-lg">가입 승인 필요</p>
               )}
             </div>
             <div className="flex flex-col items-start gap-4 lg:gap-2">
