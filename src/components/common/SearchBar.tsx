@@ -4,12 +4,14 @@ interface SearchBarProps {
   placeholder?: string;
   size?: 'xs' | 'sm' | 'md' | 'lg';
   onSearch: (value: string) => void;
+  className?: string;
 }
 
 const SearchBar = ({
   placeholder = '검색하기',
-  size = 'sm',
+  size = 'md',
   onSearch,
+  className,
 }: SearchBarProps) => {
   const sizeClass = `input-${size}`;
 
@@ -27,7 +29,7 @@ const SearchBar = ({
 
   return (
     <label
-      className={`flex items-center gap-2 input input-bordered max-w-xs ${sizeClass}`}
+      className={`flex items-center gap-2 input input-bordered max-w-xs ${sizeClass} ${className}`}
     >
       <input
         type="text"
