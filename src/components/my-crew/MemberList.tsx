@@ -9,18 +9,15 @@ const MemberList = () => {
       {crewMembers.map((member) => (
         <div
           key={member.id}
-          className="p-4 bg-white shadow-md rounded-lg flex items-center justify-between"
+          className="p-4 bg-white shadow-sm rounded-lg flex items-center justify-between"
         >
           <div className="flex items-center gap-4">
-            <Avatar src="src={member.avatar}" />
-            <div className="avatar">
-              <div className="mask mask-squircle h-12 w-12">
-                <img alt={`${member.name}'s Avatar`} />
-              </div>
-            </div>
+            <Avatar src={member.avatar} alt={member.name} />
             <span className="font-bold">{member.name}</span>
           </div>
-          <button className="btn btn-sm">details</button>
+          <Button size="sm" color="secondary">
+            1:1 채팅
+          </Button>
         </div>
       ))}
     </div>
