@@ -1,20 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import CrewCard from './CrewCard';
 import { Crew } from '@/types/crewTypes';
-import { useRecoilState } from 'recoil';
-import { currentPageState } from '@/recoil/atoms/paginationState';
 import Pagination from '../common/Pagination';
 
 interface CrewListProps {
   crews: Crew[];
 }
 
-const itemsPerPage = 9;
-
 const CrewList: React.FC<CrewListProps> = ({ crews }) => {
-  const [currentPage, setCurrentPage] = useRecoilState(currentPageState);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+  const pageRangeDisplayed = 5;
 
   const endIndex = currentPage * itemsPerPage;
   const startIndex = endIndex - itemsPerPage;
@@ -41,6 +39,7 @@ const CrewList: React.FC<CrewListProps> = ({ crews }) => {
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
+        pageRangeDisplayed={pageRangeDisplayed}
       />
     </div>
   );
