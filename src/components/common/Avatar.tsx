@@ -21,7 +21,7 @@ const Avatar = ({
   return (
     <div className={`avatar ${className}`}>
       <div className={`${size} rounded-full`}>
-        <img src={defaultAvatar} alt={alt} />
+        <img src={imageUrl} alt={alt} />
       </div>
     </div>
   );
