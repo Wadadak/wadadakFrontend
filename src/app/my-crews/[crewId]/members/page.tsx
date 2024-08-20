@@ -1,6 +1,6 @@
-import AllMemberList from '@/components/crew/MemberList';
-import MyCrewLayout from '@/components/my-crew/MyCrewLayout';
 import React from 'react';
+import MyCrewLayout from '@/components/my-crew/MyCrewLayout';
+import AllMemberList from '@/components/my-crew/AllMemberList';
 
 const MembersPage = () => {
   return (

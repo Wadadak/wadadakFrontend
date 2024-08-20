@@ -1,12 +1,16 @@
 import React from 'react';
 import Button from '../common/Button';
-import { crewMembers } from '@/mocks/mockData/crewMembers';
 import Avatar from '../common/Avatar';
+import { CrewMembers } from '@/types/memberTypes';
 
-const MemberList = () => {
+interface MemberListProps {
+  members: CrewMembers;
+}
+
+const MemberList = ({ members }: MemberListProps) => {
   return (
     <div className="grid gap-4 md:grid-cols-2">
-      {crewMembers.map((member) => (
+      {members.map((member) => (
         <div
           key={member.id}
           className="p-4 bg-white shadow-sm rounded-lg flex items-center justify-between"
