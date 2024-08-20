@@ -24,7 +24,7 @@ const Dropdown = ({
   multiple = false,
   selectedValues = [],
   width = 'xs',
-  disabled = false,
+  disabled = true,
 }: DropdownProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = multiple

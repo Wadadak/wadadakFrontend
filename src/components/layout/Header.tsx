@@ -8,9 +8,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import Avatar from '../common/Avatar';
 import { useRouter } from 'next/navigation';
+import SearchBar from '../common/SearchBar';
 
 const Header = () => {
   const router = useRouter();
+
+  const handleSearch = (value: string) => {
+    alert(value);
+  };
 
   return (
     <div className="fixed top-0 left-0 z-10 flex items-center justify-center w-full h-20 bg-white shadow-sm">
@@ -24,29 +29,18 @@ const Header = () => {
               onClick={() => router.push('/')}
             />
             {/* 검색창 */}
-            <label className="flex items-center gap-2 input input-bordered input-sm">
-              <input type="text" className="grow" placeholder="크루 검색하기" />
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 16 16"
-                fill="currentColor"
-                className="w-4 h-4 opacity-70"
-                onClick={() => alert('검색하기')}
-              >
-                <path
-                  fillRule="evenodd"
-                  d="M9.965 11.026a5 5 0 1 1 1.06-1.06l2.755 2.754a.75.75 0 1 1-1.06 1.06l-2.755-2.754ZM10.5 7a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0Z"
-                  clipRule="evenodd"
-                />
-              </svg>
-            </label>
+            <SearchBar
+              placeholder="크루 검색하기"
+              onSearch={handleSearch}
+              size="sm"
+            />
           </div>
           {/* 오른쪽 레이아웃 */}
           <div className="flex items-center space-x-6">
             <HeaderMenu
               name={'마이 크루'}
               icon={faBell}
-              onMenuClick={() => router.push('/my')}
+              onMenuClick={() => router.push('/my-crews')}
             />
             <HeaderMenu
               name={'메시지'}

@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { FormEvent, MouseEvent } from 'react';
+
+type ButtonEvent = MouseEvent<HTMLButtonElement> | FormEvent<HTMLButtonElement>;
 
 interface ButtonProps {
   outline?: boolean; // 아웃라인 버튼으로 변경
@@ -7,7 +9,7 @@ interface ButtonProps {
   size?: 'lg' | 'md' | 'sm' | 'xs';
   wide?: boolean;
   disabled?: boolean;
-  onClick?: (e: React.FormEvent) => void;
+  onClick?: (e: ButtonEvent) => void;
   children: React.ReactNode;
 }
 
