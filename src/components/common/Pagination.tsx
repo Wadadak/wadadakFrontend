@@ -1,12 +1,11 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import { pageRangeDisplayedState } from '@/recoil/atoms/paginationState';
 
 interface PaginationProps {
   totalItems: number;
   itemsPerPage: number; // 한 페이지당 아이템
   currentPage: number;
   onPageChange: (page: number) => void;
+  pageRangeDisplayed: number; // 표시할 페이지 범위
 }
 
 const Pagination = ({
@@ -14,8 +13,8 @@ const Pagination = ({
   itemsPerPage,
   currentPage,
   onPageChange,
+  pageRangeDisplayed,
 }: PaginationProps) => {
-  const pageRangeDisplayed = useRecoilValue(pageRangeDisplayedState); // Recoil에서 페이지 범위 값 가져오기
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
   // 페이지 구간 계산
@@ -49,6 +48,7 @@ const Pagination = ({
   const handleLastPage = () => {
     onPageChange(totalPages);
   };
+
   if (totalPages === 1) return null; // 페이지가 1개라면 표시x
 
   return (
