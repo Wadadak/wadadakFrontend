@@ -22,11 +22,12 @@ const SearchBar = ({
 
   const handleSearch = () => {
     onSearch(inputValue);
+    setInputValue('');
   };
 
   return (
     <label
-      className={`flex items-center gap-2 input input-bordered ${sizeClass}`}
+      className={`flex items-center gap-2 input input-bordered max-w-xs ${sizeClass}`}
     >
       <input
         type="text"
