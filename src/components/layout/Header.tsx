@@ -32,7 +32,7 @@ const Header = () => {
             <SearchBar
               placeholder="크루 검색하기"
               onSearch={handleSearch}
-              size="xs"
+              size="sm"
             />
           </div>
           {/* 오른쪽 레이아웃 */}
