@@ -29,7 +29,11 @@ const Header = () => {
               onClick={() => router.push('/')}
             />
             {/* 검색창 */}
-            <SearchBar placeholder="크루 검색하기" onSearch={handleSearch} />
+            <SearchBar
+              placeholder="크루 검색하기"
+              onSearch={handleSearch}
+              size="xs"
+            />
           </div>
           {/* 오른쪽 레이아웃 */}
           <div className="flex items-center space-x-6">
