@@ -1,4 +1,6 @@
-export const crewMembers = [
+import { CrewMembers } from '@/types/memberTypes';
+
+export const mockCrewMembers: CrewMembers = [
   {
     id: 1,
     name: 'Hart Hagerty',
