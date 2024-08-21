@@ -27,6 +27,11 @@ const MyPage = () => {
   const [recordTab, setRecordTab] = useState('round'); // round, week, month, year
   const [showEditModal, setShowEditModal] = useState(false);
   const [showAddRecord, setShowAddRecord] = useState(false);
+  const [showWeeklyGoal, setShowWeeklyGoal] = useState(false);
+
+  const [distance, setDistance] = useState<string>('');
+  const [time, setTime] = useState<string>('');
+  const [pace, setPace] = useState<string>('');
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -59,7 +64,12 @@ const MyPage = () => {
               <MyRecordItem record={"5'32''"} name={'평균 페이스'} />
               <MyRecordItem record={'164'} name={'평균 칼로리'} />
             </div>
-            <button className="text-[14px] text-gray-400 underline underline-offset-4">
+            <button
+              className="text-[14px] text-gray-400 underline underline-offset-4"
+              onClick={() => {
+                setShowAddRecord(true);
+              }}
+            >
               기록 추가하기
             </button>
           </div>
@@ -114,7 +124,12 @@ const MyPage = () => {
               </div>
 
               <div className="flex justify-center grid-cols-3 gap-[100px]">
-                <MyGoalItem title={'주간 목표'} onItemClick={() => {}} />
+                <MyGoalItem
+                  title={'주간 목표'}
+                  onItemClick={() => {
+                    setShowWeeklyGoal(true);
+                  }}
+                />
                 <MyGoalItem title={'월간 목표'} onItemClick={() => {}} />
                 <MyGoalItem title={'연간 목표'} onItemClick={() => {}} />
               </div>
@@ -253,8 +268,51 @@ const MyPage = () => {
         isOpen={showAddRecord}
         onClose={() => setShowAddRecord(false)}
       />
-      <SimpleModal isOpen={false} onClose={() => {}} title={'주간 목표'}>
-        <div>hihi</div>
+      <SimpleModal
+        isOpen={showWeeklyGoal}
+        onClose={() => {
+          setShowWeeklyGoal(false);
+        }}
+        title={'주간 목표'}
+      >
+        <div className="flex flex-col space-y-4">
+          <div className="flex flex-col space-y-5">
+            <div>2024.08.05 ~ 07일</div>
+            <div className="flex flex-col space-y-2">
+              <div className="font-bold">거리</div>
+              <TextInput
+                value={distance}
+                onChange={(value) => {
+                  setDistance(value);
+                }}
+                placeholder="목표 거리 입력"
+              />
+            </div>
+            <div className="flex flex-col space-y-2">
+              <div className="font-bold">시간</div>
+              <TextInput
+                value={time}
+                onChange={(value) => {
+                  setTime(value);
+                }}
+                placeholder="목표 시간 입력"
+              />
+            </div>
+            <div className="flex flex-col space-y-2">
+              <div className="font-bold">페이스</div>
+              <TextInput
+                value={pace}
+                onChange={(value) => {
+                  setPace(value);
+                }}
+                placeholder="목표 페이스 입력"
+              />
+            </div>
+          </div>
+          <div className="flex justify-end">
+            <Button>설정 하기</Button>
+          </div>
+        </div>
       </SimpleModal>
     </div>
   );
@@ -293,14 +351,26 @@ const MyGoalItem = ({ title, onItemClick }: MyGoalItemProps) => {
 interface MyRecordItemProps {
   record: string;
   name: string;
+  iconStyle?: string;
+  recordStyle?: string;
+  nameStyle?: string;
 }
 
-const MyRecordItem = ({ record, name }: MyRecordItemProps) => {
+export const MyRecordItem = ({
+  record,
+  name,
+  iconStyle,
+  recordStyle,
+  nameStyle,
+}: MyRecordItemProps) => {
   return (
     <div className="flex flex-col items-center space-y-2">
-      <FontAwesomeIcon icon={faRankingStar} className="w-8 h-8" />
-      <div className="text-4xl font-extrabold">{record}</div>
-      <div className="font-bold text-gray-500">{name}</div>
+      <FontAwesomeIcon
+        icon={faRankingStar}
+        className={`w-8 h-8 ${iconStyle}`}
+      />
+      <div className={`text-4xl font-extrabold ${recordStyle}`}>{record}</div>
+      <div className={`font-bold text-gray-500 ${nameStyle}`}>{name}</div>
     </div>
   );
 };
