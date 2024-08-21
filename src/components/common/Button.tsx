@@ -1,6 +1,8 @@
 import React, { FormEvent, MouseEvent } from 'react';
 
-type ButtonEvent = MouseEvent<HTMLButtonElement> | FormEvent<HTMLButtonElement>;
+type ButtonEvent<T = HTMLButtonElement> =
+  | React.MouseEvent<T>
+  | React.FormEvent<T>;
 
 interface ButtonProps {
   outline?: boolean; // 아웃라인 버튼으로 변경
