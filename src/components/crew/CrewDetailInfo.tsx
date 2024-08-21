@@ -1,4 +1,4 @@
-import React, { Children } from 'react';
+import React from 'react';
 import { Crew } from '@/types/crewTypes';
 import Wrapper from '../layout/Wrapper';
 import Button from '../common/Button';
