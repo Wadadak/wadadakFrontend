@@ -28,7 +28,10 @@ const CrewCard = ({
   myCrew = false,
 }: CrewCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleOpenModal = () => setIsModalOpen(true);
+  const handleOpenModal = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsModalOpen(true);
+  };
   const handleCloseModal = () => setIsModalOpen(false);
 
   const defaultImage = '/images/default.png';

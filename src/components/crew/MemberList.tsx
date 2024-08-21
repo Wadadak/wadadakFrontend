@@ -24,7 +24,7 @@ const MemberList = ({ members, children }: MemberListProps) => {
 
   return (
     <div
-      className="grid gap-4 md:grid-cols-2 cursor-pointer"
+      className="grid gap-4 md:grid-cols-2 cursor-pointer py-4"
       onClick={handleProfileClick}
     >
       {members.map((member) => (

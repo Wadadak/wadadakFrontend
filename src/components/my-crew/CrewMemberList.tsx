@@ -1,27 +1,54 @@
-import React from 'react';
+'use client';
+
+import React, { useState } from 'react';
 import AllMemberList from './AllMemberList';
 import Button from '../common/Button';
 import { mockCrewMembers } from '@/mocks/mockData/mockCrewMembers';
+import ApprovalAlert from './ApprovalAlert';
+import SimpleModal from '../common/SimpleModal';
+import { useRouter } from 'next/navigation';
 
-const CrewMemberList = () => {
-  const step = mockCrewMembers.some(
-    (member) => member.role === 'leader' || member.role === 'staff',
-  );
+// ui 테스트용
+interface CrewMemberListProps {
+  step?: boolean;
+}
+
+const CrewMemberList = ({ step }: CrewMemberListProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleOpenModal = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsModalOpen(true);
+  };
+  const handleCloseModal = () => setIsModalOpen(false);
 
   return (
-    <AllMemberList members={mockCrewMembers}>
-      {step && (
-        <div className="w-full bg-primary py-16 flex justify-center items-center text-[36px] font-bold text-white gap-4">
-          <div className="flex flex-col">
-            <h2 className="text-xl font-bold">
-              승인을 기다리고 있는 가입 신청
-            </h2>
-            <p>현재 00건의 가입 요청이 승인을 기다리고 있습니다.</p>
-            <Button>자세히 보기</Button>
+    <>
+      {step && <ApprovalAlert />}
+      <AllMemberList members={mockCrewMembers}>
+        <Button size="sm">1:1 채팅</Button>
+        {step && (
+          <Button outline size="sm" onClick={handleOpenModal}>
+            강제 탈퇴
+          </Button>
+        )}
+      </AllMemberList>
+      {isModalOpen && (
+        <SimpleModal
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+          title="정말 탈퇴 시키겠습니까?"
+        >
+          <div className="flex justify-end gap-2">
+            <Button outline color="accent">
+              예
+            </Button>
+            <Button color="accent" onClick={handleCloseModal}>
+              아니요
+            </Button>
           </div>
-        </div>
+        </SimpleModal>
       )}
-    </AllMemberList>
+    </>
   );
 };
 

@@ -25,7 +25,8 @@ const AllMemberList = ({ members, children }: AllMemberListProps) => {
 
   return (
     <>
-      <div className="flex justify-end mb-4">
+      <div className="text-center text-3xl font-bold">현재 크루원</div>
+      <div className="flex justify-end">
         <SearchBar placeholder="크루원 검색" onSearch={handleSearch} />
       </div>
       <MemberList members={currentMembers}>{children}</MemberList>
