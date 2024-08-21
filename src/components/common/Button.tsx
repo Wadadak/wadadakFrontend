@@ -8,7 +8,7 @@ interface ButtonProps {
   wide?: boolean;
   disabled?: boolean;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  onSubmit?: (e: React.FormEvent<HTMLButtonElement>) => void;
+  type?: 'button' | 'submit' | 'reset'; // 기본은 button
   children: React.ReactNode;
 }
 
@@ -20,6 +20,7 @@ const Button = ({
   wide = false,
   disabled = false,
   onClick,
+  type = 'button',
   children,
 }: ButtonProps) => {
   const outlineClass = outline ? `btn-outline` : '';
@@ -33,6 +34,7 @@ const Button = ({
       className={`btn ${outlineClass} ${colorClass} ${sizeClass} ${textColorClass} ${wideClass}`}
       disabled={disabled}
       onClick={onClick}
+      type={type}
     >
       {children}
     </button>
