@@ -1,12 +1,17 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import MemberList from '../crew/MemberList';
 import SearchBar from '../common/SearchBar';
 import Pagination from '../common/Pagination';
-import { mockCrewMembers } from '@/mocks/mockData/mockCrewMembers';
+import { CrewMembers } from '@/types/memberTypes';
 
-const AllMemberList = () => {
+interface AllMemberListProps {
+  members: CrewMembers;
+  children: ReactNode;
+}
+
+const AllMemberList = ({ members, children }: AllMemberListProps) => {
   const handleSearch = (value: string) => {
     alert(value);
   };
@@ -16,14 +21,16 @@ const AllMemberList = () => {
 
   const endIndex = currentPage * itemsPerPage;
   const startIndex = endIndex - itemsPerPage;
-  const currentMembers = mockCrewMembers.slice(startIndex, endIndex);
+  const currentMembers = members.slice(startIndex, endIndex);
 
   return (
     <>
-      <SearchBar placeholder="크루원 검색" onSearch={handleSearch} />
-      <MemberList members={currentMembers} />
+      <div className="flex justify-end mb-4">
+        <SearchBar placeholder="크루원 검색" onSearch={handleSearch} />
+      </div>
+      <MemberList members={currentMembers}>{children}</MemberList>
       <Pagination
-        totalItems={mockCrewMembers.length}
+        totalItems={members.length}
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
         onPageChange={setCurrentPage}

@@ -1,14 +1,14 @@
-import React from 'react';
-import Button from '../common/Button';
+import React, { ReactNode } from 'react';
 import Avatar from '../common/Avatar';
 import { CrewMembers } from '@/types/memberTypes';
 import { useRouter } from 'next/navigation';
 
 interface MemberListProps {
   members: CrewMembers;
+  children: ReactNode;
 }
 
-const MemberList = ({ members }: MemberListProps) => {
+const MemberList = ({ members, children }: MemberListProps) => {
   const router = useRouter();
 
   // TODO url 변경
@@ -36,11 +36,7 @@ const MemberList = ({ members }: MemberListProps) => {
             <Avatar src={member.avatar} alt={member.name} />
             <span className="font-bold">{member.name}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Button size="sm" color="secondary" onClick={handleChatClick}>
-              채팅
-            </Button>
-          </div>
+          <div className="flex items-center gap-2">{children}</div>
         </div>
       ))}
     </div>
