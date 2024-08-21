@@ -1,63 +1,66 @@
 import React from 'react';
 
-interface SelectInputProps {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
+interface DropdownOption {
+  id: string;
+  name: string;
+}
+
+interface DropdownProps {
+  options: DropdownOption[]; // 드롭다운에 표시할 옵션 배열
+  onChange: (value: string | string[] | number) => void;
   placeholder?: string;
   required?: boolean;
-  maxLength?: number; // 글자 수 제한
-  labelClassName?: string; // <label> 요소의 추가 클래스
-  inputClassName?: string; // <input> 요소의 추가 클래스
+  multiple?: boolean; // 다중 선택 가능 여부
+  selectedValues?: string[]; // 선택된 값들
   width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
-  as?: 'input' | 'textarea'; //input 또는 textarea 선택 (기본은 input)
-  rows?: number; // textarea의 경우
+  disabled?: boolean;
 }
 
 const Dropdown = ({
-  label,
-  value,
+  options,
   onChange,
   placeholder = '',
   required = false,
-  maxLength,
-  labelClassName = '',
-  inputClassName = '',
+  multiple = false,
+  selectedValues = [],
   width = 'xs',
-}: SelectInputProps) => {
+  disabled = true,
+}: DropdownProps) => {
+  const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = multiple
+      ? Array.from(e.target.selectedOptions, (option) => option.value)
+      : e.target.value;
+    if (onChange) {
+      onChange(value);
+    }
+  };
   const widthClass = `max-w-${width}`;
 
   return (
-    <label className={`form-control w-full py-2 ${labelClassName}`}>
-      <div className="label">
-        <span className="label-text">
-          {label}
-          {/* 필수 표시 */}
-          {required && <span className="text-red-500"> *</span>}
-        </span>
-      </div>
-
-      <select className="select select-bordered">
-        <option disabled selected>
-          {p}
+    <select
+      className={`select select-bordered ${widthClass}`}
+      value={multiple ? undefined : selectedValues[0]}
+      multiple={multiple}
+      onChange={handleChange}
+      required={required}
+    >
+      <option value="" selected disabled={disabled}>
+        {placeholder}
+      </option>
+      {options.map((option) => (
+        <option
+          key={option.id}
+          value={option.id}
+          selected={
+            multiple
+              ? selectedValues.includes(option.name)
+              : selectedValues[0] === option.name
+          }
+        >
+          {option.name}
         </option>
-        <option>Star Wars</option>
-        <option>Harry Potter</option>
-        <option>Lord of the Rings</option>
-        <option>Planet of the Apes</option>
-        <option>Star Trek</option>
-      </select>
-
-      <input
-        className={`input input-bordered w-full ${widthClass} ${inputClassName}`}
-        type="text"
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        placeholder={placeholder}
-        required={required}
-        maxLength={maxLength}
-      />
-    </label>
+      ))}
+    </select>
   );
 };
 
