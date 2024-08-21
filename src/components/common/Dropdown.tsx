@@ -50,7 +50,7 @@ const Dropdown = ({
       {options.map((option) => (
         <option
           key={option.id}
-          value={option.name}
+          value={option.id}
           selected={
             multiple
               ? selectedValues.includes(option.name)
