@@ -1,11 +1,35 @@
 'use client';
 
 import Avatar from '@/components/common/Avatar';
-import Dropdown from '@/components/common/Dropdown';
+import CheckBox from '@/components/common/CheckBox';
+import Dropdown, { DropdownOption } from '@/components/common/Dropdown';
 import { ToggleButton } from '@/components/common/ToggleButtion';
+import YearOfBirthDropdown from '@/components/common/YearOfBirthDropdown';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+
+//hctodo: API 호출하는 데이터로 바꿀 것
+const regionList: DropdownOption[] = [
+  { id: 'SEOUL', name: '서울특별시' },
+  { id: 'BUSAN', name: '부산광역시' },
+  { id: 'DAEGU', name: '대구광역시' },
+  { id: 'INCHEON', name: '인천광역시' },
+  { id: 'GWANGJU', name: '광주광역시' },
+  { id: 'DAEJEON', name: '대전광역시' },
+  { id: 'ULSAN', name: '울산광역시' },
+  { id: 'SEJONG', name: '세종특별자치시' },
+  { id: 'GYEONGGI', name: '경기도' },
+  { id: 'GANGWON', name: '강원도' },
+  { id: 'CHUNGBUK', name: '충청북도' },
+  { id: 'CHUNGNAM', name: '충청남도' },
+  { id: 'JEOLLABUK', name: '전라북도' },
+  { id: 'JEOLLANAM', name: '전라남도' },
+  { id: 'GYEONGBUK', name: '경상북도' },
+  { id: 'GYEONGNAM', name: '경상남도' },
+  { id: 'JEJU', name: '제주특별자치도' },
+  { id: 'NATIONWIDE', name: '전국' },
+];
 
 const SignUpPage = () => {
   const [email, setEmail] = useState<string>('');
@@ -15,7 +39,9 @@ const SignUpPage = () => {
   const [nickName, setNickName] = useState<string>('');
   const [profileImage, setProfileImage] = useState<string>('');
   const [phoneNumber, setPhoneNumber] = useState<string>();
-  const [gender, setGender] = useState<string>('');
+  const [gender, setGender] = useState<string[]>([]);
+  const [birthYear, setBirthYear] = useState<number>(0);
+  const [activityRegion, setActivityRegion] = useState<string>('');
 
   const router = useRouter();
   const [isNameOn, setIsNameOn] = useState<boolean>(false);
@@ -24,32 +50,67 @@ const SignUpPage = () => {
   const [isGenderOn, setIsGenderOn] = useState<boolean>(false);
   const [isAgeOn, setIsAgeOn] = useState<boolean>(false);
 
-  const yearList = Array.from({ length: 2024 - 1924 + 1 }, (_, i) => 1924 + i);
-  const regionList = [
-    '전국',
-    '서울특별시',
-    '부산광역시',
-    '대구광역시',
-    '인천광역시',
-    '광주광역시',
-    '대전광역시',
-    '울산광역시',
-    '세종특별자치시',
-    '경기도',
-    '강원도',
-    '충청북도',
-    '충청남도',
-    '전라북도',
-    '전라남도',
-    '경상북도',
-    '경상남도',
-    '제주특별자치도',
-  ];
-
-  const handleGenderChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setGender(event.target.value);
+  const validateEmail = (email: string): boolean => {
+    //기획: email 형식(xxx@xxx.xxx), 50자 이내
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
-  const handleSignUp = () => {};
+
+  const validatePassword = (password: string): boolean => {
+    //기획: 숫자, 대소문자, 특수문자 1개 이상, 8자~50자
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?{}[\]~])[A-Za-z\d!@#$%^&*()_\-+=<>?{}[\]~]{8,50}$/;
+    return passwordRegex.test(password);
+  };
+
+  const handleSignUp = () => {
+    //유효성검사
+    if (!validateEmail(email)) {
+      alert('유효하지 않은 이메일입니다.');
+      return;
+    }
+
+    if (email.length > 50) {
+      alert('이메일은 50자 이내여야 합니다.');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      alert('비밀번호를 확인해 주세요.');
+      return;
+    }
+
+    if (!validatePassword(password)) {
+      alert(
+        '비밀번호는 숫자, 대소문자, 특수문자 1개 이상, 8자~50자여야 합니다.',
+      );
+      return;
+    }
+
+    const body = {
+      username: name,
+      email: email,
+      password: password,
+      checkPassword: confirmPassword,
+      nickname: nickName,
+      phoneNumber,
+      profileImage,
+      gender: gender[0],
+      birthYear,
+      activityRegion,
+
+      // hctodo API 명세 추가되면 다시 수정할 것.
+      isNameOn,
+      isProfileOn,
+      isPhoneNumberOn,
+      isGenderOn,
+      isAgeOn,
+    };
+
+    console.log('SignUpPage body', body);
+    //api call
+    // executeMutation(body);
+  };
 
   return (
     <div className="flex flex-col bg-base-200">
@@ -187,28 +248,24 @@ const SignUpPage = () => {
               <div className="flex flex-col space-y-3">
                 <div className="flex flex-col space-y-3">
                   <Title title={'성별'} htmlFor={''} required={true} />
-                  <div className="flex space-x-10 pl-1">
-                    <div className="flex space-x-3">
-                      <input
-                        type="radio"
-                        name="gender"
-                        value={'M'}
-                        className="cursor-pointer"
-                        onChange={handleGenderChange}
-                      />
-                      <span>남</span>
-                    </div>
-                    <div className="flex space-x-3">
-                      <input
-                        type="radio"
-                        name="gender"
-                        value={'F'}
-                        className="cursor-pointer"
-                        onChange={handleGenderChange}
-                      />
-                      <span>여</span>
-                    </div>
-                  </div>
+                  <CheckBox
+                    multiple={false}
+                    options={[
+                      {
+                        id: 'M',
+                        name: '남자',
+                      },
+                      {
+                        id: 'F',
+                        name: '여자',
+                      },
+                    ]}
+                    selectedValues={gender}
+                    onChange={(list) => {
+                      console.log(list);
+                      setGender(list);
+                    }}
+                  />
                 </div>
                 <div className="flex items-center space-x-2">
                   <div className="text-[12px] font-semibold">프로필 공개</div>
@@ -221,23 +278,10 @@ const SignUpPage = () => {
               {/* age */}
               <div className="flex flex-col space-y-1">
                 <Title title={'나이'} htmlFor={''} required={true} />
-                <div className="dropdown dropdown-hover">
-                  <div tabIndex={0} role="button" className="btn m-1">
-                    나이를 선택해 주세요.
-                  </div>
-                  <ul
-                    tabIndex={0}
-                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
-                  >
-                    {yearList.map((year) => {
-                      return (
-                        <li>
-                          <a>{year}</a>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
+                <YearOfBirthDropdown
+                  selectedYear={birthYear}
+                  onYearChange={setBirthYear}
+                />
                 <div className="flex items-center space-x-2">
                   <div className="text-[12px] font-semibold">프로필 공개</div>
                   <ToggleButton
@@ -249,23 +293,12 @@ const SignUpPage = () => {
               {/* activity area */}
               <div>
                 <Title title={'활동지역'} htmlFor={''} required={true} />
-                <div className="dropdown dropdown-hover">
-                  <div tabIndex={0} role="button" className="btn m-1">
-                    활동지역을 선택해 주세요.
-                  </div>
-                  <ul
-                    tabIndex={0}
-                    className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
-                  >
-                    {regionList.map((region) => {
-                      return (
-                        <li>
-                          <a>{region}</a>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </div>
+                <Dropdown
+                  options={regionList}
+                  onChange={(region) => {
+                    setActivityRegion(region as string);
+                  }}
+                />
               </div>
             </div>
             {/* sign up */}
