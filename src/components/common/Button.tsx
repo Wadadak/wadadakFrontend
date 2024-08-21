@@ -1,9 +1,5 @@
 import React, { FormEvent, MouseEvent } from 'react';
 
-type ButtonEvent<T = HTMLButtonElement> =
-  | React.MouseEvent<T>
-  | React.FormEvent<T>;
-
 interface ButtonProps {
   outline?: boolean; // 아웃라인 버튼으로 변경
   color?: 'primary' | 'secondary' | 'accent' | string;
@@ -11,7 +7,8 @@ interface ButtonProps {
   size?: 'lg' | 'md' | 'sm' | 'xs';
   wide?: boolean;
   disabled?: boolean;
-  onClick?: (e: ButtonEvent) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onSubmit?: (e: React.FormEvent<HTMLButtonElement>) => void;
   children: React.ReactNode;
 }
 
