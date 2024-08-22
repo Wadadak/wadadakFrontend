@@ -6,7 +6,6 @@ import Button from '../common/Button';
 import { mockCrewMembers } from '@/mocks/mockData/mockCrewMembers';
 import ApprovalAlert from './ApprovalAlert';
 import SimpleModal from '../common/SimpleModal';
-import { useRouter } from 'next/navigation';
 
 // ui 테스트용
 interface CrewMemberListProps {
