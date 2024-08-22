@@ -41,7 +41,7 @@ export const mockCrewList: Crew[] = [
     minAge: null,
     maxAge: null,
     publicRecordRequired: true,
-    approvalRequired: true,
+    approvalRequired: false,
     regularRunningInfo: [],
   },
   {

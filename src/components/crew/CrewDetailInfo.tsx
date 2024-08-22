@@ -6,15 +6,10 @@ import RegularRunningInfoTable from './RegularRunningInfoTable';
 
 interface CrewDetailInfoProps {
   crew: Crew;
-  buttonText?: React.ReactNode;
-  step?: boolean;
+  children: React.ReactNode;
 }
 
-const CrewDetailInfo = ({
-  crew,
-  buttonText = '가입하기',
-  step = false,
-}: CrewDetailInfoProps) => {
+const CrewDetailInfo = ({ crew, children }: CrewDetailInfoProps) => {
   const defaultImage = '/images/default.png';
 
   const renderAgeRange = () => {
@@ -51,10 +46,7 @@ const CrewDetailInfo = ({
               {crew.activityRegion}
             </div>
           </h1>
-          <div className="flex gap-2">
-            <Button color="secondary">{buttonText}</Button>
-            {step && <Button color="secondary">수정하기</Button>}
-          </div>
+          <div className="flex gap-2">{children}</div>
         </div>
         <div className="hero-content flex-col lg:flex-row w-full justify-start items-center gap-6 lg:gap-20 mb-4">
           <img
