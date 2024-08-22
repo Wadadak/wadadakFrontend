@@ -27,7 +27,7 @@ const SimpleModal = ({
             ✕
           </button>
           <h3 className="font-bold text-lg">{title}</h3>
-          <div className="py-4">{children}</div>
+          <div className="py-4 last:pb-0">{children}</div>
         </div>
         {/* 바깥 영역 누르면 닫히는 것 */}
         <form method="dialog" className="modal-backdrop">
