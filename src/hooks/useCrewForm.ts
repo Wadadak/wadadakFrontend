@@ -53,6 +53,13 @@ export const useCrewForm = () => {
       newErrors.location = '활동 지역을 선택하세요.';
     }
 
+    if (!recordRequired) {
+      newErrors.recordRequired = '선택하세요.';
+    }
+    if (!approvalRequired) {
+      newErrors.approvalRequired = '선택하세요.';
+    }
+
     if (minAge !== null && maxAge !== null && minAge > maxAge) {
       newErrors.ageRange = '최소 나이는 최대 나이보다 클 수 없습니다.';
     }

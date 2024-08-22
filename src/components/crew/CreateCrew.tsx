@@ -11,6 +11,7 @@ import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
 import ImageUpload from '../common/ImageUpload';
 import { useCrewForm } from '@/hooks/useCrewForm';
 import { mockActivityRegions } from '@/mocks/mockData/mockActivityRegions';
+import { error } from 'console';
 // TODO : API 함수들 import
 
 const CreateCrew = () => {
@@ -60,6 +61,7 @@ const CreateCrew = () => {
             required
             maxLength={500}
             as="textarea"
+            error={errors.description}
           />
         </Label>
         <Label label="활동 지역" required>
@@ -69,6 +71,7 @@ const CreateCrew = () => {
             placeholder="활동 지역을 선택하세요"
             required
             selectedValues={[location]}
+            error={errors.location}
           />
         </Label>
         <Label label="가입 신청자의 러닝 프로필 공개 여부" required>

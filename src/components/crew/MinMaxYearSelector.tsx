@@ -6,6 +6,7 @@ interface MinMaxYearProps {
   maxAge: number | null;
   onMinAgeChange: (age: number) => void;
   onMaxAgeChange: (age: number) => void;
+  error?: string;
 }
 
 const MinMaxYearSelector = ({
@@ -13,6 +14,7 @@ const MinMaxYearSelector = ({
   maxAge,
   onMinAgeChange,
   onMaxAgeChange,
+  error,
 }: MinMaxYearProps) => {
   return (
     <div className="flex flex-row space-x-4">
@@ -20,11 +22,13 @@ const MinMaxYearSelector = ({
         selectedYear={minAge}
         onYearChange={onMinAgeChange}
         placeholder="최소 연령"
+        error={error}
       />
       <YearOfBirthDropdown
         selectedYear={maxAge}
         onYearChange={onMaxAgeChange}
         placeholder="최대 연령"
+        error={error}
       />
     </div>
   );
