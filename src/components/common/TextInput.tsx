@@ -23,7 +23,7 @@ const TextInput = ({
   as = 'input',
   rows = 5,
 }: TextInputProps) => {
-  const inputWidthClass = width ? `max-w-${width}` : 'xs';
+  const inputWidthClass = width ? `max-w-${width}` : 'max-w-xs';
   const textareaWidthClass = width ? `w-${width}` : 'w-1/2';
 
   return as === 'textarea' ? (
