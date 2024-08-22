@@ -36,6 +36,7 @@ const CreateCrew = () => {
     minAge,
     setMinAge,
     handleSubmit,
+    errors,
   } = useCrewForm();
 
   return (
@@ -48,6 +49,7 @@ const CreateCrew = () => {
             placeholder="크루명을 입력하세요"
             required
             maxLength={30}
+            error={errors.name}
           />
         </Label>
         <Label label="크루 소개" required>
