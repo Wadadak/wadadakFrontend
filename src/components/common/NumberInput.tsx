@@ -7,6 +7,7 @@ interface NumberInputProps {
   required?: boolean;
   min?: number; // 최소값 제한
   width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
+  error?: string;
 }
 
 const NumberInput = ({
@@ -16,6 +17,7 @@ const NumberInput = ({
   required = false,
   min = 1,
   width = 'xs',
+  error,
 }: NumberInputProps) => {
   const widthClass = `max-w-${width}`;
 
@@ -41,14 +43,17 @@ const NumberInput = ({
   };
 
   return (
-    <input
-      className={`input input-bordered w-full ${widthClass} }`}
-      type="text"
-      value={value !== null ? value : ''}
-      onChange={handleChange}
-      placeholder={placeholder}
-      required={required}
-    />
+    <>
+      <input
+        className={`input input-bordered w-full ${widthClass} ${error && 'input-error'}}`}
+        type="text"
+        value={value !== null ? value : ''}
+        onChange={handleChange}
+        placeholder={placeholder}
+        required={required}
+      />
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+    </>
   );
 };
 
