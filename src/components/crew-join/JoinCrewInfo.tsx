@@ -62,7 +62,7 @@ const JoinCrewInfo = () => {
   }
 
   return (
-    <>
+    <Wrapper>
       <CrewDetailInfo crew={crew}>
         {isPendingApproval ? (
           <div className="flex gap-2">
@@ -140,7 +140,7 @@ const JoinCrewInfo = () => {
           </div>
         </SimpleModal>
       )}
-    </>
+    </Wrapper>
   );
 };
 

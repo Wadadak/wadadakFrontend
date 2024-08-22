@@ -11,7 +11,6 @@ import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
 import ImageUpload from '../common/ImageUpload';
 import { useCrewForm } from '@/hooks/useCrewForm';
 import { mockActivityRegions } from '@/mocks/mockData/mockActivityRegions';
-import { error } from 'console';
 // TODO : API 함수들 import
 
 const CreateCrew = () => {

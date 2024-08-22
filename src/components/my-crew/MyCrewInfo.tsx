@@ -31,8 +31,19 @@ const MyCrewInfo = ({ step = false }: MyCrewInfoProps) => {
     router.push('/');
   };
 
+  const handleRunningInfo = () => {
+    router.push(`/my-crews/${crewId}/info/regular-running`); // 정기 러닝 정보 관리 페이지로 이동
+  };
+
   return (
     <>
+      {step && (
+        <div className="flex justify-end mb-4">
+          <Button size="sm" color="secondary" onClick={handleRunningInfo}>
+            정기 러닝 정보 추가 / 수정
+          </Button>
+        </div>
+      )}
       <CrewDetailInfo crew={crew}>
         {step && <Button>수정하기</Button>}
         <Button outline onClick={handleOpenModal}>
@@ -60,6 +71,7 @@ const MyCrewInfo = ({ step = false }: MyCrewInfoProps) => {
           </div>
         </SimpleModal>
       )}
+      {}
     </>
   );
 };
