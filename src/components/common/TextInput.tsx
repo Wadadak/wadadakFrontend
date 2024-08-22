@@ -7,7 +7,7 @@ interface TextInputProps {
   placeholder?: string;
   required?: boolean;
   maxLength?: number; // 글자 수 제한
-  width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
+  width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string; // 너비를 위한 프롭
   as?: 'input' | 'textarea'; //input 또는 textarea 선택 (기본은 input)
   rows?: number; // textarea의 경우
 }
@@ -19,15 +19,16 @@ const TextInput = ({
   placeholder = '',
   required = false,
   maxLength,
-  width = 'xs',
+  width,
   as = 'input',
   rows = 5,
 }: TextInputProps) => {
-  const widthClass = `max-w-${width}`;
+  const inputWidthClass = width ? `max-w-${width}` : 'xs';
+  const textareaWidthClass = width ? `w-${width}` : 'w-1/2';
 
   return as === 'textarea' ? (
     <textarea
-      className="textarea textarea-bordered w-1/2"
+      className={`textarea textarea-bordered ${textareaWidthClass}`}
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
@@ -37,7 +38,7 @@ const TextInput = ({
     />
   ) : (
     <input
-      className={`input input-bordered w-full ${widthClass}`}
+      className={`input input-bordered w-full ${inputWidthClass}`}
       type={type}
       value={value}
       onChange={(e) => onChange(e.target.value)}
