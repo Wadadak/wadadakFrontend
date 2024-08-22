@@ -8,10 +8,17 @@ import { CrewMembers } from '@/types/memberTypes';
 
 interface AllMemberListProps {
   members: CrewMembers;
+  title?: string;
+  search?: boolean;
   children: ReactNode;
 }
 
-const AllMemberList = ({ members, children }: AllMemberListProps) => {
+const AllMemberList = ({
+  members,
+  title = '현재 크루원',
+  search = true,
+  children,
+}: AllMemberListProps) => {
   const handleSearch = (value: string) => {
     alert(value);
   };
@@ -25,10 +32,12 @@ const AllMemberList = ({ members, children }: AllMemberListProps) => {
 
   return (
     <>
-      <div className="text-center text-3xl font-bold">현재 크루원</div>
-      <div className="flex justify-end">
-        <SearchBar placeholder="크루원 검색" onSearch={handleSearch} />
-      </div>
+      <div className="text-center text-3xl font-bold">{title}</div>
+      {search && (
+        <div className="flex justify-end">
+          <SearchBar placeholder="크루원 검색" onSearch={handleSearch} />
+        </div>
+      )}
       <MemberList members={currentMembers}>{children}</MemberList>
       <Pagination
         totalItems={members.length}

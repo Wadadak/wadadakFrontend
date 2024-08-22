@@ -13,7 +13,11 @@ const Approval = () => {
 
   return (
     <>
-      <AllMemberList members={mockCrewMembers}>
+      <AllMemberList
+        members={mockCrewMembers}
+        title="가입 승인 대기자"
+        search={false}
+      >
         <Button
           size="sm"
           color="secondary"
@@ -32,12 +36,10 @@ const Approval = () => {
           title="정말 승인하시겠습니까?"
         >
           <div className="flex justify-end gap-2">
-            <Button color="accent">예</Button>
-            <Button
-              color="accent"
-              outline
-              onClick={approvalModal.handleCloseModal}
-            >
+            <Button color="accent" outline>
+              예
+            </Button>
+            <Button color="accent" onClick={approvalModal.handleCloseModal}>
               아니요
             </Button>
           </div>
