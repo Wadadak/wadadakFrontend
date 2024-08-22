@@ -5,12 +5,14 @@ interface YearOfBirthDropdownProps {
   selectedYear: number | null;
   onYearChange: (year: number) => void;
   placeholder?: string;
+  error?: string; // 에러 메시지 프롭스
 }
 
 const YearOfBirthDropdown = ({
   selectedYear,
   onYearChange,
   placeholder = '',
+  error,
 }: YearOfBirthDropdownProps) => {
   const startYear = 1900;
   const endYear = new Date().getFullYear();
@@ -31,6 +33,7 @@ const YearOfBirthDropdown = ({
       onChange={(value) => onYearChange(Number(value))}
       selectedValues={selectedYear ? [String(selectedYear)] : []}
       placeholder={placeholder}
+      error={error}
     />
   );
 };

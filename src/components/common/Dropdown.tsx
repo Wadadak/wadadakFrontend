@@ -14,6 +14,7 @@ interface DropdownProps {
   selectedValues?: string[]; // 선택된 값들
   width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
   disabled?: boolean;
+  error?: string;
 }
 
 const Dropdown = ({
@@ -25,6 +26,7 @@ const Dropdown = ({
   selectedValues = [],
   width = 'xs',
   disabled = true,
+  error,
 }: DropdownProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = multiple
@@ -37,30 +39,33 @@ const Dropdown = ({
   const widthClass = `max-w-${width}`;
 
   return (
-    <select
-      className={`select select-bordered ${widthClass}`}
-      value={multiple ? undefined : selectedValues[0]}
-      multiple={multiple}
-      onChange={handleChange}
-      required={required}
-    >
-      <option value="" selected disabled={disabled}>
-        {placeholder}
-      </option>
-      {options.map((option) => (
-        <option
-          key={option.id}
-          value={option.id}
-          selected={
-            multiple
-              ? selectedValues.includes(option.name)
-              : selectedValues[0] === option.name
-          }
-        >
-          {option.name}
+    <>
+      <select
+        className={`select select-bordered ${widthClass}  ${error && 'select-error'}`}
+        value={multiple ? undefined : selectedValues[0]}
+        multiple={multiple}
+        onChange={handleChange}
+        required={required}
+      >
+        <option value="" selected disabled={disabled}>
+          {placeholder}
         </option>
-      ))}
-    </select>
+        {options.map((option) => (
+          <option
+            key={option.id}
+            value={option.id}
+            selected={
+              multiple
+                ? selectedValues.includes(option.name)
+                : selectedValues[0] === option.name
+            }
+          >
+            {option.name}
+          </option>
+        ))}
+      </select>
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+    </>
   );
 };
 
