@@ -3,6 +3,7 @@
 import Avatar from '@/components/common/Avatar';
 import CheckBox from '@/components/common/CheckBox';
 import Dropdown, { DropdownOption } from '@/components/common/Dropdown';
+import TextInput from '@/components/common/TextInput';
 import { ToggleButton } from '@/components/common/ToggleButtion';
 import YearOfBirthDropdown from '@/components/common/YearOfBirthDropdown';
 import { TitleBanner } from '@/components/layout/TitleBanner';
@@ -38,7 +39,7 @@ const SignUpPage = () => {
   const [name, setName] = useState<string>('');
   const [nickName, setNickName] = useState<string>('');
   const [profileImage, setProfileImage] = useState<string>('');
-  const [phoneNumber, setPhoneNumber] = useState<string>();
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [gender, setGender] = useState<string[]>([]);
   const [birthYear, setBirthYear] = useState<number>(0);
   const [activityRegion, setActivityRegion] = useState<string>('');
@@ -125,13 +126,12 @@ const SignUpPage = () => {
               {/* e-mail */}
               <div className="form-control">
                 <Title title={'이메일'} htmlFor={'email'} required={true} />
-                <input
-                  type="text"
-                  id="email"
-                  className="input input-bordered"
-                  placeholder="이메일 입력"
+                <TextInput
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(value) => {
+                    setEmail(value);
+                  }}
+                  placeholder="이메일 입력"
                 />
               </div>
               {/* password */}
@@ -169,13 +169,12 @@ const SignUpPage = () => {
               <div className="flex flex-col space-y-3">
                 <div className="form-control">
                   <Title title={'이름'} htmlFor={'name'} required={true} />
-                  <input
-                    type="text"
-                    id="name"
-                    className="input input-bordered"
-                    placeholder="이름을 입력해 주세요."
+                  <TextInput
                     value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    onChange={(value) => {
+                      setName(value);
+                    }}
+                    placeholder="이름을 입력해 주세요"
                   />
                 </div>
                 <div className="flex items-center space-x-2">
@@ -189,13 +188,12 @@ const SignUpPage = () => {
               {/* nickName */}
               <div className="form-control">
                 <Title title={'닉네임'} htmlFor={'nickName'} required={true} />
-                <input
-                  type="text"
-                  id="nickName"
-                  className="input input-bordered"
-                  placeholder="닉네임을 입력해 주세요."
+                <TextInput
                   value={nickName}
-                  onChange={(e) => setNickName(e.target.value)}
+                  onChange={(value) => {
+                    setNickName(value);
+                  }}
+                  placeholder="닉네임을 입력해 주세요"
                 />
               </div>
               {/* P.image */}
@@ -227,13 +225,12 @@ const SignUpPage = () => {
                     htmlFor={'phoneNumber'}
                     required={true}
                   />
-                  <input
-                    type="tel"
-                    id="phoneNumber"
-                    className="input input-bordered"
-                    placeholder="번호를 입력해 주세요."
+                  <TextInput
                     value={phoneNumber}
-                    onChange={(e) => setPhoneNumber(e.target.value)}
+                    onChange={(value) => {
+                      setPhoneNumber(value);
+                    }}
+                    placeholder="번호를 입력해 주세요"
                   />
                 </div>
                 <div className="flex items-center space-x-2">
