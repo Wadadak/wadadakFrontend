@@ -17,7 +17,11 @@ const JoinCrewInfo = () => {
 
   const messageModal = useModal();
   const confirmModal = useModal();
+  const cancelModal = useModal();
   const [message, setMessage] = useState('');
+  // TODO api 연결시 useQuery 사용
+  const [isPendingApproval, setIsPendingApproval] = useState(false);
+
   // TODO API 연결 시 useMutation 사용
   // const mutation = useMutation(sendMessage, {
   //   onSuccess: () => {
@@ -37,9 +41,20 @@ const JoinCrewInfo = () => {
   const handleFinalSubmit = () => {
     // TODO API 연결 시 mutation.mutate(message);로 변경
     console.log('가입 신청 메시지:', message);
-    setMessage('');
     confirmModal.handleCloseModal();
-    alert('가입 신청이 완료되었습니다.');
+    if (crew?.approvalRequired) {
+      setIsPendingApproval(true);
+      alert('가입 신청이 완료되었습니다. 관리자의 승인을 기다려주세요.');
+    } else {
+      alert('가입이 완료되었습니다!');
+    }
+  };
+
+  const handleCancel = () => {
+    setIsPendingApproval(false);
+    setMessage('');
+    alert('가입 신청이 취소되었습니다.');
+    cancelModal.handleCloseModal();
   };
 
   if (!crew) {
@@ -49,7 +64,16 @@ const JoinCrewInfo = () => {
   return (
     <>
       <CrewDetailInfo crew={crew}>
-        <Button onClick={messageModal.handleOpenModal}>가입 신청</Button>
+        {isPendingApproval ? (
+          <div className="flex gap-2">
+            <Button onClick={messageModal.handleOpenModal}>수정하기</Button>
+            <Button outline onClick={cancelModal.handleOpenModal}>
+              취소하기
+            </Button>
+          </div>
+        ) : (
+          <Button onClick={messageModal.handleOpenModal}>가입 신청</Button>
+        )}
       </CrewDetailInfo>
       {messageModal.isModalOpen && (
         <SimpleModal
@@ -93,6 +117,26 @@ const JoinCrewInfo = () => {
                 아니오
               </Button>
             </div>
+          </div>
+        </SimpleModal>
+      )}
+      {cancelModal.isModalOpen && (
+        <SimpleModal
+          isOpen={cancelModal.isModalOpen}
+          onClose={cancelModal.handleCloseModal}
+          title="정말 크루 신청을 취소하시겠습니까?"
+        >
+          <div className="flex justify-end gap-2">
+            <Button color="accent" onClick={handleCancel} type="submit">
+              예
+            </Button>
+            <Button
+              color="accent"
+              onClick={cancelModal.handleCloseModal}
+              type="submit"
+            >
+              아니오
+            </Button>
           </div>
         </SimpleModal>
       )}
