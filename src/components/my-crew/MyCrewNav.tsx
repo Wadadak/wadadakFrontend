@@ -21,7 +21,7 @@ const MyCrewNav = ({ crewId }: MyCrewNavProps) => {
         <a>게시판</a>
       </li>
       <li>
-        <a>크루 정보</a>
+        <Link href={`/my-crews/${crewId}/info`}>크루 정보</Link>
       </li>
       <li>
         <Link href={`/my-crews/${crewId}/members`}>크루원</Link>

@@ -9,9 +9,9 @@ import CheckBox from '@/components/common/CheckBox';
 import Button from '@/components/common/Button';
 import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
 import ImageUpload from '../common/ImageUpload';
+import { useCrewForm } from '@/hooks/useCrewForm';
+import { mockActivityRegions } from '@/mocks/mockData/mockActivityRegions';
 // TODO : API 함수들 import
-
-interface CrewFormData {}
 
 const CreateCrew = () => {
   const {
@@ -36,9 +36,7 @@ const CreateCrew = () => {
     minAge,
     setMinAge,
     handleSubmit,
-  } = useCreateCrew();
-
-  const regions = useRecoilValue(activityRegionsState);
+  } = useCrewForm();
 
   return (
     <>
@@ -64,7 +62,7 @@ const CreateCrew = () => {
         </Label>
         <Label label="활동 지역" required>
           <Dropdown
-            options={regions}
+            options={mockActivityRegions}
             onChange={(value) => setLocation(value as string)}
             placeholder="활동 지역을 선택하세요"
             required
