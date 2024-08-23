@@ -6,7 +6,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Button from '@/components/common/Button';
 
-const CustomDatePicker: React.FC = () => {
+const TimePicker: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
@@ -39,4 +39,4 @@ const CustomDatePicker: React.FC = () => {
   );
 };
 
-export default CustomDatePicker;
+export default TimePicker;
