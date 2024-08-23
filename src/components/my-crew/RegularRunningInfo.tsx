@@ -4,8 +4,7 @@ import React, { useState } from 'react';
 import Button from '../common/Button';
 import CheckBox from '../common/CheckBox';
 import Dropdown from '../common/Dropdown';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+import TimePicker from '../common/TimePicker';
 import Label from '../common/Label';
 import { mockActivityRegions } from '@/mocks/mockData/mockActivityRegions';
 
@@ -75,9 +74,7 @@ const RunningInfoForm = ({
   const [dayOfWeek, setDayOfWeek] = useState<string[]>(
     initialInfo?.dayOfWeek || [],
   );
-  const [times, setTimes] = useState<string[]>(
-    initialInfo?.time?.map((time) => time) || [],
-  );
+  const [times, setTimes] = useState<string[]>(initialInfo?.time || []);
 
   // 요일 선택
   const handleWeekdayChange = (newSelectedValues: string[]) => {
@@ -146,16 +143,7 @@ const RunningInfoForm = ({
         />
       </Label>
       <Label label="시간(복수 선택)">
-        <DatePicker
-          selected={null}
-          onChange={(time) => time && handleAddTime(time)}
-          showTimeSelect
-          showTimeSelectOnly
-          timeIntervals={15}
-          timeCaption="시작 시간"
-          dateFormat="HH:mm"
-          placeholderText="시간을 선택하세요"
-        />
+        <TimePicker selectedTimes={times} />
       </Label>
       {times.length > 0 && (
         <ul className="mt-2">
