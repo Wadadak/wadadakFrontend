@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface DropdownOption {
-  id: string;
-  name: string;
+  id: string | number;
+  name: string | number;
 }
 
 interface DropdownProps {
