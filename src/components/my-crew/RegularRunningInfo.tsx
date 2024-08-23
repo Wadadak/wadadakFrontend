@@ -81,12 +81,9 @@ const RunningInfoForm = ({
     setDayOfWeek(newSelectedValues);
   };
 
-  const handleAddTime = (time: Date) => {
-    setTimes((prev) => [...prev, time.toISOString().substring(11, 16)]);
-  };
-
-  const handleRemoveTime = (index: number) => {
-    setTimes((prev) => prev.filter((_, i) => i !== index));
+  // 시간 추가
+  const handleTimeChange = (newTimes: string[]) => {
+    setTimes(newTimes);
   };
 
   const handleSubmit = () => {
@@ -143,20 +140,8 @@ const RunningInfoForm = ({
         />
       </Label>
       <Label label="시간(복수 선택)">
-        <TimePicker selectedTimes={times} />
+        <TimePicker selectedTimes={times} onTimeChange={handleTimeChange} />
       </Label>
-      {times.length > 0 && (
-        <ul className="mt-2">
-          {times.map((time, index) => (
-            <li key={index} className="flex justify-between">
-              <span>{time}</span>
-              <Button size="sm" onClick={() => handleRemoveTime(index)}>
-                삭제
-              </Button>
-            </li>
-          ))}
-        </ul>
-      )}
     </>
   );
 };
