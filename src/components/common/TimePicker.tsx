@@ -5,8 +5,15 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { DateTime } from 'luxon';
 import Button from './Button';
 
-const TimePicker = () => {
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+interface TimePickerProps {
+  onTimeChange: (time: string | null) => void;
+  initialTime?: string | null;
+}
+
+const TimePicker = ({ onTimeChange, initialTime = null }: TimePickerProps) => {
+  const [selectedTime, setSelectedTime] = useState<string | null>(
+    initialTime || null,
+  );
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const toggleDatePicker = () => {
@@ -18,12 +25,14 @@ const TimePicker = () => {
       const newTime = DateTime.fromJSDate(time).toFormat('HH:mm');
       setSelectedTime(newTime);
       setIsDatePickerOpen(false); // 시간 선택 후 드롭다운 닫기
+      onTimeChange(newTime);
     }
   };
 
   const clearSelectedTime = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // 기본 동작 방지
     setSelectedTime(null);
+    onTimeChange(null);
   };
 
   return (
