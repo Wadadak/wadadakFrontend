@@ -4,6 +4,7 @@
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { DateTime } from 'luxon';
 import Button from '@/components/common/Button';
 
 interface TimePickerProps {
@@ -16,7 +17,7 @@ const TimePicker = ({ selectedTimes, onTimeChange }: TimePickerProps) => {
 
   const handleTimeChange = (time: Date | null) => {
     if (time) {
-      const newTime = time.toISOString().substring(11, 16); // "HH:mm" 형식
+      const newTime = DateTime.fromJSDate(time).toFormat('HH:mm');
       onTimeChange([...selectedTimes, newTime]);
     }
     setIsDatePickerOpen(false); // 날짜 선택 후 피커를 닫음
@@ -52,7 +53,7 @@ const TimePicker = ({ selectedTimes, onTimeChange }: TimePickerProps) => {
           {selectedTimes.map((time, index) => (
             <div
               key={index}
-              className="card bg-base-100 shadow-md rounded-lg p-2 flex justify-between items-center"
+              className="card bg-base-100 shadow-md rounded-lg gap-2 flex flex-row justify-between items-center"
             >
               <span className="font-medium text-lg">{time}</span>
               <Button
