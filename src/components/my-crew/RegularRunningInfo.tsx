@@ -135,7 +135,7 @@ const RunningInfoForm = ({
         count,
         dayOfWeek,
         activityRegion,
-        time: time | null,
+        time,
       };
 
       // 수정 시 기존 ID를 포함해서 서버로 전송
