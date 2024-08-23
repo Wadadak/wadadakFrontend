@@ -1,8 +1,8 @@
 import React from 'react';
-import RegularRunningInfo from '@/components/my-crew/RegularRunningInfo';
+import RunningInfoForm from '@/components/my-crew/RegularRunningInfo';
 
 const RegularRunningInfoPAge = () => {
-  return <RegularRunningInfo />;
+  return <RunningInfoForm />;
 };
 
 export default RegularRunningInfoPAge;

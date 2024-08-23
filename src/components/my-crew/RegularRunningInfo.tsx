@@ -97,22 +97,31 @@ const RunningInfoForm = ({
       <p className="text-center text-3xl">
         {initialInfo ? '정기 러닝 정보 수정' : '정기 러닝 정보 추가'}
       </p>
-      <Label label="활동 지역">
+      <Label label="활동 지역" required>
         <Dropdown
           options={mockActivityRegions}
           placeholder="활동 지역"
-          onChange={(id) => setLocation(value as string)}
+          onChange={(value) => setLocation(value as string)}
+          required
         />
       </Label>
-      <Label label="주기">
+      <Label label="주기" required>
         <Dropdown
           options={frequencyOptions}
           placeholder="주기"
           onChange={(value) => setWeeks(value as number)}
+          required
+        />
+      </Label>
+      <Label label="횟수">
+        <Dropdown
+          options={timesOptions}
+          placeholder="횟수"
+          onChange={(value) => setTimes(value as number)}
         />
       </Label>
     </>
   );
 };
 
-export default RegularRunningInfo;
+export default RunningInfoForm;
