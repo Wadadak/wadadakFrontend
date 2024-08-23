@@ -2,7 +2,7 @@ import React from 'react';
 
 interface DropdownOption {
   id: string | number;
-  name: string | number;
+  name: string;
 }
 
 interface DropdownProps {
