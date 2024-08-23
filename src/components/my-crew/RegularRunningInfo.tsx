@@ -52,7 +52,7 @@ interface CreateRunningInfo {
   count: number;
   dayOfWeek: string[];
   activityRegion: string;
-  time?: string[];
+  time?: string | null;
 }
 
 interface RunningInfoFormProps {
@@ -74,7 +74,8 @@ const RunningInfoForm = ({
   const [dayOfWeek, setDayOfWeek] = useState<string[]>(
     initialInfo?.dayOfWeek || [],
   );
-  const [times, setTimes] = useState<string[]>(initialInfo?.time || []);
+  const [time, setTime] = useState<string | null>(initialInfo?.time || null);
+  const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   // 요일 선택
   const handleWeekdayChange = (newSelectedValues: string[]) => {
@@ -82,25 +83,70 @@ const RunningInfoForm = ({
   };
 
   // 시간 추가
-  const handleTimeChange = (newTimes: string[]) => {
-    setTimes(newTimes);
+  const handleTimeChange = (newTime: string | null) => {
+    setTime(newTime);
+  };
+
+  // const handleSubmit = () => {
+  //   const requestData: CreateRunningInfo = {
+  //     week,
+  //     count,
+  //     dayOfWeek,
+  //     activityRegion,
+  //     time: times.length > 0 ? times : undefined, // 선택된 시간이 있을 경우 저장
+  //   };
+
+  //   // 수정 시 기존 ID를 포함해서 서버로 전송
+  //   if (initialInfo) {
+  //     requestData.id = initialInfo.id;
+  //   }
+
+  //   onSave(requestData);
+  // };
+
+  // 유효성 검사
+  const validateForm = () => {
+    const newErrors: { [key: string]: string } = {};
+
+    if (!activityRegion) {
+      newErrors.activityRegion = '활동 지역을 선택하세요.';
+    }
+
+    if (!week) {
+      newErrors.week = '주기를 선택하세요.';
+    }
+
+    if (!count) {
+      newErrors.count = '빈도를 선택하세요.';
+    }
+
+    if (dayOfWeek.length === 0) {
+      newErrors.dayOfWeek = '요일을 선택하세요.';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0; // 에러가 없으면 true 반환
   };
 
   const handleSubmit = () => {
-    const requestData: CreateRunningInfo = {
-      week,
-      count,
-      dayOfWeek,
-      activityRegion,
-      time: times.length > 0 ? times : undefined, // 선택된 시간이 있을 경우 저장
-    };
+    if (validateForm()) {
+      const requestData: CreateRunningInfo = {
+        week,
+        count,
+        dayOfWeek,
+        activityRegion,
+        time: time | null,
+      };
 
-    // 수정 시 기존 ID를 포함해서 서버로 전송
-    if (initialInfo) {
-      requestData.id = initialInfo.id;
+      // 수정 시 기존 ID를 포함해서 서버로 전송
+      if (initialInfo) {
+        requestData.id = initialInfo.id;
+      }
+
+      onSave(requestData);
+    } else {
+      console.log('유효성 검사 실패:', errors);
     }
-
-    onSave(requestData);
   };
 
   return (
@@ -139,9 +185,19 @@ const RunningInfoForm = ({
           onChange={handleWeekdayChange}
         />
       </Label>
-      <Label label="시간(복수 선택)">
-        <TimePicker selectedTimes={times} onTimeChange={handleTimeChange} />
+      <Label label="시간">
+        <TimePicker />
       </Label>
+      <div className="flex w-full justify-end">
+        <Button
+          wide={true}
+          color="secondary"
+          onClick={handleSubmit}
+          type="submit"
+        >
+          제출하기
+        </Button>
+      </div>
     </>
   );
 };
