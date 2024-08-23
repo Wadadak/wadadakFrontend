@@ -1,4 +1,3 @@
-// 시간 복수로 선택
 'use client';
 
 import React, { useState } from 'react';
@@ -15,16 +14,16 @@ interface TimePickerProps {
 const TimePicker = ({ selectedTimes, onTimeChange }: TimePickerProps) => {
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
+  const toggleDatePicker = () => {
+    setIsDatePickerOpen((prev) => !prev);
+  };
+
   const handleTimeChange = (time: Date | null) => {
     if (time) {
       const newTime = DateTime.fromJSDate(time).toFormat('HH:mm');
       onTimeChange([...selectedTimes, newTime]);
+      setIsDatePickerOpen(false); // 시간 선택 후 피커를 닫음
     }
-    setIsDatePickerOpen(false); // 날짜 선택 후 피커를 닫음
-  };
-
-  const toggleDatePicker = () => {
-    setIsDatePickerOpen((prev) => !prev);
   };
 
   return (
@@ -39,23 +38,24 @@ const TimePicker = ({ selectedTimes, onTimeChange }: TimePickerProps) => {
             onChange={handleTimeChange}
             showTimeSelect
             showTimeSelectOnly
-            timeIntervals={15}
+            timeIntervals={30}
             timeCaption="Time"
             dateFormat="HH:mm"
-            className="p-2 border border-gray-300 rounded shadow-lg"
-            inline // DatePicker를 인라인으로 표시
+            className="p-2 border border-gray-200 rounded shadow-lg"
+            inline
+            onClickOutside={toggleDatePicker}
           />
         </div>
       )}
 
       {selectedTimes.length > 0 && (
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
+        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {selectedTimes.map((time, index) => (
             <div
               key={index}
-              className="card bg-base-100 shadow-md rounded-lg gap-2 flex flex-row justify-between items-center"
+              className="card bg-base-100 shadow-md rounded-lg py-2 px-4 flex flex-row justify-between items-center"
             >
-              <span className="font-medium text-lg">{time}</span>
+              <span>{time}</span>
               <Button
                 size="sm"
                 color="accent"
