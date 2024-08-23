@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface CheckBoxProps {
-  options: { id: string; name: string }[]; // 옵션 배열 프롭스
+  options: { id: string | number; name: string }[]; // 옵션 배열 프롭스
   selectedValues: string[];
   onChange: (selectedValues: string[]) => void;
   multiple?: boolean; // 다중 선택 가능 여부
