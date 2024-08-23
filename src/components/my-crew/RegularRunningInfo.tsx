@@ -22,7 +22,7 @@ const frequencyOptions = [
   { id: 10, name: '10주' },
   { id: 11, name: '11주' },
   { id: 12, name: '12주' },
-  { id: 0, name: '기타' },
+  // { id: 0, name: '기타' },
 ];
 
 const timesOptions = [
@@ -48,8 +48,8 @@ const weekdayOptions = [
 
 interface CreateRunningInfo {
   id?: number; // 수정 시 필요
-  week: number;
-  count: number;
+  week: number | null;
+  count: number | null;
   dayOfWeek: string[];
   activityRegion: string;
   time?: string | null;
@@ -69,8 +69,8 @@ const RunningInfoForm = ({
   const [activityRegion, setActivityRegion] = useState(
     initialInfo?.activityRegion || '',
   );
-  const [week, setWeek] = useState(initialInfo?.week || 1);
-  const [count, setCount] = useState(initialInfo?.count || 1);
+  const [week, setWeek] = useState(initialInfo?.week || null);
+  const [count, setCount] = useState(initialInfo?.count || null);
   const [dayOfWeek, setDayOfWeek] = useState<string[]>(
     initialInfo?.dayOfWeek || [],
   );
@@ -80,29 +80,15 @@ const RunningInfoForm = ({
   // 요일 선택
   const handleWeekdayChange = (newSelectedValues: string[]) => {
     setDayOfWeek(newSelectedValues);
+    if (newSelectedValues.length > 0) {
+      setErrors((prevErrors) => ({ ...prevErrors, dayOfWeek: '' }));
+    }
   };
 
   // 시간 추가
   const handleTimeChange = (newTime: string | null) => {
     setTime(newTime);
   };
-
-  // const handleSubmit = () => {
-  //   const requestData: CreateRunningInfo = {
-  //     week,
-  //     count,
-  //     dayOfWeek,
-  //     activityRegion,
-  //     time: times.length > 0 ? times : undefined, // 선택된 시간이 있을 경우 저장
-  //   };
-
-  //   // 수정 시 기존 ID를 포함해서 서버로 전송
-  //   if (initialInfo) {
-  //     requestData.id = initialInfo.id;
-  //   }
-
-  //   onSave(requestData);
-  // };
 
   // 유효성 검사
   const validateForm = () => {
@@ -112,19 +98,22 @@ const RunningInfoForm = ({
       newErrors.activityRegion = '활동 지역을 선택하세요.';
     }
 
+    // week 유효성 검사
     if (!week) {
-      newErrors.week = '주기를 선택하세요.';
+      newErrors.week = '유효한 주기를 선택하세요.';
     }
 
+    // count 유효성 검사
     if (!count) {
-      newErrors.count = '빈도를 선택하세요.';
+      newErrors.count = '유효한 빈도를 선택하세요.';
     }
 
     if (dayOfWeek.length === 0) {
-      newErrors.dayOfWeek = '요일을 선택하세요.';
+      newErrors.dayOfWeek = '요일을 하나 이상 선택하세요.';
     }
 
     setErrors(newErrors);
+
     return Object.keys(newErrors).length === 0; // 에러가 없으면 true 반환
   };
 
@@ -135,7 +124,7 @@ const RunningInfoForm = ({
         count,
         dayOfWeek,
         activityRegion,
-        time,
+        time: time ? time : undefined, // 선택된 시간이 있을 경우 저장
       };
 
       // 수정 시 기존 ID를 포함해서 서버로 전송
@@ -158,23 +147,36 @@ const RunningInfoForm = ({
         <Dropdown
           options={mockActivityRegions}
           placeholder="활동 지역"
-          onChange={(value) => setActivityRegion(value as string)}
+          onChange={(value) => {
+            setActivityRegion(value as string);
+            setErrors((prevErrors) => ({ ...prevErrors, activityRegion: '' }));
+          }}
           required
+          error={errors.activityRegion}
         />
       </Label>
       <Label label="주기" required>
         <Dropdown
           options={frequencyOptions}
           placeholder="주기"
-          onChange={(value) => setWeek(value as number)}
+          onChange={(value) => {
+            setWeek(value as number);
+            setErrors((prevErrors) => ({ ...prevErrors, week: '' }));
+          }}
           required
+          error={errors.week}
         />
       </Label>
       <Label label="빈도" required>
         <Dropdown
           options={timesOptions}
           placeholder="빈도"
-          onChange={(value) => setCount(value as number)}
+          onChange={(value) => {
+            setCount(value as number);
+            setErrors((prevErrors) => ({ ...prevErrors, count: '' }));
+          }}
+          required
+          error={errors.count}
         />
       </Label>
       <Label label="요일(복수 선택)" required>
@@ -183,10 +185,14 @@ const RunningInfoForm = ({
           multiple
           selectedValues={dayOfWeek}
           onChange={handleWeekdayChange}
+          error={errors.dayOfWeek}
         />
       </Label>
       <Label label="시간">
-        <TimePicker />
+        <TimePicker
+          onTimeChange={handleTimeChange}
+          initialTime={initialInfo?.time || time}
+        />
       </Label>
       <div className="flex w-full justify-end">
         <Button
