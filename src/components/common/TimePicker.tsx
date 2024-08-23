@@ -28,13 +28,16 @@ const TimePicker = ({ selectedTimes, onTimeChange }: TimePickerProps) => {
 
   return (
     <div className="relative inline-block">
-      <Button onClick={toggleDatePicker}>시간 선택</Button>
+      <Button onClick={toggleDatePicker} size="sm" wide>
+        시간 선택
+      </Button>
       {isDatePickerOpen && (
         <div className="absolute z-10 mt-2">
           <DatePicker
             selected={null}
             onChange={handleTimeChange}
             showTimeSelect
+            showTimeSelectOnly
             timeIntervals={15}
             timeCaption="Time"
             dateFormat="HH:mm"
@@ -49,7 +52,7 @@ const TimePicker = ({ selectedTimes, onTimeChange }: TimePickerProps) => {
           {selectedTimes.map((time, index) => (
             <div
               key={index}
-              className="card bg-base-100 shadow-md rounded-lg p-4 flex justify-between items-center"
+              className="card bg-base-100 shadow-md rounded-lg p-2 flex justify-between items-center"
             >
               <span className="font-medium text-lg">{time}</span>
               <Button
