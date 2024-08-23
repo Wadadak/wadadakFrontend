@@ -1,9 +1,10 @@
 export interface RegularRunningInfo {
   id: number;
-  frequency: { weeks: number; times: number };
-  weekdays: string[];
-  location: string;
-  time?: string;
+  week: number;
+  count: number;
+  dayOfWeek: string[];
+  activityRegion: string;
+  time?: string[];
 }
 
 export interface Crew {

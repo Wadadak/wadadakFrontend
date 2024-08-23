@@ -1,21 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
-import { useParams } from 'next/navigation';
-import { mockCrewList } from '@/mocks/mockData/mockCrewList';
-import { RegularRunningInfo } from '@/types/crewTypes';
 import Button from '../common/Button';
 import CheckBox from '../common/CheckBox';
 import Dropdown from '../common/Dropdown';
 import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import Label from '../common/Label';
 import { mockActivityRegions } from '@/mocks/mockData/mockActivityRegions';
-
-interface RunningInfoFormProps {
-  initialInfo: RegularRunningInfo | null;
-  onSave: (info: RegularRunningInfo) => void;
-  onCancel: () => void;
-}
 
 // 주기 옵션
 const frequencyOptions = [
@@ -55,53 +47,78 @@ const weekdayOptions = [
   { id: 'sunday', name: '일요일' },
 ];
 
+interface CreateRunningInfo {
+  id?: number; // 수정 시 필요
+  week: number;
+  count: number;
+  dayOfWeek: string[];
+  activityRegion: string;
+  time?: string[];
+}
+
+interface RunningInfoFormProps {
+  initialInfo: CreateRunningInfo | null;
+  onSave: (info: CreateRunningInfo) => void;
+  onCancel: () => void;
+}
+
 const RunningInfoForm = ({
   initialInfo,
   onSave,
   onCancel,
 }: RunningInfoFormProps) => {
-  const [location, setLocation] = useState(initialInfo?.location || '');
-  const [weeks, setWeeks] = useState(initialInfo?.frequency.weeks || 1);
-  const [times, setTimes] = useState(initialInfo?.frequency.times || 1);
-  const [weekdays, setWeekdays] = useState<string[]>(
-    initialInfo?.weekdays || [],
+  const [activityRegion, setActivityRegion] = useState(
+    initialInfo?.activityRegion || '',
   );
-  const [selectedTime, setSelectedTime] = useState<Date | null>(
-    initialInfo?.time ? new Date(initialInfo.time) : null,
+  const [week, setWeek] = useState(initialInfo?.week || 1);
+  const [count, setCount] = useState(initialInfo?.count || 1);
+  const [dayOfWeek, setDayOfWeek] = useState<string[]>(
+    initialInfo?.dayOfWeek || [],
+  );
+  const [times, setTimes] = useState<string[]>(
+    initialInfo?.time?.map((time) => time) || [],
   );
 
   // 요일 선택
-  const handleWeekdayChange = (day: string) => {
-    setWeekdays((prev) => {
-      if (prev.includes(day)) {
-        return prev.filter((d) => d !== day); // 이미 선택된 경우 제거
-      } else {
-        return [...prev, day]; // 선택되지 않은 경우 추가
-      }
-    });
+  const handleWeekdayChange = (newSelectedValues: string[]) => {
+    setDayOfWeek(newSelectedValues);
+  };
+
+  const handleAddTime = (time: Date) => {
+    setTimes((prev) => [...prev, time.toISOString().substring(11, 16)]);
+  };
+
+  const handleRemoveTime = (index: number) => {
+    setTimes((prev) => prev.filter((_, i) => i !== index));
   };
 
   const handleSubmit = () => {
-    const info: RegularRunningInfo = {
-      id: initialInfo ? initialInfo.id : Date.now(),
-      frequency: { weeks, times },
-      weekdays,
-      location,
-      time: selectedTime ? selectedTime.toISOString() : undefined,
+    const requestData: CreateRunningInfo = {
+      week,
+      count,
+      dayOfWeek,
+      activityRegion,
+      time: times.length > 0 ? times : undefined, // 선택된 시간이 있을 경우 저장
     };
-    onSave(info);
+
+    // 수정 시 기존 ID를 포함해서 서버로 전송
+    if (initialInfo) {
+      requestData.id = initialInfo.id;
+    }
+
+    onSave(requestData);
   };
 
   return (
     <>
-      <p className="text-center text-3xl">
+      <p className="text-center text-3xl font-bold">
         {initialInfo ? '정기 러닝 정보 수정' : '정기 러닝 정보 추가'}
       </p>
       <Label label="활동 지역" required>
         <Dropdown
           options={mockActivityRegions}
           placeholder="활동 지역"
-          onChange={(value) => setLocation(value as string)}
+          onChange={(value) => setActivityRegion(value as string)}
           required
         />
       </Label>
@@ -109,17 +126,49 @@ const RunningInfoForm = ({
         <Dropdown
           options={frequencyOptions}
           placeholder="주기"
-          onChange={(value) => setWeeks(value as number)}
+          onChange={(value) => setWeek(value as number)}
           required
         />
       </Label>
-      <Label label="횟수">
+      <Label label="빈도" required>
         <Dropdown
           options={timesOptions}
-          placeholder="횟수"
-          onChange={(value) => setTimes(value as number)}
+          placeholder="빈도"
+          onChange={(value) => setCount(value as number)}
         />
       </Label>
+      <Label label="요일(복수 선택)" required>
+        <CheckBox
+          options={weekdayOptions}
+          multiple
+          selectedValues={dayOfWeek}
+          onChange={handleWeekdayChange}
+        />
+      </Label>
+      <Label label="시간(복수 선택)">
+        <DatePicker
+          selected={null}
+          onChange={(time) => time && handleAddTime(time)}
+          showTimeSelect
+          showTimeSelectOnly
+          timeIntervals={15}
+          timeCaption="시작 시간"
+          dateFormat="HH:mm"
+          placeholderText="시간을 선택하세요"
+        />
+      </Label>
+      {times.length > 0 && (
+        <ul className="mt-2">
+          {times.map((time, index) => (
+            <li key={index} className="flex justify-between">
+              <span>{time}</span>
+              <Button size="sm" onClick={() => handleRemoveTime(index)}>
+                삭제
+              </Button>
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 };
