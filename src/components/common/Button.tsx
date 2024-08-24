@@ -1,7 +1,5 @@
 import React, { FormEvent, MouseEvent } from 'react';
 
-type ButtonEvent = MouseEvent<HTMLButtonElement> | FormEvent<HTMLButtonElement>;
-
 interface ButtonProps {
   outline?: boolean; // 아웃라인 버튼으로 변경
   color?:
@@ -16,7 +14,8 @@ interface ButtonProps {
   size?: 'lg' | 'md' | 'sm' | 'xs';
   wide?: boolean;
   disabled?: boolean;
-  onClick?: (e: ButtonEvent) => void;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  type?: 'button' | 'submit' | 'reset'; // 기본은 button
   children: React.ReactNode;
 }
 
@@ -28,6 +27,7 @@ const Button = ({
   wide = false,
   disabled = false,
   onClick,
+  type = 'button',
   children,
 }: ButtonProps) => {
   const outlineClass = outline ? `btn-outline` : '';
@@ -41,6 +41,7 @@ const Button = ({
       className={`btn ${outlineClass} ${colorClass} ${sizeClass} ${textColorClass} ${wideClass}`}
       disabled={disabled}
       onClick={onClick}
+      type={type}
     >
       {children}
     </button>

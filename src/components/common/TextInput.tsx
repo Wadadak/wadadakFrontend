@@ -7,9 +7,10 @@ interface TextInputProps {
   placeholder?: string;
   required?: boolean;
   maxLength?: number; // 글자 수 제한
-  width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
+  width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | string; // 너비를 위한 프롭
   as?: 'input' | 'textarea'; //input 또는 textarea 선택 (기본은 input)
   rows?: number; // textarea의 경우
+  error?: string; // 에러 메시지 프롭스
 }
 
 const TextInput = ({
@@ -19,32 +20,39 @@ const TextInput = ({
   placeholder = '',
   required = false,
   maxLength,
-  width = 'xs',
+  width,
   as = 'input',
   rows = 5,
+  error,
 }: TextInputProps) => {
-  const widthClass = `max-w-${width}`;
+  const inputWidthClass = width ? `max-w-${width}` : 'max-w-xs';
+  const textareaWidthClass = width ? `w-${width}` : 'w-1/2';
 
-  return as === 'textarea' ? (
-    <textarea
-      className="textarea textarea-bordered w-1/2"
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      maxLength={maxLength}
-      required={required}
-      rows={rows}
-    />
-  ) : (
-    <input
-      className={`input input-bordered w-full ${widthClass}`}
-      type={type}
-      value={value}
-      onChange={(e) => onChange(e.target.value)}
-      placeholder={placeholder}
-      required={required}
-      maxLength={maxLength}
-    />
+  return (
+    <>
+      {as === 'textarea' ? (
+        <textarea
+          className={`textarea textarea-bordered ${textareaWidthClass} ${error && 'textarea-error'}`}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          maxLength={maxLength}
+          required={required}
+          rows={rows}
+        />
+      ) : (
+        <input
+          className={`input input-bordered w-full ${inputWidthClass} ${error && 'input-error'}`}
+          type={type}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          placeholder={placeholder}
+          required={required}
+          maxLength={maxLength}
+        />
+      )}
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+    </>
   );
 };
 
