@@ -1,17 +1,24 @@
 'use client';
-
 import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { DateTime } from 'luxon';
-import Button from '@/components/common/Button';
+import Button from './Button';
 
 interface TimePickerProps {
-  selectedTimes: string[];
-  onTimeChange: (times: string[]) => void;
+  onTimeChange: (time: string | null) => void;
+  initialTime?: string | null;
+  error?: string;
 }
 
-const TimePicker = ({ selectedTimes, onTimeChange }: TimePickerProps) => {
+const TimePicker = ({
+  onTimeChange,
+  initialTime = null,
+  error,
+}: TimePickerProps) => {
+  const [selectedTime, setSelectedTime] = useState<string | null>(
+    initialTime || null,
+  );
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
   const toggleDatePicker = () => {
@@ -21,54 +28,49 @@ const TimePicker = ({ selectedTimes, onTimeChange }: TimePickerProps) => {
   const handleTimeChange = (time: Date | null) => {
     if (time) {
       const newTime = DateTime.fromJSDate(time).toFormat('HH:mm');
-      onTimeChange([...selectedTimes, newTime]);
-      setIsDatePickerOpen(false); // 시간 선택 후 피커를 닫음
+      setSelectedTime(newTime);
+      setIsDatePickerOpen(false); // 시간 선택 후 드롭다운 닫기
+      onTimeChange(newTime);
     }
+  };
+
+  const clearSelectedTime = (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.preventDefault(); // 기본 동작 방지
+    setSelectedTime(null);
+    onTimeChange(null);
   };
 
   return (
     <div className="relative inline-block">
-      <Button onClick={toggleDatePicker} size="sm" wide>
-        시간 선택
-      </Button>
-      {isDatePickerOpen && (
-        <div className="absolute z-10 mt-2">
-          <DatePicker
-            selected={null}
-            onChange={handleTimeChange}
-            showTimeSelect
-            showTimeSelectOnly
-            timeIntervals={30}
-            timeCaption="Time"
-            dateFormat="HH:mm"
-            className="p-2 border border-gray-200 rounded shadow-lg"
-            inline
-            onClickOutside={toggleDatePicker}
-          />
-        </div>
-      )}
+      <div onClick={toggleDatePicker} className="cursor-pointer">
+        <DatePicker
+          selected={
+            selectedTime ? new Date(`1970-01-01T${selectedTime}:00`) : null
+          }
+          onChange={handleTimeChange}
+          showTimeSelect
+          showTimeSelectOnly
+          timeIntervals={30}
+          timeCaption="Time"
+          dateFormat="HH:mm"
+          className={`input input-bordered max-w-xs ${error && 'textarea-error'}`}
+          placeholderText="시간을 선택하세요"
+          open={isDatePickerOpen} // 드롭다운 상태
+          onClickOutside={() => setIsDatePickerOpen(false)} // 드롭다운 외부 클릭 시 닫기
+        />
+      </div>
 
-      {selectedTimes.length > 0 && (
-        <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {selectedTimes.map((time, index) => (
-            <div
-              key={index}
-              className="card bg-base-100 shadow-md rounded-lg py-2 px-4 flex flex-row justify-between items-center"
-            >
-              <span>{time}</span>
-              <Button
-                size="sm"
-                color="accent"
-                onClick={() =>
-                  onTimeChange(selectedTimes.filter((_, i) => i !== index))
-                }
-              >
-                삭제
-              </Button>
-            </div>
-          ))}
+      {selectedTime && (
+        <div className="mt-4 flex items-center gap-2">
+          <p>
+            선택된 시간: <strong>{selectedTime}</strong>
+          </p>
+          <Button onClick={clearSelectedTime} size="sm">
+            선택 취소
+          </Button>
         </div>
       )}
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>
   );
 };
