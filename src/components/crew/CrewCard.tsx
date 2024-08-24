@@ -3,34 +3,55 @@
 import React, { useState } from 'react';
 import SimpleModal from '../common/SimpleModal';
 import { RegularRunningInfo } from '@/types/crewTypes';
+import Link from 'next/link';
+import RegularRunningInfoTable from './RegularRunningInfoTable';
+import { useRouter } from 'next/navigation';
 
 interface CrewCardProps {
+  crewId: number;
   crewName: string;
   crewOccupancy: number;
   crewCapacity: number;
-  crewImage?: string;
+  crewImage?: string | null;
   activityRegion: string;
   regularRunningInfo?: RegularRunningInfo[];
+  myCrew?: boolean;
 }
 
-const CrewCard: React.FC<CrewCardProps> = ({
+const CrewCard = ({
+  crewId,
   crewName,
   crewOccupancy,
   crewCapacity,
   crewImage,
   activityRegion,
   regularRunningInfo = [],
-}) => {
+  myCrew = false,
+}: CrewCardProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const handleOpenModal = () => setIsModalOpen(true);
+  const router = useRouter();
+
+  const handleOpenModal = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setIsModalOpen(true);
+  };
   const handleCloseModal = () => setIsModalOpen(false);
 
   const defaultImage = '/images/default.png';
+
+  const handleCardClick = () => {
+    if (myCrew) {
+      router.push(`/my-crews/${crewId}`);
+    } else {
+      router.push(`/crew/${crewId}`);
+    }
+  };
 
   return (
     <div
       className="card bg-base-100 w-full sm:max-w-md md:max-w-lg lg:max-w-xl  shadow-sm cursor-pointer focus:outline focus:outline-2  focus:outline-accent focus:outline-offset-0 hover:outline hover:outline-2 hover:outline-accent hover:outline-offset-0"
       tabIndex={0}
+      onClick={handleCardClick}
     >
       <figure>
         <img src={crewImage || defaultImage} alt={crewName} />
@@ -54,32 +75,9 @@ const CrewCard: React.FC<CrewCardProps> = ({
               onClose={handleCloseModal}
               title="정기 러닝 정보"
             >
-              {regularRunningInfo.length > 0 ? (
-                <div className="overflow-x-auto">
-                  <table className="table">
-                    <thead>
-                      <tr>
-                        <th>지역</th>
-                        <th>주기</th>
-                        <th>요일</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {regularRunningInfo.map((info) => (
-                        <tr key={info.id}>
-                          <td>{info.location}</td>
-                          <td>
-                            {info.frequency.weeks}주에 {info.frequency.times}번
-                          </td>
-                          <td>{info.weekdays.join(', ')}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              ) : (
-                <p>정기 러닝 정보가 없습니다.</p>
-              )}
+              <RegularRunningInfoTable
+                regularRunningInfo={regularRunningInfo}
+              />
             </SimpleModal>
           )}
         </div>

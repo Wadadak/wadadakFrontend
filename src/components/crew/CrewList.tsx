@@ -7,9 +7,10 @@ import Pagination from '../common/Pagination';
 
 interface CrewListProps {
   crews: Crew[];
+  myCrew?: boolean;
 }
 
-const CrewList: React.FC<CrewListProps> = ({ crews }) => {
+const CrewList: React.FC<CrewListProps> = ({ crews, myCrew }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
   const pageRangeDisplayed = 5;
@@ -23,13 +24,15 @@ const CrewList: React.FC<CrewListProps> = ({ crews }) => {
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-items-center">
         {currentCards.map((crew) => (
           <CrewCard
-            key={crew.crew_id}
+            key={crew.crewId}
+            crewId={crew.crewId}
             crewName={crew.crewName}
             crewOccupancy={crew.crewOccupancy}
             crewCapacity={crew.crewCapacity}
             crewImage={crew.crewImage}
             activityRegion={crew.activityRegion}
             regularRunningInfo={crew.regularRunningInfo}
+            myCrew={myCrew}
           />
         ))}
       </div>
