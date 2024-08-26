@@ -3,8 +3,7 @@
 import React, { useState } from 'react';
 import SimpleModal from '../common/SimpleModal';
 import { RegularRunningInfo } from '@/types/crewTypes';
-import Link from 'next/link';
-import RegularRunningInfoTable from './RegularRunningInfoTable';
+import RegularRunningInfoTable from '../crew-info/RegularRunningInfoTable';
 import { useRouter } from 'next/navigation';
 
 interface CrewCardProps {

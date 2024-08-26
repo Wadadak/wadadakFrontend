@@ -56,16 +56,11 @@ interface CreateRunningInfo {
 }
 
 interface RunningInfoFormProps {
-  initialInfo: CreateRunningInfo | null;
+  initialInfo?: CreateRunningInfo;
   onSave: (info: CreateRunningInfo) => void;
-  onCancel: () => void;
 }
 
-const RunningInfoForm = ({
-  initialInfo,
-  onSave,
-  onCancel,
-}: RunningInfoFormProps) => {
+const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
   const [activityRegion, setActivityRegion] = useState(
     initialInfo?.activityRegion || '',
   );
@@ -133,6 +128,8 @@ const RunningInfoForm = ({
       }
 
       onSave(requestData);
+
+      alert('정기 러닝 정보가 추가되었습니다.');
     } else {
       console.log('유효성 검사 실패:', errors);
     }

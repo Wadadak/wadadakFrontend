@@ -11,9 +11,7 @@ import useModal from '@/hooks/useModal';
 import TextInput from '../common/TextInput';
 
 const JoinCrewInfo = () => {
-  const { crewId } = useParams();
-  const id = parseInt(crewId as string, 10);
-  const crew = mockCrewList.find((crew) => crew.crewId === id);
+  const crew = mockCrewList[0];
 
   const messageModal = useModal();
   const confirmModal = useModal();

@@ -1,13 +1,22 @@
 import React from 'react';
 import { Crew } from '@/types/crewTypes';
-import RegularRunningInfoTable from './RegularRunningInfoTable';
+import RegularRunningInfoTable from '../crew-info/RegularRunningInfoTable';
 
 interface CrewDetailInfoProps {
   crew: Crew;
   children: React.ReactNode;
+  userRole?: 'LEADER' | 'STAFF' | 'MEMBER';
+  onEditRunningInfo?: (id: number) => void; // 수정 핸들러 함수
+  onDeleteRunningInfo?: (id: number) => void; // 삭제 핸들러 함수
 }
 
-const CrewDetailInfo = ({ crew, children }: CrewDetailInfoProps) => {
+const CrewDetailInfo = ({
+  crew,
+  children,
+  userRole,
+  onEditRunningInfo,
+  onDeleteRunningInfo,
+}: CrewDetailInfoProps) => {
   const defaultImage = '/images/default.png';
 
   const renderAgeRange = () => {
@@ -15,7 +24,7 @@ const CrewDetailInfo = ({ crew, children }: CrewDetailInfoProps) => {
       // 둘 다 선택된 경우
       return (
         <p className="text-lg">
-          연령대 : {crew.minAge}년생 ~ {crew.maxAge}년생
+          연령대 : {crew.maxAge}년생 ~ {crew.minAge}년생
         </p>
       );
     } else if (crew.minAge !== null && crew.maxAge === null) {
@@ -61,7 +70,8 @@ const CrewDetailInfo = ({ crew, children }: CrewDetailInfoProps) => {
             {crew.publicRecordRequired && (
               <p className="text-lg">러닝 프로필 공개 필수</p>
             )}
-            {crew.approvalRequired && <p className="text-lg">가입 승인 필요</p>}
+            {/* NOTE 가입 승인 */}
+            {/* {crew.approvalRequired && <p className="text-lg">가입 승인 필요</p>} */}
           </div>
           <div className="flex flex-col items-start gap-4 lg:gap-2">
             <p className="card-title">크루 소개</p>
@@ -73,6 +83,9 @@ const CrewDetailInfo = ({ crew, children }: CrewDetailInfoProps) => {
         <p className="card-title pb-2 ">정기 러닝 정보</p>
         <RegularRunningInfoTable
           regularRunningInfo={crew.regularRunningInfo || []}
+          userRole={userRole}
+          onEditRunningInfo={onEditRunningInfo}
+          onDeleteRunningInfo={onDeleteRunningInfo}
         />
       </div>
       <div>

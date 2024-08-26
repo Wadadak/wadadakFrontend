@@ -40,9 +40,10 @@ const Header = () => {
             <HeaderMenu
               name={'마이 크루'}
               icon={faBell}
-              onMenuClick={() => router.push('/my-crews')}
+              onMenuClick={() => router.push('/joined-crews')}
             />
-            <HeaderMenu
+            {/* TODO 추후에 메시지, 알림 추가할 경우 */}
+            {/* <HeaderMenu
               name={'메시지'}
               icon={faBell}
               onMenuClick={() => router.push('/message')}
@@ -51,7 +52,7 @@ const Header = () => {
               name={'알림'}
               icon={faBell}
               onMenuClick={() => router.push('/alarm')}
-            />
+            /> */}
             <Avatar />
           </div>
         </div>

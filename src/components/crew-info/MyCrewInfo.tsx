@@ -9,14 +9,10 @@ import { useParams, useRouter } from 'next/navigation';
 import Wrapper from '@/components/layout/Wrapper';
 import useModal from '@/hooks/useModal';
 
-interface MyCrewInfoProps {
-  step?: boolean;
-}
-
-const MyCrewInfo = ({ step = false }: MyCrewInfoProps) => {
+const MyCrewInfo = () => {
   const { crewId } = useParams();
-  const id = parseInt(crewId as string, 10);
-  const crew = mockCrewList.find((crew) => crew.crewId === id);
+  const crew = mockCrewList.find((c) => c.crewId === Number(crewId)); // TODO 실제 데이터로 교체
+  const userRole = 'LEADER'; // TODO 실제 사용자 역할로 교체
 
   const { isModalOpen, handleCloseModal, handleOpenModal } = useModal();
   const router = useRouter();
@@ -32,20 +28,36 @@ const MyCrewInfo = ({ step = false }: MyCrewInfoProps) => {
   };
 
   const handleRunningInfo = () => {
-    router.push(`/my-crews/${crewId}/info/regular-running`); // 정기 러닝 정보 관리 페이지로 이동
+    router.push(`/regular-running/create`); // 정기 러닝 정보 관리 페이지로 이동
+  };
+
+  const handleEditCrewInfo = () => {
+    // 크루 정보 수정 페이지로 이동 또는 수정 로직 추가
+  };
+
+  const handleDeleteRunningInfo = (runningInfoId: number) => {
+    // 정기 러닝 정보 삭제 로직 구현
+    console.log(`${runningInfoId}번 정기 러닝 정보를 삭제합니다.`);
   };
 
   return (
     <>
-      {step && (
+      {(userRole === 'LEADER' || userRole === 'STAFF') && (
         <div className="flex justify-end mb-4">
           <Button size="sm" color="secondary" onClick={handleRunningInfo}>
-            정기 러닝 정보 추가 / 수정
+            정기 러닝 정보 추가
           </Button>
         </div>
       )}
-      <CrewDetailInfo crew={crew}>
-        {step && <Button>수정하기</Button>}
+      <CrewDetailInfo
+        crew={crew}
+        userRole={userRole}
+        onEditRunningInfo={handleEditCrewInfo}
+        onDeleteRunningInfo={handleDeleteRunningInfo}
+      >
+        {(userRole === 'LEADER' || userRole === 'STAFF') && (
+          <Button>수정하기</Button>
+        )}
         <Button outline onClick={handleOpenModal}>
           탈퇴하기
         </Button>

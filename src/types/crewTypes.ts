@@ -4,7 +4,7 @@ export interface RegularRunningInfo {
   count: number;
   dayOfWeek: string[];
   activityRegion: string;
-  time?: string[];
+  time?: string;
 }
 
 export interface Crew {
