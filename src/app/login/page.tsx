@@ -39,7 +39,7 @@ const LoginPage = () => {
             {/* username */}
             <div className="form-control">
               <label className="label" htmlFor="username">
-                <span className="label-text">이메일</span>
+                <span className="label-text font-semibold">이메일</span>
               </label>
               <input
                 type="text"
@@ -53,7 +53,7 @@ const LoginPage = () => {
             {/* password */}
             <div className="form-control mt-4">
               <label className="label" htmlFor="password">
-                <span className="label-text">비밀번호</span>
+                <span className="label-text font-semibold">비밀번호</span>
               </label>
               <input
                 type="password"

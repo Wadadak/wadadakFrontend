@@ -1,6 +1,6 @@
 import React from 'react';
 
-interface DropdownOption {
+export interface DropdownOption {
   id: string | number;
   name: string;
 }

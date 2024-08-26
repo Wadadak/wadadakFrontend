@@ -2,7 +2,14 @@ import React, { FormEvent, MouseEvent } from 'react';
 
 interface ButtonProps {
   outline?: boolean; // 아웃라인 버튼으로 변경
-  color?: 'primary' | 'secondary' | 'accent' | string;
+  color?:
+    | 'primary'
+    | 'secondary'
+    | 'accent'
+    | 'error'
+    | 'warning'
+    | 'base-500'
+    | string;
   textColor?: 'white' | 'black' | string;
   size?: 'lg' | 'md' | 'sm' | 'xs';
   wide?: boolean;
