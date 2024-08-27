@@ -7,6 +7,7 @@ import Dropdown from '../common/Dropdown';
 import TimePicker from '../common/TimePicker';
 import Label from '../common/Label';
 import { mockActivityRegions } from '@/mocks/mockData/mockActivityRegions';
+import { RegularRunningInfo } from '@/types/crewTypes';
 
 // 주기 옵션
 const frequencyOptions = [
@@ -37,27 +38,18 @@ const timesOptions = [
 
 // 요일 옵션
 const weekdayOptions = [
-  { id: 'monday', name: '월요일' },
-  { id: 'tuesday', name: '화요일' },
-  { id: 'wednesday', name: '수요일' },
-  { id: 'thursday', name: '목요일' },
-  { id: 'friday', name: '금요일' },
-  { id: 'saturday', name: '토요일' },
-  { id: 'sunday', name: '일요일' },
+  { id: 'monday', name: '월' },
+  { id: 'tuesday', name: '화' },
+  { id: 'wednesday', name: '수' },
+  { id: 'thursday', name: '목' },
+  { id: 'friday', name: '금' },
+  { id: 'saturday', name: '토' },
+  { id: 'sunday', name: '일' },
 ];
 
-interface CreateRunningInfo {
-  id?: number; // 수정 시 필요
-  week: number | null;
-  count: number | null;
-  dayOfWeek: string[];
-  activityRegion: string;
-  time?: string | null;
-}
-
 interface RunningInfoFormProps {
-  initialInfo?: CreateRunningInfo;
-  onSave: (info: CreateRunningInfo) => void;
+  initialInfo?: RegularRunningInfo | null;
+  onSave: (info: RegularRunningInfo) => void;
 }
 
 const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
@@ -114,7 +106,7 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      const requestData: CreateRunningInfo = {
+      const requestData: RegularRunningInfo = {
         week,
         count,
         dayOfWeek,
@@ -137,9 +129,6 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
 
   return (
     <>
-      <p className="text-center text-3xl font-bold">
-        {initialInfo ? '정기 러닝 정보 수정' : '정기 러닝 정보 추가'}
-      </p>
       <Label label="활동 지역" required>
         <Dropdown
           options={mockActivityRegions}
@@ -191,7 +180,7 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
           initialTime={initialInfo?.time || time}
         />
       </Label>
-      <div className="flex w-full justify-end">
+      <div className="flex w-full justify-center pt-4">
         <Button
           wide={true}
           color="secondary"

@@ -1,7 +1,7 @@
 export interface RegularRunningInfo {
-  id: number;
-  week: number;
-  count: number;
+  id?: number;
+  week: number | null;
+  count: number | null;
   dayOfWeek: string[];
   activityRegion: string;
   time?: string;

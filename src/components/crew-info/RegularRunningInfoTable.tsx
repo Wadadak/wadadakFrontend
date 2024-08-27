@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 interface RegularRunningInfoTableProps {
   regularRunningInfo: RegularRunningInfo[];
   userRole?: 'LEADER' | 'STAFF' | 'MEMBER';
-  onEditRunningInfo?: (id: number) => void;
+  onEditRunningInfo?: (id: number | undefined) => void;
   onDeleteRunningInfo?: (id: number) => void;
 }
 const RegularRunningInfoTable = ({
