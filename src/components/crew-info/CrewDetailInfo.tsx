@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Crew, RegularRunningInfo } from '@/types/crewTypes';
-import RegularRunningInfoTable from '../crew-info/RegularRunningInfoTable';
+import RegularRunningInfoTable from './RegularRunningInfoTable';
 import Button from '../common/Button';
 
 interface CrewDetailInfoProps {
@@ -98,15 +98,7 @@ const CrewDetailInfo = ({
         <RegularRunningInfoTable
           regularRunningInfo={crew.regularRunningInfo || []}
           userRole={userRole}
-          onEditRunningInfo={
-            canManage
-              ? (id) =>
-                  onEditRunningInfo?.(
-                    crew.regularRunningInfo?.find((info) => info.id === id) ||
-                      null,
-                  )
-              : undefined
-          }
+          onEditRunningInfo={canManage ? onEditRunningInfo : undefined}
           onDeleteRunningInfo={canManage ? onDeleteRunningInfo : undefined}
         />
       </div>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../common/Button';
 import CheckBox from '../common/CheckBox';
 import Dropdown from '../common/Dropdown';
@@ -64,6 +64,16 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
   const [time, setTime] = useState<string | null>(initialInfo?.time || null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
+  useEffect(() => {
+    if (initialInfo) {
+      setActivityRegion(initialInfo.activityRegion);
+      setWeek(initialInfo.week);
+      setCount(initialInfo.count);
+      setDayOfWeek(initialInfo.dayOfWeek);
+      setTime(initialInfo.time || null);
+    }
+  }, [initialInfo]);
+
   // 요일 선택
   const handleWeekdayChange = (newSelectedValues: string[]) => {
     setDayOfWeek(newSelectedValues);
@@ -107,10 +117,10 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
   const handleSubmit = () => {
     if (validateForm()) {
       const requestData: RegularRunningInfo = {
-        week,
-        count,
+        week: Number(week),
+        count: Number(count),
         dayOfWeek,
-        activityRegion,
+        activityRegion: activityRegion.toString(),
         time: time ? time : undefined, // 선택된 시간이 있을 경우 저장
       };
 
@@ -121,7 +131,7 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
 
       onSave(requestData);
 
-      alert('정기 러닝 정보가 추가되었습니다.');
+      alert('성공적으로 제출되었습니다!');
     } else {
       console.log('유효성 검사 실패:', errors);
     }

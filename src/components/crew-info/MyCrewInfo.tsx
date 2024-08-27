@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { mockCrewList } from '@/mocks/mockData/mockCrewList';
-import CrewDetailInfo from '@/components/crew/CrewDetailInfo';
+import CrewDetailInfo from '@/components/crew-info/CrewDetailInfo';
 import Button from '../common/Button';
 import SimpleModal from '../common/SimpleModal';
 import { useParams, useRouter } from 'next/navigation';
@@ -35,10 +35,6 @@ const MyCrewInfo = () => {
     router.push('/');
   };
 
-  const handleEditCrewInfo = () => {
-    // 크루 정보 수정 페이지로 이동 또는 수정 로직 추가
-  };
-
   const handleSaveRunningInfo = (info: RegularRunningInfo) => {
     // TODO 추가/수정 API 연동
     console.log('저장된 정보:', info);
@@ -57,6 +53,16 @@ const MyCrewInfo = () => {
     }
   };
 
+  // 테이블에서 삭제 눌렀을 때 모달을 띄우는 함수
+  const handleDeleteRunningInfoById = (id: number) => {
+    const info = crew.regularRunningInfo?.find((info) => info.id === id);
+
+    if (info) {
+      openDeleteRunningInfoModal(info);
+    }
+  };
+
+  // 모달에서 삭제하는 함수
   const handleDeleteRunningInfo = () => {
     if (selectedInfo && selectedInfo.id !== undefined) {
       // TODO 삭제 API 연동
@@ -72,7 +78,7 @@ const MyCrewInfo = () => {
         userRole={userRole}
         canManage={true}
         onEditRunningInfo={openEditRunningInfoModal}
-        onDeleteRunningInfo={handleDeleteRunningInfo}
+        onDeleteRunningInfo={handleDeleteRunningInfoById}
       >
         {(userRole === 'LEADER' || userRole === 'STAFF') && (
           <Button>수정하기</Button>
@@ -114,11 +120,39 @@ const MyCrewInfo = () => {
         <SimpleModal
           isOpen={runningInfoEditModal.isModalOpen}
           onClose={runningInfoEditModal.handleCloseModal}
+          title={selectedInfo ? '정기 러닝 정보 수정' : '정기 러닝 정보 추가'}
         >
           <RunningInfoForm
             initialInfo={selectedInfo}
             onSave={handleSaveRunningInfo}
           />
+        </SimpleModal>
+      )}
+
+      {/* 정기 러닝 정보 삭제 확인 모달 */}
+      {runningInfoDeleteModal.isModalOpen && (
+        <SimpleModal
+          isOpen={runningInfoDeleteModal.isModalOpen}
+          onClose={runningInfoDeleteModal.handleCloseModal}
+          title={`정말 ${selectedInfo?.activityRegion}에서의 정기 러닝 정보를 삭제하시겠습니까?`}
+        >
+          <div className="flex justify-end gap-2">
+            <Button
+              outline
+              color="accent"
+              onClick={handleDeleteRunningInfo}
+              type="submit"
+            >
+              예
+            </Button>
+            <Button
+              color="accent"
+              onClick={runningInfoDeleteModal.handleCloseModal}
+              type="button"
+            >
+              아니오
+            </Button>
+          </div>
         </SimpleModal>
       )}
     </>

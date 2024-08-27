@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { mockCrewList } from '@/mocks/mockData/mockCrewList';
-import CrewDetailInfo from '@/components/crew/CrewDetailInfo';
+import CrewDetailInfo from '@/components/crew-info/CrewDetailInfo';
 import Button from '../common/Button';
 import SimpleModal from '../common/SimpleModal';
 import { useParams } from 'next/navigation';

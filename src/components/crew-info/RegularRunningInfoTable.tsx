@@ -1,12 +1,11 @@
 import React from 'react';
 import { RegularRunningInfo } from '@/types/crewTypes';
 import Button from '../common/Button';
-import { useRouter } from 'next/navigation';
 
 interface RegularRunningInfoTableProps {
   regularRunningInfo: RegularRunningInfo[];
   userRole?: 'LEADER' | 'STAFF' | 'MEMBER';
-  onEditRunningInfo?: (id: number | undefined) => void;
+  onEditRunningInfo?: (info: RegularRunningInfo) => void;
   onDeleteRunningInfo?: (id: number) => void;
 }
 const RegularRunningInfoTable = ({
@@ -41,19 +40,19 @@ const RegularRunningInfoTable = ({
                   <td>{info.time || '시간 미정'}</td>
                   {userRole && (
                     <td className="flex gap-2 justify-end items-center max-w-[120px] min-w-[60px]">
-                      {onEditRunningInfo && (
+                      {onEditRunningInfo && info.id !== undefined && (
                         <Button
                           size="sm"
-                          onClick={() => onEditRunningInfo(info.id)}
+                          onClick={() => onEditRunningInfo(info)}
                         >
                           수정
                         </Button>
                       )}
-                      {onDeleteRunningInfo && (
+                      {onDeleteRunningInfo && info.id !== undefined && (
                         <Button
                           outline
                           size="sm"
-                          onClick={() => onDeleteRunningInfo(info.id)}
+                          onClick={() => onDeleteRunningInfo(info.id!)}
                         >
                           삭제
                         </Button>
