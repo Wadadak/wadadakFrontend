@@ -16,7 +16,6 @@ export interface Crew {
   crewOccupancy: number;
   leaderRequired: boolean;
   activityRegion: string;
-  regularRunningInfo?: RegularRunningInfo[];
   genderRestriction?: string; // 성별 제한 (없을 경우 빈 문자열)
   minAge?: number | null; // 최소 나이 제한 (없을 경우 null)
   maxAge?: number | null; // 최대 나이 제한 (없을 경우 null)

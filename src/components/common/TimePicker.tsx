@@ -21,17 +21,17 @@ const TimePicker = ({
   const [selectedTime, setSelectedTime] = useState<string | null>(
     initialTime || null,
   );
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
 
-  const toggleDatePicker = () => {
-    setIsDatePickerOpen((prev) => !prev);
+  const toggleTimePicker = () => {
+    setIsTimePickerOpen((prev) => !prev);
   };
 
   const handleTimeChange = (time: Date | null) => {
     if (time) {
       const newTime = DateTime.fromJSDate(time).toFormat('HH:mm');
       setSelectedTime(newTime);
-      setIsDatePickerOpen(false); // 시간 선택 후 드롭다운 닫기
+      setIsTimePickerOpen(false); // 시간 선택 후 드롭다운 닫기
       onTimeChange(newTime);
     } else {
       setSelectedTime(null);
@@ -47,7 +47,7 @@ const TimePicker = ({
 
   return (
     <div className="relative inline-block">
-      <div onClick={toggleDatePicker} className="cursor-pointer">
+      <div onClick={toggleTimePicker} className="cursor-pointer">
         <DatePicker
           selected={
             selectedTime ? new Date(`1970-01-01T${selectedTime}:00`) : null
@@ -60,7 +60,8 @@ const TimePicker = ({
           dateFormat="HH:mm"
           className={`input input-bordered max-w-xs ${error && 'textarea-error'}`}
           placeholderText={placeholder}
-          open={isDatePickerOpen} // 드롭다운 상태
+          open={isTimePickerOpen} // 드롭다운 상태
+          onClickOutside={() => setIsTimePickerOpen(false)}
         />
       </div>
 

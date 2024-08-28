@@ -3,12 +3,12 @@
 import React, { useState } from 'react';
 import Button from '../common/Button';
 import SimpleModal from '../common/SimpleModal';
-import RunningScheduleForm from './RunningScheduleForm';
 import { RunningSchedule } from '@/types/crewTypes';
 import useModal from '@/hooks/useModal';
+import { useRouter, useParams } from 'next/navigation';
 
 // Mock Data
-const mockSchedules: RunningSchedule[] = [
+export const mockSchedules: RunningSchedule[] = [
   {
     activityId: '1',
     title: '아침에 같이 러닝 하시죠?!',
@@ -18,7 +18,7 @@ const mockSchedules: RunningSchedule[] = [
     endTime: '08:00',
     location: '서울숲',
     memo: '아침 공기가 상쾌해요!',
-    regularId: 1,
+    // regularId: 1,
     author: '하이요',
     participant: 10,
   },
@@ -41,8 +41,9 @@ const CrewRunningSchedule = () => {
   const [selectedSchedule, setSelectedSchedule] =
     useState<RunningSchedule | null>(null);
 
-  const runningScheduleModal = useModal();
   const deleteModal = useModal();
+  const router = useRouter();
+  const { crewId } = useParams(); // 크루 ID를 URL에서 가져옴
 
   const currentUser = '하이요'; // 실제로는 로그인한 사용자의 이름 또는 ID를 사용
   const userRole = 'LEADER'; // 실제로는 API를 통해 받아오는 사용자의 역할
@@ -56,9 +57,12 @@ const CrewRunningSchedule = () => {
     );
   };
 
-  const openEditScheduleModal = (schedule: RunningSchedule | null) => {
-    setSelectedSchedule(schedule);
-    runningScheduleModal.handleOpenModal();
+  const handleAddSchedule = () => {
+    router.push(`/my-crews/${crewId}/schedule/new`);
+  };
+
+  const handleEditSchedule = (activityId: string) => {
+    router.push(`/my-crews/${crewId}/schedule/edit/${activityId}`);
   };
 
   const openDeleteScheduleModal = (schedule: RunningSchedule) => {
@@ -68,22 +72,7 @@ const CrewRunningSchedule = () => {
     }
   };
 
-  const handleSaveRunningSchedule = (schedule: RunningSchedule) => {
-    if (selectedSchedule) {
-      // 수정 로직
-      setSchedules((prevSchedules) =>
-        prevSchedules.map((s) =>
-          s.activityId === schedule.activityId ? schedule : s,
-        ),
-      );
-    } else {
-      // 추가 로직
-      setSchedules((prevSchedules) => [...prevSchedules, schedule]);
-    }
-    runningScheduleModal.handleCloseModal();
-  };
-
-  const handleDeleteRunningSchedule = () => {
+  const handleDeleteRunningSchedule = (activityId: string) => {
     if (selectedSchedule) {
       setSchedules((prevSchedules) =>
         prevSchedules.filter(
@@ -97,12 +86,8 @@ const CrewRunningSchedule = () => {
   return (
     <>
       <div className="flex justify-between items-center pb-2">
-        <p className="card-title">다가오는 오프라인 러닝</p>
-        <Button
-          onClick={() => openEditScheduleModal(null)}
-          size="sm"
-          color="secondary"
-        >
+        <p className="card-title">다가오는 러닝 일정</p>
+        <Button onClick={handleAddSchedule} size="sm" color="secondary">
           러닝 일정 추가
         </Button>
       </div>
@@ -134,7 +119,7 @@ const CrewRunningSchedule = () => {
                   <td className="flex gap-2 justify-end items-center max-w-[120px] min-w-[60px]">
                     <Button
                       size="sm"
-                      onClick={() => openEditScheduleModal(schedule)}
+                      onClick={() => handleEditSchedule(schedule.activityId!)}
                     >
                       수정
                     </Button>
@@ -152,18 +137,7 @@ const CrewRunningSchedule = () => {
           </tbody>
         </table>
       </div>
-      {/* 일정 추가 or 수정 모달 */}
-      <SimpleModal
-        isOpen={runningScheduleModal.isModalOpen}
-        onClose={runningScheduleModal.handleCloseModal}
-        title={selectedSchedule ? '일정 수정' : '일정 추가'}
-      >
-        <RunningScheduleForm
-          initialInfo={selectedSchedule}
-          onSave={handleSaveRunningSchedule}
-        />
-      </SimpleModal>
-      {/* 정기 러닝 정보 삭제 확인 모달 */}
+
       <SimpleModal
         isOpen={deleteModal.isModalOpen}
         onClose={deleteModal.handleCloseModal}

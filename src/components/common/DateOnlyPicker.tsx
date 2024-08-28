@@ -20,11 +20,17 @@ const DateOnlyPicker = ({
   const [selectedDate, setSelectedDate] = useState<string | null>(
     initialDate || null,
   );
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
+  const toggleDatePicker = () => {
+    setIsDatePickerOpen((prev) => !prev);
+  };
 
   const handleDateChange = (date: Date | null) => {
     if (date) {
       const newDate = DateTime.fromJSDate(date).toFormat('yyyy-MM-dd');
       setSelectedDate(newDate);
+      setIsDatePickerOpen(false);
       onDateChange(newDate);
     } else {
       setSelectedDate(null);
@@ -40,25 +46,29 @@ const DateOnlyPicker = ({
 
   return (
     <div className="relative inline-block">
-      <DatePicker
-        selected={selectedDate ? new Date(selectedDate) : null}
-        onChange={handleDateChange}
-        dateFormat="yyyy-MM-dd"
-        className={`input input-bordered max-w-xs ${error && 'textarea-error'}`}
-        placeholderText="날짜를 선택하세요"
-      />
+      <div onClick={toggleDatePicker} className="cursor-pointer">
+        <DatePicker
+          selected={selectedDate ? new Date(selectedDate) : null}
+          onChange={handleDateChange}
+          dateFormat="yyyy-MM-dd"
+          className={`input input-bordered max-w-xs ${error && 'textarea-error'}`}
+          placeholderText="날짜를 선택하세요"
+          open={isDatePickerOpen} // 드롭다운 상태
+          onClickOutside={() => setIsDatePickerOpen(false)}
+        />
 
-      {selectedDate && (
-        <div className="mt-4 flex items-center gap-2">
-          <p>
-            선택된 날짜: <strong>{selectedDate}</strong>
-          </p>
-          <Button onClick={clearSelectedDate} size="sm">
-            선택 취소
-          </Button>
-        </div>
-      )}
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+        {selectedDate && (
+          <div className="mt-4 flex items-center gap-2">
+            <p>
+              선택된 날짜: <strong>{selectedDate}</strong>
+            </p>
+            <Button onClick={clearSelectedDate} size="sm">
+              선택 취소
+            </Button>
+          </div>
+        )}
+        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      </div>
     </div>
   );
 };

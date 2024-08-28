@@ -1,3 +1,5 @@
+'use client';
+
 import { RunningSchedule } from '@/types/crewTypes';
 import React, { useEffect, useState } from 'react';
 import DateOnlyPicker from '../common/DateOnlyPicker';
@@ -15,11 +17,13 @@ const CategoryOptions = [
 interface RunningScheduleFormProps {
   initialInfo?: RunningSchedule | null;
   onSave: (schedule: RunningSchedule) => void;
+  currentUser: string;
 }
 
 const RunningScheduleForm = ({
   onSave,
   initialInfo,
+  currentUser,
 }: RunningScheduleFormProps) => {
   const [title, setTitle] = useState<string>('');
   const [category, setCategory] = useState<'REGULAR' | 'ON_DEMAND'>('REGULAR');
@@ -78,6 +82,7 @@ const RunningScheduleForm = ({
         endTime,
         memo,
         location,
+        author: currentUser,
       };
 
       // 수정 시 기존 ID를 포함해서 서버로 전송
@@ -95,44 +100,53 @@ const RunningScheduleForm = ({
 
   return (
     <>
-      <Label label="카테고리" required>
-        <CheckBox
-          options={CategoryOptions}
-          selectedValues={[category]}
-          onChange={(values) =>
-            handleCategoryChange(values[0] as 'REGULAR' | 'ON_DEMAND')
-          }
-          error={errors.category}
-        />
-      </Label>
-      <Label label="활동명">
-        <TextInput
-          value={title}
-          onChange={setTitle}
-          placeholder="활동명을 입력하세요"
-        />
-      </Label>
-      <Label label="장소" required>
-        <TextInput
-          value={location}
-          onChange={setLocation}
-          placeholder="장소를 입력해주세요"
-          required
-          error={errors.location}
-        />
-      </Label>
-      <Label label="날짜" required>
-        <DateOnlyPicker
-          initialDate={date}
-          onDateChange={(newDate) => setDate(newDate)}
-          error={errors.date}
-        />
-      </Label>
-      <div className="flex flex-row gap-4">
+      <div className="pb-5">
+        <Label label="카테고리" required>
+          <CheckBox
+            options={CategoryOptions}
+            selectedValues={[category]}
+            onChange={(values) =>
+              handleCategoryChange(values[0] as 'REGULAR' | 'ON_DEMAND')
+            }
+            error={errors.category}
+          />
+        </Label>
+        <Label label="활동명">
+          <TextInput
+            value={title}
+            onChange={setTitle}
+            placeholder="예 : 2024-12-31 정기"
+          />
+        </Label>
+        <Label label="장소" required>
+          <TextInput
+            value={location}
+            onChange={(value) => {
+              setLocation(value);
+              setErrors((prevErrors) => ({ ...prevErrors, location: '' }));
+            }}
+            placeholder="장소를 입력해주세요"
+            required
+            error={errors.location}
+          />
+        </Label>
+        <Label label="날짜" required>
+          <DateOnlyPicker
+            initialDate={date}
+            onDateChange={(newDate) => {
+              setDate(newDate);
+              setErrors((prevErrors) => ({ ...prevErrors, date: '' }));
+            }}
+            error={errors.date}
+          />
+        </Label>
         <Label label="시작 시간" required>
           <TimePicker
             initialTime={startTime}
-            onTimeChange={(newTime) => setStartTime(newTime)}
+            onTimeChange={(newTime) => {
+              setStartTime(newTime);
+              setErrors((prevErrors) => ({ ...prevErrors, startTime: '' }));
+            }}
             error={errors.startTime}
             placeholder="시작 시간"
           />
@@ -144,18 +158,17 @@ const RunningScheduleForm = ({
             placeholder="종료 시간"
           />
         </Label>
+        <Label label="메모">
+          <TextInput
+            value={memo}
+            onChange={setMemo}
+            placeholder="메모를 입력해주세요"
+            maxLength={200}
+            as="textarea"
+          />
+        </Label>
       </div>
-      <Label label="메모">
-        <TextInput
-          value={memo}
-          onChange={setMemo}
-          placeholder="메모를 입력해주세요"
-          maxLength={200}
-          as="textarea"
-        />
-      </Label>
-
-      <div className="flex w-full justify-center pt-4">
+      <div className="flex w-full justify-end">
         <Button
           wide={true}
           color="secondary"

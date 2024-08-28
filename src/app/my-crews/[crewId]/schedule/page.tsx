@@ -1,6 +1,6 @@
 import React from 'react';
 import MyCrewLayout from '@/components/my-crew/MyCrewLayout';
-import CrewRunningSchedule from '@/components/runnig-schedule/CrewRunningSchedule';
+import CrewRunningSchedule from '@/components/running-schedule/CrewRunningSchedule';
 
 const MembersPage = () => {
   return (
