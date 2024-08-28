@@ -9,12 +9,14 @@ interface TimePickerProps {
   onTimeChange: (time: string | null) => void;
   initialTime?: string | null;
   error?: string;
+  placeholder?: string;
 }
 
 const TimePicker = ({
   onTimeChange,
   initialTime = null,
   error,
+  placeholder,
 }: TimePickerProps) => {
   const [selectedTime, setSelectedTime] = useState<string | null>(
     initialTime || null,
@@ -31,6 +33,9 @@ const TimePicker = ({
       setSelectedTime(newTime);
       setIsDatePickerOpen(false); // 시간 선택 후 드롭다운 닫기
       onTimeChange(newTime);
+    } else {
+      setSelectedTime(null);
+      onTimeChange(null);
     }
   };
 
@@ -54,9 +59,8 @@ const TimePicker = ({
           timeCaption="Time"
           dateFormat="HH:mm"
           className={`input input-bordered max-w-xs ${error && 'textarea-error'}`}
-          placeholderText="시간을 선택하세요"
+          placeholderText={placeholder}
           open={isDatePickerOpen} // 드롭다운 상태
-          onClickOutside={() => setIsDatePickerOpen(false)} // 드롭다운 외부 클릭 시 닫기
         />
       </div>
 

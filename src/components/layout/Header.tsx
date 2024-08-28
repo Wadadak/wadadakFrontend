@@ -52,7 +52,7 @@ const Header = () => {
               icon={faBell}
               onMenuClick={() => router.push('/alarm')}
             />
-            <Avatar />
+            <Avatar onAvatarClick={() => router.push('/my')} />
           </div>
         </div>
       </Wrapper>
