@@ -67,6 +67,7 @@ const LoginPage = () => {
             {/* password */}
             <Label label="비밀번호" textSize="sm">
               <TextInput
+                type="password"
                 value={password}
                 placeholder="비밀번호 입력"
                 onChange={setPassword}
