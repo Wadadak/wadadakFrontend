@@ -7,11 +7,10 @@ import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
 import { loginState } from '@/recoil/atoms/userState';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-import { useRecoilValue, useSetRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 const LoginPage = () => {
-  const isLogin = useRecoilValue(loginState);
-  const setLogin = useSetRecoilState(loginState);
+  const [isLogin, setLogin] = useRecoilState(loginState);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const router = useRouter();
