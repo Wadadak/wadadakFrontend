@@ -125,7 +125,7 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
       };
 
       // 수정 시 기존 ID를 포함해서 서버로 전송
-      if (initialInfo) {
+      if (initialInfo && initialInfo.id) {
         requestData.id = initialInfo.id;
       }
 
@@ -188,8 +188,10 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
         <TimePicker
           onTimeChange={handleTimeChange}
           initialTime={initialInfo?.time || time}
+          placeholder="모임 시간"
         />
       </Label>
+
       <div className="flex w-full justify-center pt-4">
         <Button
           wide={true}

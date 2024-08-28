@@ -94,7 +94,7 @@ const CrewDetailInfo = ({
               정기 러닝 정보 추가
             </Button>
           )}
-        </div>{' '}
+        </div>
         <RegularRunningInfoTable
           regularRunningInfo={crew.regularRunningInfo || []}
           userRole={userRole}
