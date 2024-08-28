@@ -7,6 +7,7 @@ interface LabelProps {
   required?: boolean;
   textSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | string;
   children: React.ReactNode;
+  htmlFor?: string;
 }
 
 const Label = ({
@@ -14,11 +15,12 @@ const Label = ({
   required = false,
   textSize = 'lg',
   children,
+  htmlFor,
 }: LabelProps) => {
   const textSizeClass = `text-${textSize}`;
 
   return (
-    <label className="form-control w-full py-2">
+    <label className="form-control w-full py-2" htmlFor={htmlFor}>
       <div className="label">
         <span className={`label-text ${textSizeClass}`}>
           {label}

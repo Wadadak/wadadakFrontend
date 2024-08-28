@@ -40,7 +40,7 @@ axiosInstance.interceptors.request.use(
       '/crew/regular',
       'crew/{crew_id}/regular',
       '/crew/{crew_id}/regular/{regular_id}',
-      // '/crew/{crew_id}',
+      '/crew/{crew_id}',
     ];
 
     // 토큰이 필요한 엔드포인트에만 토큰을 헤더에 추가
