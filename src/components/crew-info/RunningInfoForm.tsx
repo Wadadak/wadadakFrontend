@@ -1,12 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '../common/Button';
 import CheckBox from '../common/CheckBox';
 import Dropdown from '../common/Dropdown';
 import TimePicker from '../common/TimePicker';
 import Label from '../common/Label';
 import { mockActivityRegions } from '@/mocks/mockData/mockActivityRegions';
+import { RegularRunningInfo } from '@/types/crewTypes';
 
 // 주기 옵션
 const frequencyOptions = [
@@ -37,35 +38,21 @@ const timesOptions = [
 
 // 요일 옵션
 const weekdayOptions = [
-  { id: 'monday', name: '월요일' },
-  { id: 'tuesday', name: '화요일' },
-  { id: 'wednesday', name: '수요일' },
-  { id: 'thursday', name: '목요일' },
-  { id: 'friday', name: '금요일' },
-  { id: 'saturday', name: '토요일' },
-  { id: 'sunday', name: '일요일' },
+  { id: 'monday', name: '월' },
+  { id: 'tuesday', name: '화' },
+  { id: 'wednesday', name: '수' },
+  { id: 'thursday', name: '목' },
+  { id: 'friday', name: '금' },
+  { id: 'saturday', name: '토' },
+  { id: 'sunday', name: '일' },
 ];
 
-interface CreateRunningInfo {
-  id?: number; // 수정 시 필요
-  week: number | null;
-  count: number | null;
-  dayOfWeek: string[];
-  activityRegion: string;
-  time?: string | null;
-}
-
 interface RunningInfoFormProps {
-  initialInfo: CreateRunningInfo | null;
-  onSave: (info: CreateRunningInfo) => void;
-  onCancel: () => void;
+  initialInfo?: RegularRunningInfo | null;
+  onSave: (info: RegularRunningInfo) => void;
 }
 
-const RunningInfoForm = ({
-  initialInfo,
-  onSave,
-  onCancel,
-}: RunningInfoFormProps) => {
+const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
   const [activityRegion, setActivityRegion] = useState(
     initialInfo?.activityRegion || '',
   );
@@ -76,6 +63,16 @@ const RunningInfoForm = ({
   );
   const [time, setTime] = useState<string | null>(initialInfo?.time || null);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+
+  useEffect(() => {
+    if (initialInfo) {
+      setActivityRegion(initialInfo.activityRegion);
+      setWeek(initialInfo.week);
+      setCount(initialInfo.count);
+      setDayOfWeek(initialInfo.dayOfWeek);
+      setTime(initialInfo.time || null);
+    }
+  }, [initialInfo]);
 
   // 요일 선택
   const handleWeekdayChange = (newSelectedValues: string[]) => {
@@ -119,20 +116,22 @@ const RunningInfoForm = ({
 
   const handleSubmit = () => {
     if (validateForm()) {
-      const requestData: CreateRunningInfo = {
-        week,
-        count,
+      const requestData: RegularRunningInfo = {
+        week: Number(week),
+        count: Number(count),
         dayOfWeek,
-        activityRegion,
+        activityRegion: activityRegion.toString(),
         time: time ? time : undefined, // 선택된 시간이 있을 경우 저장
       };
 
       // 수정 시 기존 ID를 포함해서 서버로 전송
-      if (initialInfo) {
+      if (initialInfo && initialInfo.id) {
         requestData.id = initialInfo.id;
       }
 
       onSave(requestData);
+
+      alert('성공적으로 제출되었습니다!');
     } else {
       console.log('유효성 검사 실패:', errors);
     }
@@ -140,9 +139,6 @@ const RunningInfoForm = ({
 
   return (
     <>
-      <p className="text-center text-3xl font-bold">
-        {initialInfo ? '정기 러닝 정보 수정' : '정기 러닝 정보 추가'}
-      </p>
       <Label label="활동 지역" required>
         <Dropdown
           options={mockActivityRegions}
@@ -192,9 +188,11 @@ const RunningInfoForm = ({
         <TimePicker
           onTimeChange={handleTimeChange}
           initialTime={initialInfo?.time || time}
+          placeholder="모임 시간"
         />
       </Label>
-      <div className="flex w-full justify-end">
+
+      <div className="flex w-full justify-center pt-4">
         <Button
           wide={true}
           color="secondary"

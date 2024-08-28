@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { mockCrewList } from '@/mocks/mockData/mockCrewList';
-import CrewDetailInfo from '@/components/crew/CrewDetailInfo';
+import CrewDetailInfo from '@/components/crew-info/CrewDetailInfo';
 import Button from '../common/Button';
 import SimpleModal from '../common/SimpleModal';
 import { useParams } from 'next/navigation';
@@ -11,9 +11,7 @@ import useModal from '@/hooks/useModal';
 import TextInput from '../common/TextInput';
 
 const JoinCrewInfo = () => {
-  const { crewId } = useParams();
-  const id = parseInt(crewId as string, 10);
-  const crew = mockCrewList.find((crew) => crew.crewId === id);
+  const crew = mockCrewList[0];
 
   const messageModal = useModal();
   const confirmModal = useModal();
@@ -38,24 +36,28 @@ const JoinCrewInfo = () => {
     messageModal.handleCloseModal();
     confirmModal.handleOpenModal();
   };
+
   const handleFinalSubmit = () => {
     // TODO API 연결 시 mutation.mutate(message);로 변경
     console.log('가입 신청 메시지:', message);
     confirmModal.handleCloseModal();
-    if (crew?.approvalRequired) {
-      setIsPendingApproval(true);
-      alert('가입 신청이 완료되었습니다. 관리자의 승인을 기다려주세요.');
-    } else {
-      alert('가입이 완료되었습니다!');
-    }
+    alert('가입이 완료되었습니다!');
+    // NOTE 가입 승인
+    // if (crew?.approvalRequired) {
+    //   setIsPendingApproval(true);
+    //   alert('가입 신청이 완료되었습니다. 관리자의 승인을 기다려주세요.');
+    // } else {
+    //   alert('가입이 완료되었습니다!');
+    // }
   };
 
-  const handleCancel = () => {
-    setIsPendingApproval(false);
-    setMessage('');
-    alert('가입 신청이 취소되었습니다.');
-    cancelModal.handleCloseModal();
-  };
+  // NOTE 가입 승인
+  // const handleCancel = () => {
+  //   setIsPendingApproval(false);
+  //   setMessage('');
+  //   alert('가입 신청이 취소되었습니다.');
+  //   cancelModal.handleCloseModal();
+  // };
 
   if (!crew) {
     return <Wrapper>크루 정보가 없습니다.</Wrapper>;
@@ -64,7 +66,9 @@ const JoinCrewInfo = () => {
   return (
     <Wrapper>
       <CrewDetailInfo crew={crew}>
-        {isPendingApproval ? (
+        <Button onClick={messageModal.handleOpenModal}>가입 신청</Button>
+        {/* NOTE 가입 승인 */}
+        {/* {isPendingApproval ? (
           <div className="flex gap-2">
             <Button onClick={messageModal.handleOpenModal}>수정하기</Button>
             <Button outline onClick={cancelModal.handleOpenModal}>
@@ -73,7 +77,7 @@ const JoinCrewInfo = () => {
           </div>
         ) : (
           <Button onClick={messageModal.handleOpenModal}>가입 신청</Button>
-        )}
+        )} */}
       </CrewDetailInfo>
       {messageModal.isModalOpen && (
         <SimpleModal
@@ -120,7 +124,9 @@ const JoinCrewInfo = () => {
           </div>
         </SimpleModal>
       )}
-      {cancelModal.isModalOpen && (
+
+      {/* NOTE 가입 승인 */}
+      {/* {cancelModal.isModalOpen && (
         <SimpleModal
           isOpen={cancelModal.isModalOpen}
           onClose={cancelModal.handleCloseModal}
@@ -139,7 +145,7 @@ const JoinCrewInfo = () => {
             </Button>
           </div>
         </SimpleModal>
-      )}
+      )} */}
     </Wrapper>
   );
 };

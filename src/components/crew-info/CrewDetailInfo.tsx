@@ -1,13 +1,25 @@
 import React from 'react';
-import { Crew } from '@/types/crewTypes';
+import { Crew, RegularRunningInfo } from '@/types/crewTypes';
 import RegularRunningInfoTable from './RegularRunningInfoTable';
+import Button from '../common/Button';
 
 interface CrewDetailInfoProps {
   crew: Crew;
   children: React.ReactNode;
+  userRole?: 'LEADER' | 'STAFF' | 'MEMBER';
+  onDeleteRunningInfo?: (id: number) => void; // 삭제 핸들러 함수
+  onEditRunningInfo?: (info: RegularRunningInfo | null) => void; // 추가 및 수정 핸들러 함수
+  canManage?: boolean;
 }
 
-const CrewDetailInfo = ({ crew, children }: CrewDetailInfoProps) => {
+const CrewDetailInfo = ({
+  crew,
+  children,
+  userRole,
+  onDeleteRunningInfo,
+  onEditRunningInfo,
+  canManage = false,
+}: CrewDetailInfoProps) => {
   const defaultImage = '/images/default.png';
 
   const renderAgeRange = () => {
@@ -15,15 +27,15 @@ const CrewDetailInfo = ({ crew, children }: CrewDetailInfoProps) => {
       // 둘 다 선택된 경우
       return (
         <p className="text-lg">
-          연령대 : {crew.minAge}년생 ~ {crew.maxAge}년생
+          연령대 : {crew.maxAge}년생 ~ {crew.minAge}년생
         </p>
       );
     } else if (crew.minAge !== null && crew.maxAge === null) {
       // 최소 연령만 선택된 경우
-      return <p className="text-lg">연령대 : {crew.minAge}년생 ~ </p>;
+      return <p className="text-lg">연령대 : {crew.minAge}년생부터</p>;
     } else if (crew.minAge === null && crew.maxAge !== null) {
       // 최대 연령만 선택된 경우
-      return <p className="text-lg">연령대 : {crew.maxAge}년생 ~</p>;
+      return <p className="text-lg">연령대 : {crew.maxAge}년생까지</p>;
     } else {
       // 둘 다 선택되지 않은 경우
       return <p className="text-lg">연령 제한 없음</p>;
@@ -61,7 +73,8 @@ const CrewDetailInfo = ({ crew, children }: CrewDetailInfoProps) => {
             {crew.publicRecordRequired && (
               <p className="text-lg">러닝 프로필 공개 필수</p>
             )}
-            {crew.approvalRequired && <p className="text-lg">가입 승인 필요</p>}
+            {/* NOTE 가입 승인 */}
+            {/* {crew.approvalRequired && <p className="text-lg">가입 승인 필요</p>} */}
           </div>
           <div className="flex flex-col items-start gap-4 lg:gap-2">
             <p className="card-title">크루 소개</p>
@@ -70,9 +83,23 @@ const CrewDetailInfo = ({ crew, children }: CrewDetailInfoProps) => {
         </div>
       </div>
       <div className="mb-4">
-        <p className="card-title pb-2 ">정기 러닝 정보</p>
+        <div className="flex justify-between items-center pb-2">
+          <p className="card-title">정기 러닝 정보</p>
+          {canManage && (userRole === 'LEADER' || userRole === 'STAFF') && (
+            <Button
+              onClick={() => onEditRunningInfo?.(null)}
+              size="sm"
+              color="secondary"
+            >
+              정기 러닝 정보 추가
+            </Button>
+          )}
+        </div>
         <RegularRunningInfoTable
           regularRunningInfo={crew.regularRunningInfo || []}
+          userRole={userRole}
+          onEditRunningInfo={canManage ? onEditRunningInfo : undefined}
+          onDeleteRunningInfo={canManage ? onDeleteRunningInfo : undefined}
         />
       </div>
       <div>
