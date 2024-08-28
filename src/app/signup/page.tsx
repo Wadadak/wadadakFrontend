@@ -7,30 +7,10 @@ import TextInput from '@/components/common/TextInput';
 import { ToggleButton } from '@/components/common/ToggleButtion';
 import YearOfBirthDropdown from '@/components/common/YearOfBirthDropdown';
 import { TitleBanner } from '@/components/layout/TitleBanner';
+import { loginState } from '@/recoil/atoms/userState';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
-
-//hctodo: API 호출하는 데이터로 바꿀 것
-const regionList: DropdownOption[] = [
-  { id: 'SEOUL', name: '서울특별시' },
-  { id: 'BUSAN', name: '부산광역시' },
-  { id: 'DAEGU', name: '대구광역시' },
-  { id: 'INCHEON', name: '인천광역시' },
-  { id: 'GWANGJU', name: '광주광역시' },
-  { id: 'DAEJEON', name: '대전광역시' },
-  { id: 'ULSAN', name: '울산광역시' },
-  { id: 'SEJONG', name: '세종특별자치시' },
-  { id: 'GYEONGGI', name: '경기도' },
-  { id: 'GANGWON', name: '강원도' },
-  { id: 'CHUNGBUK', name: '충청북도' },
-  { id: 'CHUNGNAM', name: '충청남도' },
-  { id: 'JEOLLABUK', name: '전라북도' },
-  { id: 'JEOLLANAM', name: '전라남도' },
-  { id: 'GYEONGBUK', name: '경상북도' },
-  { id: 'GYEONGNAM', name: '경상남도' },
-  { id: 'JEJU', name: '제주특별자치도' },
-  { id: 'NATIONWIDE', name: '전국' },
-];
+import { useSetRecoilState } from 'recoil';
 
 const SignUpPage = () => {
   const [email, setEmail] = useState<string>('');
@@ -50,6 +30,8 @@ const SignUpPage = () => {
   const [isPhoneNumberOn, setIsPhoneNumberOn] = useState<boolean>(false);
   const [isGenderOn, setIsGenderOn] = useState<boolean>(false);
   const [isAgeOn, setIsAgeOn] = useState<boolean>(false);
+
+  const setLogin = useSetRecoilState(loginState);
 
   const validateEmail = (email: string): boolean => {
     //기획: email 형식(xxx@xxx.xxx), 50자 이내
@@ -109,20 +91,22 @@ const SignUpPage = () => {
     };
 
     console.log('SignUpPage body', body);
+    alert('회원가입이 완료되었습니다.');
+    setLogin(true);
+    router.push('/');
+
     //api call
     // executeMutation(body);
   };
 
   return (
     <div className="flex flex-col bg-base-200">
-      <TitleBanner>
-        <div className="py-16">와다닥에 오신것을 환영합니다!</div>
-      </TitleBanner>
+      <TitleBanner>와다닥에 오신것을 환영합니다!</TitleBanner>
       <div className="flex justify-center py-16">
         <div className="card w-[450px] bg-base-100 shadow-2xl">
           <div className="card-body">
             <div className="text-[20px] font-bold text-gray-700">회원가입</div>
-            <div className="flex flex-col space-y-4 mt-5">
+            <div className="flex flex-col mt-5 space-y-4">
               {/* e-mail */}
               <div className="form-control">
                 <Title title={'이메일'} htmlFor={'email'} required={true} />
@@ -198,7 +182,7 @@ const SignUpPage = () => {
               </div>
               {/* P.image */}
               <div className="flex items-center space-x-5">
-                <div className="flex flex-col space-y-2 items-center">
+                <div className="flex flex-col items-center space-y-2">
                   <Title
                     title={'프로필 이미지'}
                     htmlFor={'profileImage'}
@@ -299,7 +283,7 @@ const SignUpPage = () => {
               </div>
             </div>
             {/* sign up */}
-            <div className="form-control mt-8">
+            <div className="mt-8 form-control">
               <button className="btn btn-primary" onClick={handleSignUp}>
                 회원가입
               </button>
@@ -320,9 +304,9 @@ interface TitleProps {
 }
 const Title = ({ title, htmlFor, required }: TitleProps) => {
   return (
-    <label className="label flex items-center justify-start" htmlFor={htmlFor}>
+    <label className="flex items-center justify-start label" htmlFor={htmlFor}>
       <span className="label-text">{title}</span>
-      {required && <div className="text-red-500 ml-1">*</div>}
+      {required && <div className="ml-1 text-red-500">*</div>}
     </label>
   );
 };
