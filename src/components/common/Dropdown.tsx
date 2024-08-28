@@ -7,13 +7,12 @@ export interface DropdownOption {
 
 interface DropdownProps {
   options: DropdownOption[]; // 드롭다운에 표시할 옵션 배열
-  onChange: (value: string | string[] | number) => void;
+  onChange: (value: string | number) => void;
   placeholder?: string;
   required?: boolean;
-  multiple?: boolean; // 다중 선택 가능 여부
-  selectedValues?: string[]; // 선택된 값들
+  selectedValue?: string | number; // 선택된 값들
   width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
-  disabled?: boolean;
+  disabled?: boolean; // 첫 번째 옵션(placeholder) disabled 여부
   error?: string;
 }
 
@@ -22,19 +21,13 @@ const Dropdown = ({
   onChange,
   placeholder = '',
   required = false,
-  multiple = false,
-  selectedValues = [],
+  selectedValue,
   width = 'xs',
   disabled = true,
   error,
 }: DropdownProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = multiple
-      ? Array.from(e.target.selectedOptions, (option) => option.value)
-      : e.target.value;
-    if (onChange) {
-      onChange(value);
-    }
+    onChange(e.target.value);
   };
   const widthClass = `max-w-${width}`;
 
@@ -42,8 +35,7 @@ const Dropdown = ({
     <>
       <select
         className={`select select-bordered ${widthClass}  ${error && 'select-error'}`}
-        value={multiple ? undefined : selectedValues[0]}
-        multiple={multiple}
+        value={selectedValue || ''}
         onChange={handleChange}
         required={required}
       >
@@ -51,15 +43,7 @@ const Dropdown = ({
           {placeholder}
         </option>
         {options.map((option) => (
-          <option
-            key={option.id}
-            value={option.id}
-            selected={
-              multiple
-                ? selectedValues.includes(option.name)
-                : selectedValues[0] === option.name
-            }
-          >
+          <option key={option.id} value={option.id}>
             {option.name}
           </option>
         ))}
