@@ -8,6 +8,7 @@ import TextInput from '@/components/common/TextInput';
 import { ToggleButton } from '@/components/common/ToggleButtion';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
+import { mockRunningList } from '@/mocks/mockData/mockRunList';
 import {
   faPen,
   faPenToSquare,
@@ -32,6 +33,12 @@ const MyPage = () => {
   const [distance, setDistance] = useState<string>('');
   const [time, setTime] = useState<string>('');
   const [pace, setPace] = useState<string>('');
+
+  const [editRunningId, setEditRunningId] = useState<number | undefined>();
+
+  useEffect(() => {
+    setShowEditModal(true);
+  }, [editRunningId]);
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -185,16 +192,16 @@ const MyPage = () => {
             <div className="w-full h-1 bg-gray-100"></div>
             {recordTab === 'round' && (
               <div className="flex flex-col space-y-4">
-                {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, index) => (
+                {mockRunningList.data.map((item, index) => (
                   <RunningRecordItem
                     key={index}
-                    round={index + 1}
-                    date={'2024-05-16'}
-                    distance={11.83}
-                    totalTime={'01:12:25'}
-                    pace={"5'55''"}
+                    round={item.runRecordId}
+                    date={item.runningDate}
+                    distance={item.distance}
+                    totalTime={item.runningTime}
+                    pace={item.pace}
                     onButtonClick={() => {
-                      setShowEditModal(true);
+                      setEditRunningId(item.runRecordId);
                     }}
                   />
                 ))}
@@ -255,14 +262,13 @@ const MyPage = () => {
         </div>
       </Wrapper>
       <EditRecordModal
+        id={editRunningId}
         isOpen={showEditModal}
         onClose={() => {
+          //수정을 완료하고 모달을 닫을때,
+          // refetch();
           setShowEditModal(false);
         }}
-        _date={'2024-05-06'}
-        _distance={'11.2'}
-        _record={'1:23:33'}
-        _pace={"5'44''"}
       />
       <AddRecordModal
         isOpen={showAddRecord}
@@ -486,25 +492,27 @@ const AddRecordModal = ({ isOpen, onClose }: AddRecordModalProps) => {
 };
 
 interface EditRecordModalProps {
-  _date: string;
-  _distance: string;
-  _record: string;
-  _pace: string;
+  id?: number;
   isOpen: boolean;
   onClose: () => void;
 }
-const EditRecordModal = ({
-  _date,
-  _distance,
-  _record,
-  _pace,
-  isOpen,
-  onClose,
-}: EditRecordModalProps) => {
-  const [date, setDate] = useState<string>(_date);
-  const [distance, setDistance] = useState<string>(_distance);
-  const [record, setRecord] = useState<string>(_record);
-  const [pace, setPace] = useState<string>(_pace);
+const EditRecordModal = ({ id, isOpen, onClose }: EditRecordModalProps) => {
+  if (id === undefined) return <></>;
+
+  //id=2인 api를 호출해서 나온 값으로 여기를 채워줘야해
+  const data = mockRunningList.data[id - 1]; // 2024-08-02
+
+  const [date, setDate] = useState<string>(data.runningDate);
+  const [distance, setDistance] = useState<string>(String(data.distance));
+  const [record, setRecord] = useState<string>(data.runningTime);
+  const [pace, setPace] = useState<string>(data.pace);
+
+  useEffect(() => {
+    setDate(data.runningDate);
+    setDistance(String(data.distance));
+    setRecord(data.runningTime);
+    setPace(data.pace);
+  }, [id]);
 
   return (
     <SimpleModal isOpen={isOpen} onClose={onClose} title={'기록 수정'}>
@@ -556,7 +564,17 @@ const EditRecordModal = ({
           </div>
         </div>
         <div className="flex justify-end space-x-3">
-          <Button color="base-500">삭제하기</Button>
+          <Button
+            color="base-500"
+            onClick={() => {
+              alert(`#${data.runRecordId}을 삭제합니다.`);
+              //삭제 api를 호출
+              // 성공하면 모달 닫기.
+              onClose();
+            }}
+          >
+            삭제하기
+          </Button>
           <Button
             onClick={() => {
               const query = {
@@ -567,6 +585,11 @@ const EditRecordModal = ({
               };
 
               console.log('query', query);
+
+              //query를 기록 수정하는 api에 보냄
+              //isSuccess == true이면
+
+              alert('수정되었습니다!');
 
               onClose();
             }}

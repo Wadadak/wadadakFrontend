@@ -8,6 +8,7 @@ import TextInput from '@/components/common/TextInput';
 import { ToggleButton } from '@/components/common/ToggleButtion';
 import YearOfBirthDropdown from '@/components/common/YearOfBirthDropdown';
 import { TitleBanner } from '@/components/layout/TitleBanner';
+import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 
@@ -36,7 +37,7 @@ const EditPage = () => {
   const router = useRouter();
   const [nickName, setNickName] = useState<string>('');
   const [profileImage, setProfileImage] = useState<string>('');
-  const [phoneNumber, setPhoneNumber] = useState<number | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState<string>('');
   const [gender, setGender] = useState<string[]>([]);
   const [age, setAge] = useState<number | null>(null);
   const [activityArea, setActivityArea] = useState<string[]>([]);
@@ -46,21 +47,19 @@ const EditPage = () => {
   const [isGenderOn, setIsGenderOn] = useState<boolean>(false);
   const [isAgeOn, setIsAgeOn] = useState<boolean>(false);
 
-  useEffect(() => {
-    //임시 목업 데이터
-    const result = {
-      nickname: '날아라 호빵맨',
-      age: 1988,
-    };
+  //임시 목업 데이터
+  const result = mockMyInfo;
 
+  useEffect(() => {
     setNickName(result.nickname);
-    setPhoneNumber(123456879);
-    setGender(['M']);
-    setAge(result.age);
-    setActivityArea(['1']);
-    setIsAgeOn(false);
-    setIsGenderOn(true);
-    setIsImageOn(true);
+    setPhoneNumber(result.phoneNumber);
+    setGender([result.gender]); // ['MALE']
+    setAge(result.birthYear);
+    setActivityArea([result.activityRegion]); // ['2']
+    setIsAgeOn(result.birthYearVisibility === 'PUBLIC'); // PUBLIC,
+    setIsGenderOn(result.genderVisibility === 'PUBLIC');
+    setIsImageOn(result.profieImageVisibility === 'PUBLIC');
+    setIsPhoneNumberOn(result.phoenNumberVisibility === 'PUBLIC');
   }, []);
 
   const handleEdit = () => {
@@ -75,7 +74,16 @@ const EditPage = () => {
       isGenderOn,
       isAgeOn,
     };
+
+    const body2 = {};
+
+    const body3 = {
+      phoneNumber: isPhoneNumberOn ? 0 : 1, // 공개면0, 비공개1
+      gender: isGenderOn ? 0 : 1,
+      birthYear: isAgeOn ? 0 : 1,
+    };
     console.log(body);
+    // 수정 api 호출
     alert('수정이 완료되었습니다!');
     router.back();
   };
@@ -128,7 +136,7 @@ const EditPage = () => {
                     htmlFor={'phoneNumber'}
                     required={true}
                   />
-                  <NumberInput
+                  <TextInput
                     value={phoneNumber}
                     onChange={(value) => {
                       setPhoneNumber(value);
@@ -154,11 +162,11 @@ const EditPage = () => {
                       multiple={false}
                       options={[
                         {
-                          id: 'M',
+                          id: 'MALE',
                           name: '남자',
                         },
                         {
-                          id: 'F',
+                          id: 'FEMALE',
                           name: '여자',
                         },
                       ]}
