@@ -8,6 +8,7 @@ import TextInput from '@/components/common/TextInput';
 import { ToggleButton } from '@/components/common/ToggleButtion';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
+import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
 import { mockRunningList } from '@/mocks/mockData/mockRunList';
 import {
   faPen,
@@ -48,10 +49,10 @@ const MyPage = () => {
       {/* 총 거리 */}
       <Wrapper>
         <div className="flex flex-col w-full">
-          <div className="flex justify-end items-center space-x-6">
+          <div className="flex items-center justify-end space-x-6">
             <div className="flex items-center space-x-3">
-              <Avatar size="w-8" />
-              <div className="font-bold">닉네임</div>
+              <Avatar size="w-8" src={mockMyInfo.profileImage} />
+              <div className="font-bold">{mockMyInfo.nickname}</div>
             </div>
             <Button
               onClick={() => {
@@ -90,11 +91,11 @@ const MyPage = () => {
             <div className="flex justify-center">
               <div
                 role="tablist"
-                className="tabs tabs-bordered w-60 space-x-8 font-bold"
+                className="space-x-8 font-bold tabs tabs-bordered w-60"
               >
                 <a
                   role="tab"
-                  className="tab text-gray-500"
+                  className="text-gray-500 tab"
                   style={{ whiteSpace: 'nowrap' }}
                   onClick={() => {
                     setTabSelect(true);
@@ -104,14 +105,14 @@ const MyPage = () => {
                 </a>
                 <a
                   role="tab"
-                  className="tab text-gray-500 tab-active"
+                  className="text-gray-500 tab tab-active"
                   style={{ whiteSpace: 'nowrap' }}
                 >
                   내 크루
                 </a>
                 <a
                   role="tab"
-                  className="tab text-gray-500"
+                  className="text-gray-500 tab"
                   style={{ whiteSpace: 'nowrap' }}
                 >
                   내 활동
@@ -119,7 +120,7 @@ const MyPage = () => {
               </div>
             </div>
 
-            <div className="flex flex-col space-y-12 w-full">
+            <div className="flex flex-col w-full space-y-12">
               <div className="flex justify-end space-x-3">
                 <div className="font-bold">프로필 공개</div>
                 <ToggleButton
@@ -133,19 +134,28 @@ const MyPage = () => {
               <div className="flex justify-center grid-cols-3 gap-[100px]">
                 <MyGoalItem
                   title={'주간 목표'}
+                  progress={50}
                   onItemClick={() => {
                     setShowWeeklyGoal(true);
                   }}
                 />
-                <MyGoalItem title={'월간 목표'} onItemClick={() => {}} />
-                <MyGoalItem title={'연간 목표'} onItemClick={() => {}} />
+                <MyGoalItem
+                  title={'월간 목표'}
+                  progress={40}
+                  onItemClick={() => {}}
+                />
+                <MyGoalItem
+                  title={'연간 목표'}
+                  progress={80}
+                  onItemClick={() => {}}
+                />
               </div>
             </div>
           </div>
           {/* 기록 코드 리스트 */}
           <div className="flex flex-col space-y-7">
-            <div className="flex justify-between items-center">
-              <div className="flex space-x-5 justify-center flex-grow">
+            <div className="flex items-center justify-between">
+              <div className="flex justify-center flex-grow space-x-5">
                 <Button
                   color={recordTab === 'round' ? 'accent' : undefined}
                   onClick={() => {
@@ -179,7 +189,7 @@ const MyPage = () => {
                   연간
                 </Button>
               </div>
-              <div className="flex space-x-3 items-center">
+              <div className="flex items-center space-x-3">
                 <div className="font-bold">프로필 공개</div>
                 <ToggleButton
                   onButtonClick={() =>
@@ -327,24 +337,28 @@ export default MyPage;
 
 interface MyGoalItemProps {
   title: string;
+  progress: number;
   onItemClick: () => void;
 }
-const MyGoalItem = ({ title, onItemClick }: MyGoalItemProps) => {
+
+const MyGoalItem = ({ title, onItemClick, progress }: MyGoalItemProps) => {
+  const style: React.CSSProperties = {
+    '--value': progress,
+    '--size': '8rem',
+    '--thickness': '1rem',
+  } as React.CSSProperties;
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-col items-center space-y-3">
-        <div
-          className="radial-progress w-32 h-32"
-          style={{ '--value': 80 }}
-          role="progressbar"
-        >
-          80%
+        <div className="radial-progress" style={style} role="progressbar">
+          {progress}%
         </div>
         <div className="h-6 bg-gray-200 w-[200px] rounded-[12px]"></div>
         <div className="h-6 bg-gray-200 w-[200px] rounded-[12px]"></div>
       </div>
       <div
-        className="flex justify-center mt-6 items-center space-x-2 cursor-pointer"
+        className="flex items-center justify-center mt-6 space-x-2 cursor-pointer"
         onClick={onItemClick}
       >
         <div className="text-[16px] font-semibold">{title}</div>
@@ -398,7 +412,7 @@ const RunningRecordItem = ({
   onButtonClick,
 }: RunningRecordItemProps) => {
   return (
-    <div className="flex items-center px-5 py-4 border border-gray-200  rounded-lg">
+    <div className="flex items-center px-5 py-4 border border-gray-200 rounded-lg">
       <div className="flex space-x-5 text-[20px] font-bold divide-x divide-gray-300 grow">
         {round && <div className="w-[100px] text-center">#{round}</div>}
         <div className="px-8">{date}</div>
@@ -424,7 +438,7 @@ const AddRecordModal = ({ isOpen, onClose }: AddRecordModalProps) => {
   return (
     <SimpleModal isOpen={isOpen} onClose={onClose} title={'기록 추가'}>
       <div className="flex flex-col space-y-7">
-        <div className="flex flex-col space-y-3 mt-3">
+        <div className="flex flex-col mt-3 space-y-3">
           <div className="flex flex-col space-y-2">
             <div className="font-semibold">날짜</div>
             <TextInput
@@ -517,7 +531,7 @@ const EditRecordModal = ({ id, isOpen, onClose }: EditRecordModalProps) => {
   return (
     <SimpleModal isOpen={isOpen} onClose={onClose} title={'기록 수정'}>
       <div className="flex flex-col space-y-7">
-        <div className="flex flex-col space-y-3 mt-3">
+        <div className="flex flex-col mt-3 space-y-3">
           <div className="flex flex-col space-y-2">
             <div className="font-semibold">날짜</div>
             <TextInput

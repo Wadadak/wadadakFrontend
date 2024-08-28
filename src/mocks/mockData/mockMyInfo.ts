@@ -7,23 +7,23 @@ export interface myInfo {
   birthYear: number;
   activityRegion: string;
   nameVisibility: string;
-  phoenNumberVisibility: string;
+  phoneNumberVisibility: string;
   genderVisibility: string;
   birthYearVisibility: string;
-  profieImageVisibility: string;
+  profileImageVisibility: string;
 }
 
 export const mockMyInfo: myInfo = {
   username: '정희철',
   nickname: '날아라호빵맨',
-  profileImage: '',
-  phoneNumber: '01011112345',
+  profileImage: 'https://picsum.photos/200/200',
+  phoneNumber: '01055670111',
   gender: 'MALE',
   birthYear: 1990,
-  activityRegion: '3',
-  phoenNumberVisibility: 'PUBLIC',
+  activityRegion: 'gyeonggi',
+  phoneNumberVisibility: 'PUBLIC',
   nameVisibility: 'PUBLIC',
   genderVisibility: 'PRIVATE',
-  birthYearVisibility: 'PUBLIC',
-  profieImageVisibility: 'PUBLIC',
+  birthYearVisibility: 'PRIVATE',
+  profileImageVisibility: 'PUBLIC',
 };
