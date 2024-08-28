@@ -1,18 +1,19 @@
 import React from 'react';
 
-export interface DropdownOption {
+interface DropdownOption {
   id: string | number;
   name: string;
 }
 
 interface DropdownProps {
   options: DropdownOption[]; // 드롭다운에 표시할 옵션 배열
-  onChange: (value: string | number) => void;
+  onChange: (value: string | string[] | number) => void;
   placeholder?: string;
   required?: boolean;
-  selectedValue?: string | number; // 선택된 값들
+  multiple?: boolean; // 다중 선택 가능 여부
+  selectedValues?: string[]; // 선택된 값들
   width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
-  disabled?: boolean; // 첫 번째 옵션(placeholder) disabled 여부
+  disabled?: boolean;
   error?: string;
 }
 
@@ -21,13 +22,19 @@ const Dropdown = ({
   onChange,
   placeholder = '',
   required = false,
-  selectedValue,
+  multiple = false,
+  selectedValues = [],
   width = 'xs',
   disabled = true,
   error,
 }: DropdownProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange(e.target.value);
+    const value = multiple
+      ? Array.from(e.target.selectedOptions, (option) => option.value)
+      : e.target.value;
+    if (onChange) {
+      onChange(value);
+    }
   };
   const widthClass = `max-w-${width}`;
 
@@ -35,7 +42,8 @@ const Dropdown = ({
     <>
       <select
         className={`select select-bordered ${widthClass}  ${error && 'select-error'}`}
-        value={selectedValue || ''}
+        value={multiple ? undefined : selectedValues[0]}
+        multiple={multiple}
         onChange={handleChange}
         required={required}
       >
@@ -43,12 +51,20 @@ const Dropdown = ({
           {placeholder}
         </option>
         {options.map((option) => (
-          <option key={option.id} value={option.id}>
+          <option
+            key={option.id}
+            value={option.id}
+            selected={
+              multiple
+                ? selectedValues.includes(option.name)
+                : selectedValues[0] === option.name
+            }
+          >
             {option.name}
           </option>
         ))}
       </select>
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </>
   );
 };
