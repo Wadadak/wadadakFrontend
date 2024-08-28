@@ -1,17 +1,24 @@
 'use client';
 
+import Label from '@/components/common/Label';
+import TextInput from '@/components/common/TextInput';
 import { TitleBanner } from '@/components/layout/TitleBanner';
+import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
+import { loginState } from '@/recoil/atoms/userState';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
+import { useRecoilValue, useSetRecoilState } from 'recoil';
 
 const LoginPage = () => {
-  const [username, setUsername] = useState<string>('');
+  const isLogin = useRecoilValue(loginState);
+  const setLogin = useSetRecoilState(loginState);
+  const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const router = useRouter();
 
   const handleLogin = () => {
     // 이메일과 비밀번호를 검사
-    if (username === '') {
+    if (email === '') {
       alert('이메일을 입력해 주세요!');
       return;
     }
@@ -21,51 +28,54 @@ const LoginPage = () => {
       return;
     }
 
-    //임시로 메인페이지로 보낸다
-    router.push('/');
+    if (email === mockMyInfo.email && password === mockMyInfo.password) {
+      //hctodo 임시처리
+      alert('로그인 성공');
+      setLogin(true);
+      router.push('/');
+    } else {
+      if (email !== mockMyInfo.email) {
+        alert('존재하지 않는 이메일입니다.');
+        return;
+      }
 
-    // 로그인 api에 이메일과 비밀번호를 보냄
-    // isSuccess === true ? 메인 페이지로 이동 : 응 없는 회원입니다.
+      if (password !== mockMyInfo.password) {
+        alert('비밀번호가 일치하지 않습니다.');
+        return;
+      }
+    }
   };
 
   return (
     <div className="flex flex-col bg-base-200">
-      <TitleBanner>
-        <div className="py-16">와다닥에 오신것을 환영합니다!</div>
-      </TitleBanner>
+      <TitleBanner>와다닥에 오신것을 환영합니다!</TitleBanner>
       <div className="flex justify-center py-16">
         <div className="card w-[450px] bg-base-100 shadow-2xl">
-          <div className="card-body">
-            {/* username */}
-            <div className="form-control">
-              <label className="label" htmlFor="username">
-                <span className="label-text font-semibold">이메일</span>
-              </label>
-              <input
-                type="text"
-                id="username"
-                className="input input-bordered"
+          <div className="space-y-3 card-body">
+            {/* hctodo: 나중에 지울 텍스트 */}
+            <div className="text-xs">
+              임시로 wadadak@gmail.com/1234로 로그인 가능합니다
+            </div>
+            {/* email */}
+            <Label label="이메일" textSize="sm">
+              <TextInput
+                value={email}
                 placeholder="이메일 입력"
-                value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={setEmail}
+                width="full"
               />
-            </div>
+            </Label>
             {/* password */}
-            <div className="form-control mt-4">
-              <label className="label" htmlFor="password">
-                <span className="label-text font-semibold">비밀번호</span>
-              </label>
-              <input
-                type="password"
-                id="password"
-                className="input input-bordered"
-                placeholder="비밀번호 입력"
+            <Label label="비밀번호" textSize="sm">
+              <TextInput
                 value={password}
-                onChange={(e) => setPassword(e.target.value)}
+                placeholder="비밀번호 입력"
+                onChange={setPassword}
+                width="full"
               />
-            </div>
+            </Label>
             {/* login */}
-            <div className="form-control mt-6">
+            <div className="mt-6 form-control">
               <button className="btn btn-primary" onClick={handleLogin}>
                 로그인
               </button>

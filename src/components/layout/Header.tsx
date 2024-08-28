@@ -9,9 +9,14 @@ import {
 import Avatar from '../common/Avatar';
 import { useRouter } from 'next/navigation';
 import SearchBar from '../common/SearchBar';
+import { useRecoilValue } from 'recoil';
+import { loginState } from '@/recoil/atoms/userState';
+import LoginMenu from '../login/LoginMenu';
+import LogoutMenu from '../login/LogoutMenu';
 
 const Header = () => {
   const router = useRouter();
+  const isLogin = useRecoilValue(loginState); //hctodo: 임시 로그인 상태
 
   const handleSearch = (value: string) => {
     alert(value);
@@ -25,7 +30,7 @@ const Header = () => {
           <div className="flex items-center space-x-3">
             <FontAwesomeIcon
               icon={faPersonRunning}
-              className="w-8 h-8"
+              className="w-8 h-8 cursor-pointer"
               onClick={() => router.push('/')}
             />
             {/* 검색창 */}
@@ -36,24 +41,7 @@ const Header = () => {
             />
           </div>
           {/* 오른쪽 레이아웃 */}
-          <div className="flex items-center space-x-6">
-            <HeaderMenu
-              name={'마이 크루'}
-              icon={faBell}
-              onMenuClick={() => router.push('/my-crews')}
-            />
-            <HeaderMenu
-              name={'메시지'}
-              icon={faBell}
-              onMenuClick={() => router.push('/message')}
-            />
-            <HeaderMenu
-              name={'알림'}
-              icon={faBell}
-              onMenuClick={() => router.push('/alarm')}
-            />
-            <Avatar onAvatarClick={() => router.push('/my')} />
-          </div>
+          {isLogin ? <LoginMenu /> : <LogoutMenu />}
         </div>
       </Wrapper>
     </div>
@@ -62,20 +50,3 @@ const Header = () => {
 
 export default Header;
 
-interface HeaderMenuProps {
-  name: string;
-  icon: IconDefinition;
-  onMenuClick: () => void;
-}
-
-const HeaderMenu = ({ name, icon, onMenuClick }: HeaderMenuProps) => {
-  return (
-    <button
-      className="flex flex-col items-center space-y-2"
-      onClick={onMenuClick}
-    >
-      <FontAwesomeIcon icon={icon} className="w-5 h-5" />
-      <div className="text-[10px]">{name}</div>
-    </button>
-  );
-};

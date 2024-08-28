@@ -1,4 +1,6 @@
-export interface myInfo {
+export interface userInfo {
+  email: string; //임시데이터
+  password: string; //임시데이터
   username: string;
   nickname: string;
   profileImage: string;
@@ -13,8 +15,10 @@ export interface myInfo {
   profileImageVisibility: string;
 }
 
-export const mockMyInfo: myInfo = {
-  username: '정희철',
+export const mockMyInfo: userInfo = {
+  email: 'wadadak@gmail.com',
+  password: '1234',
+  username: '와다닥',
   nickname: '날아라호빵맨',
   profileImage: 'https://picsum.photos/200/200',
   phoneNumber: '01055670111',
