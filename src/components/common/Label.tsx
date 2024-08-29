@@ -20,7 +20,7 @@ const Label = ({
   const textSizeClass = `text-${textSize}`;
 
   return (
-    <label className="form-control w-full py-2" htmlFor={htmlFor}>
+    <label className="w-full py-2 form-control" htmlFor={htmlFor}>
       <div className="label">
         <span className={`label-text ${textSizeClass}`}>
           {label}

@@ -5,15 +5,23 @@ import LoadingSpinner from './LoadingSpinner';
 import ErrorComponent from './ErrorComponent';
 
 interface RegionDropdownProps {
-  selectedRegion: string | number | null;
+  selectedRegion?: string | number | null;
   onRegionChange: (region: string | number) => void;
   placeholder?: string;
+  required?: boolean;
+  disabled?: boolean; // 첫 번째 옵션(placeholder) disabled 여부
+  errorMessage?: string;
+  width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
 }
 
 const RegionDropdown = ({
   selectedRegion,
   onRegionChange,
   placeholder = '지역을 선택하세요.',
+  required = false,
+  width = 'xs',
+  disabled = true,
+  errorMessage,
 }: RegionDropdownProps) => {
   const { data: regions, isLoading, error } = useRegions();
 
@@ -32,6 +40,10 @@ const RegionDropdown = ({
       onChange={handleRegionChange}
       selectedValue={selectedRegion}
       placeholder={placeholder}
+      required={required}
+      disabled={disabled}
+      errorMessage={errorMessage}
+      width={width}
     />
   );
 };

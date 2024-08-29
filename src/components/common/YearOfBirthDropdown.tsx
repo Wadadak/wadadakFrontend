@@ -5,25 +5,31 @@ interface YearOfBirthDropdownProps {
   selectedYear: number | null;
   onYearChange: (year: number) => void;
   placeholder?: string;
-  error?: string; // 에러 메시지 프롭스
+  required?: boolean;
+  disabled?: boolean; // 첫 번째 옵션(placeholder) disabled 여부
+  errorMessage?: string;
+  width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
 }
 
 const YearOfBirthDropdown = ({
   selectedYear,
   onYearChange,
   placeholder = '',
-  error,
+  required = false,
+  width = 'xs',
+  disabled = true,
+  errorMessage,
 }: YearOfBirthDropdownProps) => {
   const startYear = 1900;
   const endYear = new Date().getFullYear();
 
   const years = Array.from(
     { length: endYear - startYear + 1 },
-    (_, idx) => startYear + idx,
+    (_, idx) => endYear - idx,
   );
 
   const options = years.map((year) => ({
-    id: String(year),
+    id: year,
     name: String(year),
   }));
 
@@ -31,9 +37,12 @@ const YearOfBirthDropdown = ({
     <Dropdown
       options={options}
       onChange={(value) => onYearChange(Number(value))}
-      selectedValues={selectedYear ? [String(selectedYear)] : []}
+      selectedValue={selectedYear !== null ? String(selectedYear) : ''}
       placeholder={placeholder}
-      error={error}
+      required={required}
+      disabled={disabled}
+      errorMessage={errorMessage}
+      width={width}
     />
   );
 };
