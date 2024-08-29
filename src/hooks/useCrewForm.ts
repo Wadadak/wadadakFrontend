@@ -1,26 +1,35 @@
 import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-// import { mockCrewList } from '@/mocks/mockData/mockCrewList';
 import { useParams } from 'next/navigation';
 import { useUserRoles } from './useUserRoles';
 import { useCrewInfo } from './useCrewInfo';
-
-
+import {
+  CreateCrewData,
+  CrewResponse,
+  UpdateCrewData,
+} from '@/types/crewTypes';
+import { createCrew, updateCrew } from '@/apis/crewApi';
+import { useRouter } from 'next/navigation';
 
 export const useCrewForm = () => {
-  const crewId = Number(useParams().crewId);  
+  const crewId = Number(useParams().crewId);
   const isEditing = Boolean(crewId);
-  // const id = parseInt(crewId as string, 10);
-  // const crew = mockCrewList.find((crew) => crew.crewId === id);
+  const router = useRouter();
 
-  // 권한 확인 
-  const {data:userRole, isLoading:isRoleLoading, isError:isRoleError} = useUserRoles(crewId);
-  
+  // 권한 확인
+  const {
+    data: userRole,
+    isLoading: isRoleLoading,
+    isError: isRoleError,
+  } = useUserRoles(crewId);
+
   // 크루 정보 조회
-  const {data:crewInfo, isLoading:isInfoLoading, isError:isInfoError} = useCrewInfo(crewId);
-  
+  const {
+    data: crewInfo,
+    isLoading: isInfoLoading,
+    isError: isInfoError,
+  } = useCrewInfo(crewId);
 
-  
   const [crewName, setCrewName] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [crewCapacity, setCrewCapacity] = useState<number>();
@@ -29,13 +38,20 @@ export const useCrewForm = () => {
   const [runRecordOpen, setRunRecordOpen] = useState<boolean>();
   const [minYear, setMinYear] = useState<number>();
   const [maxYear, setMaxYear] = useState<number>();
-  const [gender, setGender] = useState<string>('');
+  const [gender, setGender] = useState<string>();
   const [leaderRequired, setLeaderRequired] = useState<boolean>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const queryClient = useQueryClient();
 
-  // useEffect로 초기값 설정 
+  // NOTE 권한 확인, 리디렉션 추가 가능
+  useEffect(() => {
+    if (isEditing && userRole && !['LEADER', 'STAFF'].includes(userRole.role)) {
+      alert('수정 권한이 없습니다');
+    }
+  }, [isEditing, userRole, isRoleLoading]);
+
+  // useEffect로 초기값 설정
   // TODO 이미지 추가
   useEffect(() => {
     if (isEditing && crewInfo) {
@@ -44,12 +60,12 @@ export const useCrewForm = () => {
       setCrewCapacity(crewInfo.crewCapacity);
       setActivityRegion(crewInfo.activityRegion);
       setRunRecordOpen(crewInfo.limit.runRecordOpen);
-      setApprovalRequired(crewInfo.leaderRequired);
-      setGenderRestriction(crewInfo.genderRestriction ?? '');
-      setMaxYear(crewInfo.maxYear ?? null);
-      setMinYear(crewInfo.minYear ?? null);
+      setLeaderRequired(crewInfo.limit.leaderRequired);
+      setMinYear(crewInfo.limit.minYear);
+      setMaxYear(crewInfo.limit.maxYear);
+      setGender(crewInfo.limit.gender);
     }
-  }, [crew]);
+  }, [isEditing, crewInfo]);
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
@@ -66,46 +82,71 @@ export const useCrewForm = () => {
       newErrors.description = '크루 소개는 500자 이내여야 합니다.';
     }
 
-    if (!location) {
-      newErrors.location = '활동 지역을 선택하세요.';
+    if (!activityRegion) {
+      newErrors.activityRegion = '활동 지역을 선택하세요.';
     }
 
-    if (!recordRequired) {
-      newErrors.recordRequired = '선택하세요.';
+    if (!runRecordOpen) {
+      newErrors.runRecordOpen = '선택하세요.';
     }
-    if (!approvalRequired) {
-      newErrors.approvalRequired = '선택하세요.';
-    }
-
-    if (minYear !== null && maxYear !== null && minYear < maxYear) {
-      newErrors.yearRange = '최소 년생은 최대 년생보다 커야 합니다.';
+    if (!leaderRequired) {
+      newErrors.leaderRequired = '선택하세요.';
     }
 
+    if (minYear && maxYear) {
+      if (minYear < maxYear) {
+        newErrors.yearRange = '연령대를 올바르게 선택하세요.';
+      }
+    }
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0; // 에러가 없으면 true 반환
   };
 
-  const createCrewMutation = useMutation(
-    (newCrewData: any)
-  )
-
+  const mutation = useMutation<
+    CrewResponse,
+    Error,
+    CreateCrewData | UpdateCrewData
+  >({
+    mutationFn: (
+      newCrewData: CreateCrewData | UpdateCrewData,
+    ): Promise<CrewResponse> => {
+      if (isEditing) {
+        return updateCrew(crewId, newCrewData as UpdateCrewData);
+      } else {
+        return createCrew(newCrewData as CreateCrewData);
+      }
+    },
+    onSuccess: (data: CrewResponse) => {
+      queryClient.invalidateQueries({
+        queryKey: ['crewInfo', crewId],
+      });
+      alert(
+        isEditing ? '크루 정보가 수정되었습니다.' : '크루가 생성되었습니다!',
+      );
+      // TODO 리다이렉트 추가
+      router.push(`/my-crews/${crewId}`);
+    },
+    onError: (error: Error) => {
+      console.error('크루 작업 중 오류 발생:', error);
+    },
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
+    // CHECKLIST
     if (validateForm()) {
-      const crewData = {
-        id: crewId || Date.now().toString(), // 새로운 ID 생성
-        name,
+      const crewData: CreateCrewData | UpdateCrewData = {
+        crewName: crewName!,
         description,
-        location,
-        recordRequired,
-        approvalRequired,
-        image,
-        capacity,
-        genderRestriction,
-        maxYear,
+        activityRegion,
+        runRecordOpen,
+        leaderRequired,
+        crewCapacity,
+        crewImage,
         minYear,
+        maxYear,
+        gender,
       };
 
       if (crewId) {
@@ -122,31 +163,31 @@ export const useCrewForm = () => {
     }
   };
 
-  const handleImageUpload = (file: File | null) => {
-    setImage(file);
+  const handleImageUpload = (file: File) => {
+    setCrewImage(file);
   };
 
   return {
-    name,
-    setName,
+    crewName,
+    setCrewName,
     description,
     setDescription,
-    location,
-    setLocation,
-    recordRequired,
-    setRecordRequired,
-    approvalRequired,
-    setApprovalRequired,
-    image,
+    activityRegion,
+    setActivityRegion,
+    runRecordOpen,
+    setRunRecordOpen,
+    leaderRequired,
+    setLeaderRequired,
+    crewCapacity,
+    setCrewCapacity,
+    crewImage,
     handleImageUpload,
-    capacity,
-    setCapacity,
-    genderRestriction,
-    setGenderRestriction,
-    maxYear,
-    setMaxYear,
     minYear,
     setMinYear,
+    maxYear,
+    setMaxYear,
+    gender,
+    setGender,
     handleSubmit, // 폼 제출 핸들러
     errors,
   };
