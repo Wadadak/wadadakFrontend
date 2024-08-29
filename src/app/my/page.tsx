@@ -8,6 +8,11 @@ import TextInput from '@/components/common/TextInput';
 import { ToggleButton } from '@/components/common/ToggleButtion';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
+import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
+import {
+  mockMyRunningInfo,
+  mockRunningList,
+} from '@/mocks/mockData/mockRunList';
 import {
   faPen,
   faPenToSquare,
@@ -33,18 +38,22 @@ const MyPage = () => {
   const [time, setTime] = useState<string>('');
   const [pace, setPace] = useState<string>('');
 
+  const [editRunningId, setEditRunningId] = useState<number | undefined>();
+
+  useEffect(() => {
+    setShowEditModal(true);
+  }, [editRunningId]);
+
   return (
     <div className="flex flex-col items-center w-full">
-      <TitleBanner>
-        <div className="py-16">🏃🏻내 정보</div>
-      </TitleBanner>
+      <TitleBanner>🏃🏻내 정보</TitleBanner>
       {/* 총 거리 */}
       <Wrapper>
         <div className="flex flex-col w-full">
-          <div className="flex justify-end items-center space-x-6">
+          <div className="flex items-center justify-end space-x-6">
             <div className="flex items-center space-x-3">
-              <Avatar size="w-8" />
-              <div className="font-bold">닉네임</div>
+              <Avatar size="w-8" src={mockMyInfo.profileImage} />
+              <div className="font-bold">{mockMyInfo.nickname}</div>
             </div>
             <Button
               onClick={() => {
@@ -56,13 +65,24 @@ const MyPage = () => {
           </div>
           <div className="flex flex-col space-y-8">
             <div className="flex flex-col items-center space-y-1">
-              <div className="text-[128px] font-extrabold">2453.3</div>
+              <div className="text-[128px] font-extrabold">
+                {mockMyRunningInfo.totalDistance} km
+              </div>
               <div className="font-bold">총 거리</div>
             </div>
             <div className="flex justify-center mt-8 space-x-16">
-              <MyRecordItem record={'128'} name={'총 러닝 횟수'} />
-              <MyRecordItem record={"5'32''"} name={'평균 페이스'} />
-              <MyRecordItem record={'164'} name={'평균 칼로리'} />
+              <MyRecordItem
+                record={String(mockMyRunningInfo.totalRunningCount)}
+                name={'총 러닝 횟수'}
+              />
+              <MyRecordItem
+                record={mockMyRunningInfo.averagePace}
+                name={'평균 페이스'}
+              />
+              <MyRecordItem
+                record={mockMyRunningInfo.averageRunningTime}
+                name={'평균 기록'}
+              />
             </div>
             <button
               className="text-[14px] text-gray-400 underline underline-offset-4"
@@ -83,11 +103,11 @@ const MyPage = () => {
             <div className="flex justify-center">
               <div
                 role="tablist"
-                className="tabs tabs-bordered w-60 space-x-8 font-bold"
+                className="space-x-8 font-bold tabs tabs-bordered w-60"
               >
                 <a
                   role="tab"
-                  className="tab text-gray-500"
+                  className="text-gray-500 tab"
                   style={{ whiteSpace: 'nowrap' }}
                   onClick={() => {
                     setTabSelect(true);
@@ -97,14 +117,14 @@ const MyPage = () => {
                 </a>
                 <a
                   role="tab"
-                  className="tab text-gray-500 tab-active"
+                  className="text-gray-500 tab tab-active"
                   style={{ whiteSpace: 'nowrap' }}
                 >
                   내 크루
                 </a>
                 <a
                   role="tab"
-                  className="tab text-gray-500"
+                  className="text-gray-500 tab"
                   style={{ whiteSpace: 'nowrap' }}
                 >
                   내 활동
@@ -112,7 +132,7 @@ const MyPage = () => {
               </div>
             </div>
 
-            <div className="flex flex-col space-y-12 w-full">
+            <div className="flex flex-col w-full space-y-12">
               <div className="flex justify-end space-x-3">
                 <div className="font-bold">프로필 공개</div>
                 <ToggleButton
@@ -126,19 +146,28 @@ const MyPage = () => {
               <div className="flex justify-center grid-cols-3 gap-[100px]">
                 <MyGoalItem
                   title={'주간 목표'}
+                  progress={50}
                   onItemClick={() => {
                     setShowWeeklyGoal(true);
                   }}
                 />
-                <MyGoalItem title={'월간 목표'} onItemClick={() => {}} />
-                <MyGoalItem title={'연간 목표'} onItemClick={() => {}} />
+                <MyGoalItem
+                  title={'월간 목표'}
+                  progress={40}
+                  onItemClick={() => {}}
+                />
+                <MyGoalItem
+                  title={'연간 목표'}
+                  progress={80}
+                  onItemClick={() => {}}
+                />
               </div>
             </div>
           </div>
           {/* 기록 코드 리스트 */}
           <div className="flex flex-col space-y-7">
-            <div className="flex justify-between items-center">
-              <div className="flex space-x-5 justify-center flex-grow">
+            <div className="flex items-center justify-between">
+              <div className="flex justify-center flex-grow space-x-5">
                 <Button
                   color={recordTab === 'round' ? 'accent' : undefined}
                   onClick={() => {
@@ -172,7 +201,7 @@ const MyPage = () => {
                   연간
                 </Button>
               </div>
-              <div className="flex space-x-3 items-center">
+              <div className="flex items-center space-x-3">
                 <div className="font-bold">프로필 공개</div>
                 <ToggleButton
                   onButtonClick={() =>
@@ -185,16 +214,16 @@ const MyPage = () => {
             <div className="w-full h-1 bg-gray-100"></div>
             {recordTab === 'round' && (
               <div className="flex flex-col space-y-4">
-                {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, index) => (
+                {mockRunningList.data.map((item, index) => (
                   <RunningRecordItem
                     key={index}
-                    round={index + 1}
-                    date={'2024-05-16'}
-                    distance={11.83}
-                    totalTime={'01:12:25'}
-                    pace={"5'55''"}
+                    round={item.runRecordId}
+                    date={item.runningDate}
+                    distance={item.distance}
+                    totalTime={item.runningTime}
+                    pace={item.pace}
                     onButtonClick={() => {
-                      setShowEditModal(true);
+                      setEditRunningId(item.runRecordId);
                     }}
                   />
                 ))}
@@ -255,14 +284,13 @@ const MyPage = () => {
         </div>
       </Wrapper>
       <EditRecordModal
+        id={editRunningId}
         isOpen={showEditModal}
         onClose={() => {
+          //수정을 완료하고 모달을 닫을때,
+          // refetch();
           setShowEditModal(false);
         }}
-        _date={'2024-05-06'}
-        _distance={'11.2'}
-        _record={'1:23:33'}
-        _pace={"5'44''"}
       />
       <AddRecordModal
         isOpen={showAddRecord}
@@ -321,24 +349,28 @@ export default MyPage;
 
 interface MyGoalItemProps {
   title: string;
+  progress: number;
   onItemClick: () => void;
 }
-const MyGoalItem = ({ title, onItemClick }: MyGoalItemProps) => {
+
+const MyGoalItem = ({ title, onItemClick, progress }: MyGoalItemProps) => {
+  const style: React.CSSProperties = {
+    '--value': progress,
+    '--size': '8rem',
+    '--thickness': '1rem',
+  } as React.CSSProperties;
+
   return (
     <div className="flex flex-col">
       <div className="flex flex-col items-center space-y-3">
-        <div
-          className="radial-progress w-32 h-32"
-          style={{ '--value': 80 }}
-          role="progressbar"
-        >
-          80%
+        <div className="radial-progress" style={style} role="progressbar">
+          {progress}%
         </div>
         <div className="h-6 bg-gray-200 w-[200px] rounded-[12px]"></div>
         <div className="h-6 bg-gray-200 w-[200px] rounded-[12px]"></div>
       </div>
       <div
-        className="flex justify-center mt-6 items-center space-x-2 cursor-pointer"
+        className="flex items-center justify-center mt-6 space-x-2 cursor-pointer"
         onClick={onItemClick}
       >
         <div className="text-[16px] font-semibold">{title}</div>
@@ -392,7 +424,7 @@ const RunningRecordItem = ({
   onButtonClick,
 }: RunningRecordItemProps) => {
   return (
-    <div className="flex items-center px-5 py-4 border border-gray-200  rounded-lg">
+    <div className="flex items-center px-5 py-4 border border-gray-200 rounded-lg">
       <div className="flex space-x-5 text-[20px] font-bold divide-x divide-gray-300 grow">
         {round && <div className="w-[100px] text-center">#{round}</div>}
         <div className="px-8">{date}</div>
@@ -418,7 +450,7 @@ const AddRecordModal = ({ isOpen, onClose }: AddRecordModalProps) => {
   return (
     <SimpleModal isOpen={isOpen} onClose={onClose} title={'기록 추가'}>
       <div className="flex flex-col space-y-7">
-        <div className="flex flex-col space-y-3 mt-3">
+        <div className="flex flex-col mt-3 space-y-3">
           <div className="flex flex-col space-y-2">
             <div className="font-semibold">날짜</div>
             <TextInput
@@ -486,30 +518,32 @@ const AddRecordModal = ({ isOpen, onClose }: AddRecordModalProps) => {
 };
 
 interface EditRecordModalProps {
-  _date: string;
-  _distance: string;
-  _record: string;
-  _pace: string;
+  id?: number;
   isOpen: boolean;
   onClose: () => void;
 }
-const EditRecordModal = ({
-  _date,
-  _distance,
-  _record,
-  _pace,
-  isOpen,
-  onClose,
-}: EditRecordModalProps) => {
-  const [date, setDate] = useState<string>(_date);
-  const [distance, setDistance] = useState<string>(_distance);
-  const [record, setRecord] = useState<string>(_record);
-  const [pace, setPace] = useState<string>(_pace);
+const EditRecordModal = ({ id, isOpen, onClose }: EditRecordModalProps) => {
+  if (id === undefined) return <></>;
+
+  //id=2인 api를 호출해서 나온 값으로 여기를 채워줘야해
+  const data = mockRunningList.data[id - 1]; // 2024-08-02
+
+  const [date, setDate] = useState<string>(data.runningDate);
+  const [distance, setDistance] = useState<string>(String(data.distance));
+  const [record, setRecord] = useState<string>(data.runningTime);
+  const [pace, setPace] = useState<string>(data.pace);
+
+  useEffect(() => {
+    setDate(data.runningDate);
+    setDistance(String(data.distance));
+    setRecord(data.runningTime);
+    setPace(data.pace);
+  }, [id]);
 
   return (
     <SimpleModal isOpen={isOpen} onClose={onClose} title={'기록 수정'}>
       <div className="flex flex-col space-y-7">
-        <div className="flex flex-col space-y-3 mt-3">
+        <div className="flex flex-col mt-3 space-y-3">
           <div className="flex flex-col space-y-2">
             <div className="font-semibold">날짜</div>
             <TextInput
@@ -556,7 +590,17 @@ const EditRecordModal = ({
           </div>
         </div>
         <div className="flex justify-end space-x-3">
-          <Button color="base-500">삭제하기</Button>
+          <Button
+            color="base-500"
+            onClick={() => {
+              alert(`#${data.runRecordId}을 삭제합니다.`);
+              //삭제 api를 호출
+              // 성공하면 모달 닫기.
+              onClose();
+            }}
+          >
+            삭제하기
+          </Button>
           <Button
             onClick={() => {
               const query = {
@@ -567,6 +611,11 @@ const EditRecordModal = ({
               };
 
               console.log('query', query);
+
+              //query를 기록 수정하는 api에 보냄
+              //isSuccess == true이면
+
+              alert('수정되었습니다!');
 
               onClose();
             }}
