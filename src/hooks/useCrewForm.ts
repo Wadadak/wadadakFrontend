@@ -1,123 +1,63 @@
 import { useEffect, useState } from 'react';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 // import { mockCrewList } from '@/mocks/mockData/mockCrewList';
 import { useParams } from 'next/navigation';
-import { CreateCrewData, CrewResponse, UpdateCrewData } from '@/types/crewTypes';
-import axiosInstance from '@/apis/axiosInstance';
+import { useUserRoles } from './useUserRoles';
+import { useCrewInfo } from './useCrewInfo';
 
-const createCrew =async (newCrewData:CreateCrewData) :Promise<CrewResponse> => {
-    const formData = new FormData();
-    formData.append('crewName', newCrewData.crewName);
-    formData.append('description', newCrewData.description);
-    formData.append('activityRegion', newCrewData.activityRegion);
-    formData.append('runRecordOpen', String(newCrewData.runRecordOpen));
-    formData.append('leaderRequired', String(newCrewData.leaderRequired));
-
-    if(newCrewData.crewCapacity) {
-      formData.append('crewCapacity', String(newCrewData.crewCapacity));
-    }
-
-    if(newCrewData.crewImage) {
-      formData.append('crewImage', newCrewData.crewImage);
-    }
-
-    if(newCrewData.minYear) {
-      formData.append('minYear', String(newCrewData.minYear));
-    }
-
-    if(newCrewData.maxYear) {
-      formData.append('maxYear', String(newCrewData.maxYear));
-    }
-
-    if(newCrewData.gender) {
-      formData.append('gender', newCrewData.gender);
-    }
-
-
-    const response = await axiosInstance.post('/crew', formData, {
-      headers : {
-        'Content-Type':'multipart/form-data'
-      }
-    });
-    return response.data
-}
-
-const updateCrew =async (newCrewData:UpdateCrewData) :Promise<CrewResponse>=> {
-    const formData = new FormData();
-    formData.append('description', newCrewData.description);
-    formData.append('activityRegion', newCrewData.activityRegion);
-    formData.append('runRecordOpen', String(newCrewData.runRecordOpen));
-    formData.append('leaderRequired', String(newCrewData.leaderRequired));
-
-    if(newCrewData.crewCapacity) {
-      formData.append('crewCapacity', String(newCrewData.crewCapacity));
-    }
-
-    if(newCrewData.crewImage) {
-      formData.append('crewImage', newCrewData.crewImage);
-    }
-
-    if(newCrewData.minYear) {
-      formData.append('minYear', String(newCrewData.minYear));
-    }
-
-    if(newCrewData.maxYear) {
-      formData.append('maxYear', String(newCrewData.maxYear));
-    }
-
-    if(newCrewData.gender) {
-      formData.append('gender', newCrewData.gender);
-    }
-
-
-    const response = await axiosInstance.put(`/crew/${crewId}`, formData, {
-      headers : {
-        'Content-Type':'multipart/form-data'
-      }
-    });
-    return response.data
-}
 
 
 export const useCrewForm = () => {
-  const { crewId } = useParams(); // URL에서 crewId 추출
+  const crewId = Number(useParams().crewId);  
+  const isEditing = Boolean(crewId);
   // const id = parseInt(crewId as string, 10);
   // const crew = mockCrewList.find((crew) => crew.crewId === id);
 
-  const [crewName, setCrewName] = useState('');
-  const [description, setDescription] = useState('');
-  const [crewCapacity, setCrewCapacity] = useState<number | null>(null);
-  const [activityRegion, setActivityRegion] = useState('');
-  const [crewImage, setCrewImage] = useState<File | null>(null);
-  const [runRecordOpen, setRunRecordOpen] = useState(false);
-  const [minYear, setMinYear] = useState<number | null>(null);
-  const [maxYear, setMaxYear] = useState<number | null>(null);
-  const [gender, setGender] = useState('');
-  const [leaderRequired, setLeaderRequired] = useState(false);
+  // 권한 확인 
+  const {data:userRole, isLoading:isRoleLoading, isError:isRoleError} = useUserRoles(crewId);
+  
+  // 크루 정보 조회
+  const {data:crewInfo, isLoading:isInfoLoading, isError:isInfoError} = useCrewInfo(crewId);
+  
+
+  
+  const [crewName, setCrewName] = useState<string>();
+  const [description, setDescription] = useState<string>();
+  const [crewCapacity, setCrewCapacity] = useState<number>();
+  const [activityRegion, setActivityRegion] = useState<string>();
+  const [crewImage, setCrewImage] = useState<File>();
+  const [runRecordOpen, setRunRecordOpen] = useState<boolean>();
+  const [minYear, setMinYear] = useState<number>();
+  const [maxYear, setMaxYear] = useState<number>();
+  const [gender, setGender] = useState<string>('');
+  const [leaderRequired, setLeaderRequired] = useState<boolean>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  // useEffect로 초기값 설정
+  const queryClient = useQueryClient();
+
+  // useEffect로 초기값 설정 
+  // TODO 이미지 추가
   useEffect(() => {
-    if (crew) {
-      setName(crew.crewName);
-      setDescription(crew.description);
-      setLocation(crew.activityRegion);
-      setRecordRequired(crew.publicRecordRequired ?? false);
-      setApprovalRequired(crew.leaderRequired);
-      setCapacity(crew.crewCapacity);
-      setGenderRestriction(crew.genderRestriction ?? '');
-      setMaxYear(crew.maxYear ?? null);
-      setMinYear(crew.minYear ?? null);
+    if (isEditing && crewInfo) {
+      setCrewName(crewInfo.crewName);
+      setDescription(crewInfo.description);
+      setCrewCapacity(crewInfo.crewCapacity);
+      setActivityRegion(crewInfo.activityRegion);
+      setRunRecordOpen(crewInfo.limit.runRecordOpen);
+      setApprovalRequired(crewInfo.leaderRequired);
+      setGenderRestriction(crewInfo.genderRestriction ?? '');
+      setMaxYear(crewInfo.maxYear ?? null);
+      setMinYear(crewInfo.minYear ?? null);
     }
   }, [crew]);
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
 
-    if (!name) {
-      newErrors.name = '크루명을 입력하세요.';
-    } else if (name.length > 30) {
-      newErrors.name = '크루명은 30자 이내여야 합니다.';
+    if (!crewName) {
+      newErrors.crewName = '크루명을 입력하세요.';
+    } else if (crewName.length > 30) {
+      newErrors.crewName = '크루명은 30자 이내여야 합니다.';
     }
 
     if (!description) {

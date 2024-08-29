@@ -1,3 +1,5 @@
+// 권한 조회
+
 import axiosInstance from '@/apis/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 

@@ -7,6 +7,7 @@
 //   time?: string;
 // }
 
+// 크루 생성 요청 본문
 export interface CreateCrewData {
   crewName: string;
   description: string;
@@ -20,6 +21,7 @@ export interface CreateCrewData {
   leaderRequired: boolean;
 }
 
+// 크루 정보 수정 요청 본문
 export interface UpdateCrewData {
   description: string;
   crewCapacity?: number;
@@ -32,6 +34,7 @@ export interface UpdateCrewData {
   leaderRequired: boolean;
 }
 
+// 크루 생성, 수정 응답 본문
 export interface CrewResponse {
   crewId: number;
   crewName: string;
@@ -39,6 +42,28 @@ export interface CrewResponse {
   crewCapacity?: number;
   crewOccupancy: 1;
   activityRegion: string;
+}
+
+// 크루 제한 사항
+export interface CrewLimit {
+  gender?: string;
+  minYear?: number;
+  maxYear?: number;
+  leaderRequired: boolean;
+  runRecordOpen: boolean;
+}
+
+// 크루 정보 조회 응답 본문
+export interface CrewInfoResponse {
+  crewId: number;
+  crewName: string;
+  leader: string;
+  description: string;
+  crewCapacity?: number;
+  crewOccupancy: number;
+  activityRegion: string;
+  runningCount?: number;
+  limit: CrewLimit;
 }
 
 // export interface RunningSchedule {
