@@ -23,11 +23,15 @@ const RegionDropdown = ({
   disabled = true,
   errorMessage,
 }: RegionDropdownProps) => {
-  const { data: regions, isLoading, error } = useRegions();
+  const { data: regions, isLoading, isError, error } = useRegions();
 
   if (isLoading) return <LoadingSpinner />;
-  if (error)
-    return <ErrorComponent message="지역 정보를 불러오지 못했습니다." />;
+  if (isError)
+    return (
+      <ErrorComponent
+        message={error?.message || '지역 정보를 불러오지 못했습니다.'}
+      />
+    );
 
   // 드롭다운 값 변경 핸들러
   const handleRegionChange = (value: string | number) => {
@@ -36,7 +40,7 @@ const RegionDropdown = ({
 
   return (
     <Dropdown
-      options={regions}
+      options={regions || []}
       onChange={handleRegionChange}
       selectedValue={selectedRegion}
       placeholder={placeholder}
