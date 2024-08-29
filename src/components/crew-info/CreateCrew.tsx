@@ -11,6 +11,7 @@ import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
 import ImageUpload from '../common/ImageUpload';
 import { useCrewForm } from '@/hooks/useCrewForm';
 import { mockActivityRegions } from '@/mocks/mockData/mockActivityRegions';
+import RegionDropdown from '../common/RegionDropdown';
 // TODO : API 함수들 import
 
 const CreateCrew = () => {
@@ -64,6 +65,7 @@ const CreateCrew = () => {
           />
         </Label>
         <Label label="활동 지역" required>
+          <RegionDropdown selectedRegion={location}>
           <Dropdown
             options={mockActivityRegions}
             onChange={(value) => setLocation(value as string)}
