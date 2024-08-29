@@ -65,14 +65,11 @@ const CreateCrew = () => {
           />
         </Label>
         <Label label="활동 지역" required>
-          <RegionDropdown selectedRegion={location}>
-          <Dropdown
-            options={mockActivityRegions}
-            onChange={(value) => setLocation(value as string)}
-            placeholder="활동 지역을 선택하세요"
+          <RegionDropdown
+            selectedRegion={location}
             required
-            selectedValues={[location]}
-            error={errors.location}
+            onRegionChange={(value) => setLocation(value as string)}
+            errorMessage={errors.location}
           />
         </Label>
         <Label label="가입 신청자의 러닝 프로필 공개 여부" required>

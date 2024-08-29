@@ -42,29 +42,7 @@ const Header = () => {
             />
           </div>
           {/* 오른쪽 레이아웃 */}
-<<<<<<< HEAD
-          <div className="flex items-center space-x-6">
-            <HeaderMenu
-              name={'마이 크루'}
-              icon={faBell}
-              onMenuClick={() => router.push('/joined-crews')}
-            />
-            {/* TODO 추후에 메시지, 알림 추가할 경우 */}
-            {/* <HeaderMenu
-              name={'메시지'}
-              icon={faBell}
-              onMenuClick={() => router.push('/message')}
-            />
-            <HeaderMenu
-              name={'알림'}
-              icon={faBell}
-              onMenuClick={() => router.push('/alarm')}
-            /> */}
-            <Avatar />
-          </div>
-=======
           {isLogin ? <LoginMenu /> : <LogoutMenu />}
->>>>>>> 5b0731ef7c955acaa61b864f3ac66369f7c2bb9f
         </div>
       </Wrapper>
     </div>
@@ -72,4 +50,3 @@ const Header = () => {
 };
 
 export default Header;
-
