@@ -10,7 +10,7 @@ interface DropdownProps {
   onChange: (value: string | number) => void;
   placeholder?: string;
   required?: boolean;
-  selectedValue?: string | number; // 선택된 값들
+  selectedValue?: string | number | null; // 선택된 값들
   width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
   disabled?: boolean; // 첫 번째 옵션(placeholder) disabled 여부
   error?: string;
