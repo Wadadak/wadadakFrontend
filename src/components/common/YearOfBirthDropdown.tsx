@@ -31,7 +31,7 @@ const YearOfBirthDropdown = ({
     <Dropdown
       options={options}
       onChange={(value) => onYearChange(Number(value))}
-      selectedValues={selectedYear ? [String(selectedYear)] : []}
+      selectedValue={selectedYear ? String(selectedYear) : undefined}
       placeholder={placeholder}
       error={error}
     />
