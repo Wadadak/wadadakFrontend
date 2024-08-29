@@ -1,13 +1,18 @@
 import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '@/apis/axiosInstance';
 
-const fetchRegions = async () => {
+interface Regions {
+  id: string;
+  name: string;
+}
+
+const fetchRegions = async (): Promise<Regions[]> => {
   const response = await axiosInstance.get('/region');
   return response.data;
 };
 
 export const useRegions = () => {
-  return useQuery({
+  return useQuery<Regions[], Error>({
     queryKey: ['region'],
     queryFn: fetchRegions,
     staleTime: Infinity,
