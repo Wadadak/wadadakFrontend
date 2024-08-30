@@ -9,7 +9,7 @@ interface RegularRunningInfoTableProps {
   onDeleteRunningInfo?: (id: number) => void;
 }
 const RegularRunningInfoTable = ({
-  regularRunningInfo,
+  regularRunningInfo = [],
   userRole,
   onDeleteRunningInfo,
   onEditRunningInfo,

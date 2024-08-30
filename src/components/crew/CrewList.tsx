@@ -1,12 +1,11 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CrewCard from './CrewCard';
 import Pagination from '../common/Pagination';
-import { useCrewList } from '@/hooks/useCrewList';
+import { useCrewList } from '@/hooks/crew/useCrewList';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
-import axiosInstance from '@/apis/axiosInstance';
 
 const CrewList = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -48,13 +47,12 @@ const CrewList = () => {
             crewCapacity={crew.crewCapacity}
             crewImage={crew.crewImage}
             activityRegion={crew.activityRegion}
-            regularRunningInfo={crew.regularRunningInfo}
           />
         ))}
       </div>
 
       <Pagination
-        totalItems={crews.length}
+        totalItems={totalCrews}
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
         onPageChange={setCurrentPage}

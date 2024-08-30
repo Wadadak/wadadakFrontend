@@ -9,7 +9,7 @@ import Button from '@/components/common/Button';
 import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
 import ImageUpload from '../common/ImageUpload';
 import RegionDropdown from '../common/RegionDropdown';
-import { useCrewForm } from '@/hooks/useCrewForm';
+import { useCrewForm } from '@/hooks/crew/useCrewForm';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
 

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import RegularRunningInfoTable from '../crew-info/RegularRunningInfoTable';
 import { useRouter } from 'next/navigation';
-import { useCrewRunningInfo } from '@/hooks/useCrewRunningInfo';
+import { useCrewRunningInfo } from '@/hooks/crew/useCrewRunningInfo';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
 
@@ -11,7 +11,7 @@ interface CrewCardProps {
   crewId: number;
   crewName: string;
   crewOccupancy: number;
-  crewCapacity: number;
+  crewCapacity?: number;
   crewImage?: string;
   activityRegion: string;
   myCrew?: boolean;
@@ -66,7 +66,8 @@ const CrewCard = ({
           <div className="badge badge-secondary">{activityRegion}</div>
         </h2>
         <p>
-          인원 : {crewOccupancy}명 / {crewCapacity}명
+          인원 : {crewOccupancy}명 /{' '}
+          {crewCapacity !== undefined ? `${crewCapacity}명` : '제한 없음'}
         </p>
         <div className="card-actions justify-start relative">
           <div
@@ -93,7 +94,7 @@ const CrewCard = ({
                 )}
                 {!isLoading && !isError && (
                   <RegularRunningInfoTable
-                    regularRunningInfo={regularRunningInfo || []}
+                    regularRunningInfo={regularRunningInfo?.data}
                   />
                 )}
               </div>

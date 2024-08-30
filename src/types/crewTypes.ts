@@ -59,6 +59,7 @@ export interface CrewInfoResponse {
   limit: CrewLimit;
 }
 
+// 크루 리스트
 export interface CrewSummary {
   crewId: number;
   crewName: string;
@@ -81,6 +82,18 @@ export interface CrewListParams {
   occupancyStatus?: 'FULL' | 'AVAILABLE';
   size?: number; // 페이지 당 항목 수
   page?: number; // 현재 페이지 번호
+}
+
+// 가입한 크루 리스트
+export interface JoinedCrewSummary {
+  crewId: number;
+  crewName: string;
+  crewImage?: string;
+  role: 'LEADER' | 'STAFF' | 'MEMBER';
+  leader: string;
+  crewCapacity?: number;
+  crewOccupancy: number;
+  activityRegion: string;
 }
 
 // 정기 러닝
