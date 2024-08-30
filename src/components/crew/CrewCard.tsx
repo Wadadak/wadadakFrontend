@@ -1,19 +1,19 @@
 'use client';
 
 import React, { useState } from 'react';
-import SimpleModal from '../common/SimpleModal';
-import { RegularRunningInfo } from '@/types/crewTypes';
 import RegularRunningInfoTable from '../crew-info/RegularRunningInfoTable';
 import { useRouter } from 'next/navigation';
+import { useCrewRunningInfo } from '@/hooks/useCrewRunningInfo';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorComponent from '../common/ErrorComponent';
 
 interface CrewCardProps {
   crewId: number;
   crewName: string;
   crewOccupancy: number;
   crewCapacity: number;
-  crewImage?: string | null;
+  crewImage?: string;
   activityRegion: string;
-  regularRunningInfo?: RegularRunningInfo[];
   myCrew?: boolean;
 }
 
@@ -24,18 +24,15 @@ const CrewCard = ({
   crewCapacity,
   crewImage,
   activityRegion,
-  regularRunningInfo = [],
   myCrew = false,
 }: CrewCardProps) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [showTooltip, setShowTooltip] = useState(false);
+  const {
+    data: regularRunningInfo,
+    isLoading,
+    isError,
+  } = useCrewRunningInfo(crewId);
   const router = useRouter();
-
-  const handleOpenModal = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    setIsModalOpen(true);
-  };
-  const handleCloseModal = () => setIsModalOpen(false);
-
   const defaultImage = '/images/default.png';
 
   const handleCardClick = () => {
@@ -44,6 +41,14 @@ const CrewCard = ({
     } else {
       router.push(`/crew/${crewId}`);
     }
+  };
+
+  const handleMouseEnter = () => {
+    setShowTooltip(true);
+  };
+
+  const handleMouseLeave = () => {
+    setShowTooltip(false);
   };
 
   return (
@@ -63,21 +68,36 @@ const CrewCard = ({
         <p>
           인원 : {crewOccupancy}명 / {crewCapacity}명
         </p>
-        <div className="card-actions justify-start">
-          <div className="badge py-3 hover:bg-accent" onClick={handleOpenModal}>
+        <div className="card-actions justify-start relative">
+          <div
+            className="btn btn-primary btn-xs mt-1 relative"
+            onMouseEnter={handleMouseEnter}
+            onMouseLeave={handleMouseLeave}
+          >
             정기 러닝 정보
           </div>
 
-          {isModalOpen && (
-            <SimpleModal
-              isOpen={isModalOpen}
-              onClose={handleCloseModal}
-              title="정기 러닝 정보"
+          {showTooltip && (
+            <div
+              className="absolute left-0 mt-2 bg-base-100 border border-base-300 shadow-lg z-10 w-80"
+              style={{ marginTop: '30px' }} // 버튼 아래에 툴팁을 배치
+              onMouseEnter={handleMouseEnter} // 툴팁 위에 있을 때는 사라지지 않도록 함
+              onMouseLeave={handleMouseLeave}
             >
-              <RegularRunningInfoTable
-                regularRunningInfo={regularRunningInfo}
-              />
-            </SimpleModal>
+              <div className="card-body p-3">
+                {isLoading && <LoadingSpinner />}
+                {isError && (
+                  <ErrorComponent
+                    message={'정기 러닝 정보를 불러오는 데 실패했습니다.'}
+                  />
+                )}
+                {!isLoading && !isError && (
+                  <RegularRunningInfoTable
+                    regularRunningInfo={regularRunningInfo || []}
+                  />
+                )}
+              </div>
+            </div>
           )}
         </div>
       </div>

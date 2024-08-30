@@ -1,11 +1,11 @@
 import React from 'react';
-import { RegularRunningInfo } from '@/types/crewTypes';
+import { RunningInfo } from '@/types/crewTypes';
 import Button from '../common/Button';
 
 interface RegularRunningInfoTableProps {
-  regularRunningInfo: RegularRunningInfo[];
+  regularRunningInfo?: RunningInfo[];
   userRole?: 'LEADER' | 'STAFF' | 'MEMBER';
-  onEditRunningInfo?: (info: RegularRunningInfo) => void;
+  onEditRunningInfo?: (info: RunningInfo) => void;
   onDeleteRunningInfo?: (id: number) => void;
 }
 const RegularRunningInfoTable = ({

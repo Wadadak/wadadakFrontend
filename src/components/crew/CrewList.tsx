@@ -1,28 +1,45 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import CrewCard from './CrewCard';
-import { Crew } from '@/types/crewTypes';
 import Pagination from '../common/Pagination';
+import { useCrewList } from '@/hooks/useCrewList';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorComponent from '../common/ErrorComponent';
+import axiosInstance from '@/apis/axiosInstance';
 
-interface CrewListProps {
-  crews: Crew[];
-  myCrew?: boolean;
-}
-
-const CrewList: React.FC<CrewListProps> = ({ crews, myCrew }) => {
+const CrewList = () => {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 9;
+  const itemsPerPage = 9; // 한 페이지에 표시할 항목
   const pageRangeDisplayed = 5;
 
-  const endIndex = currentPage * itemsPerPage;
-  const startIndex = endIndex - itemsPerPage;
-  const currentCards = crews.slice(startIndex, endIndex);
+  // const endIndex = currentPage * itemsPerPage;
+  // const startIndex = endIndex - itemsPerPage;
+  // const currentCards = crews.slice(startIndex, endIndex);
+
+  const { data, isLoading, isError, error } = useCrewList({
+    size: itemsPerPage,
+    page: currentPage,
+  });
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isError) {
+    return (
+      <ErrorComponent
+        message={error.message || '크루 목록을 불러오는 데 실패했습니다.'}
+      />
+    );
+  }
+
+  const { crews, totalCrews } = data || { crews: [], totalCrews: 0 };
 
   return (
     <div className="container mx-auto">
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-items-center">
-        {currentCards.map((crew) => (
+        {crews.map((crew) => (
           <CrewCard
             key={crew.crewId}
             crewId={crew.crewId}
@@ -32,7 +49,6 @@ const CrewList: React.FC<CrewListProps> = ({ crews, myCrew }) => {
             crewImage={crew.crewImage}
             activityRegion={crew.activityRegion}
             regularRunningInfo={crew.regularRunningInfo}
-            myCrew={myCrew}
           />
         ))}
       </div>

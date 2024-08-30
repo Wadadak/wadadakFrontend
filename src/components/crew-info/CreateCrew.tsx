@@ -3,50 +3,75 @@
 import React from 'react';
 import TextInput from '@/components/common/TextInput';
 import NumberInput from '@/components/common/NumberInput';
-import Dropdown from '@/components/common/Dropdown';
 import Label from '@/components/common/Label';
 import CheckBox from '@/components/common/CheckBox';
 import Button from '@/components/common/Button';
 import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
 import ImageUpload from '../common/ImageUpload';
-import { useCrewForm } from '@/hooks/useCrewForm';
-import { mockActivityRegions } from '@/mocks/mockData/mockActivityRegions';
 import RegionDropdown from '../common/RegionDropdown';
-// TODO : API 함수들 import
+import { useCrewForm } from '@/hooks/useCrewForm';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorComponent from '../common/ErrorComponent';
 
 const CreateCrew = () => {
   const {
-    name,
-    setName,
+    crewName,
+    setCrewName,
     description,
     setDescription,
-    location,
-    setLocation,
-    recordRequired,
-    setRecordRequired,
-    approvalRequired,
-    setApprovalRequired,
-    image,
+    activityRegion,
+    setActivityRegion,
+    runRecordOpen,
+    setRunRecordOpen,
+    leaderRequired,
+    setLeaderRequired,
+    crewCapacity,
+    setCrewCapacity,
+    crewImage,
     handleImageUpload,
-    capacity,
-    setCapacity,
-    genderRestriction,
-    setGenderRestriction,
-    maxAge,
-    setMaxAge,
-    minAge,
-    setMinAge,
+    minYear,
+    setMinYear,
+    maxYear,
+    setMaxYear,
+    gender,
+    setGender,
     handleSubmit,
     errors,
+    isRoleLoading,
+    isInfoLoading,
+    isRoleError,
+    isInfoError,
+    roleError,
+    infoError,
   } = useCrewForm();
+
+  if (isRoleLoading || isInfoLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isRoleError) {
+    return (
+      <ErrorComponent
+        message={roleError?.message || '권한을 확인하지 못했습니다.'}
+      />
+    );
+  }
+
+  if (isInfoError) {
+    return (
+      <ErrorComponent
+        message={infoError?.message || '크루 정보를 불러오는 데 실패했습니다.'}
+      />
+    );
+  }
 
   return (
     <>
       <div className="pb-5">
         <Label label="크루명" required>
           <TextInput
-            value={name}
-            onChange={setName}
+            value={crewName}
+            onChange={setCrewName}
             placeholder="크루명을 입력하세요"
             required
             maxLength={30}
@@ -66,9 +91,9 @@ const CreateCrew = () => {
         </Label>
         <Label label="활동 지역" required>
           <RegionDropdown
-            selectedRegion={location}
+            selectedRegion={activityRegion}
             required
-            onRegionChange={(value) => setLocation(value as string)}
+            onRegionChange={(value) => setActivityRegion(value as string)}
             errorMessage={errors.location}
           />
         </Label>
@@ -78,24 +103,25 @@ const CreateCrew = () => {
               { id: 'true', name: '필수' },
               { id: 'false', name: '선택' },
             ]}
-            selectedValues={recordRequired ? ['true'] : ['false']}
-            onChange={(values) => setRecordRequired(values.includes('true'))}
+            selectedValues={runRecordOpen ? ['true'] : ['false']}
+            onChange={(values) => setRunRecordOpen(values.includes('true'))}
           />
         </Label>
-        <Label label="가입 승인 여부" required>
+        // FIXME
+        {/* <Label label="가입 승인 여부" required>
           <CheckBox
             options={[
               { id: 'true', name: '승인 필요' },
               { id: 'false', name: '자동 가입' },
             ]}
-            selectedValues={approvalRequired ? ['true'] : ['false']}
-            onChange={(values) => setApprovalRequired(values.includes('true'))}
+            selectedValues={leaderRequired ? ['true'] : ['false']}
+            onChange={(values) => setLeaderRequired(values.includes('true'))}
           />
-        </Label>
+        </Label> */}
         <Label label="크루 정원">
           <NumberInput
-            value={capacity}
-            onChange={setCapacity}
+            value={crewCapacity}
+            onChange={setCrewCapacity}
             placeholder="capacity"
           />
         </Label>
@@ -105,16 +131,16 @@ const CreateCrew = () => {
               { id: 'male', name: '남성' },
               { id: 'female', name: '여성' },
             ]}
-            selectedValues={[genderRestriction]}
-            onChange={(values) => setGenderRestriction(values[0])}
+            selectedValues={[gender || '']}
+            onChange={(values) => setGender(values[0])}
           />
         </Label>
         <Label label="연령대 제한">
           <MinMaxYearSelector
-            maxAge={maxAge}
-            minAge={minAge}
-            onMaxAgeChange={(age) => setMaxAge(age)}
-            onMinAgeChange={(age) => setMinAge(age)}
+            maxAge={maxYear}
+            minAge={minYear}
+            onMaxAgeChange={(age) => setMaxYear(age)}
+            onMinAgeChange={(age) => setMinYear(age)}
           />
         </Label>
         <Label label="대표 이미지">

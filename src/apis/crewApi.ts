@@ -7,36 +7,36 @@ import {
   CrewResponse,
 } from '@/types/crewTypes';
 
+// FormData에 속성을 추가하는 유틸리티 함수
+const appendFormData = (
+  formData: FormData,
+  key: string,
+  value: string | Blob | number | boolean | undefined,
+) => {
+  if (value !== undefined && value !== null) {
+    if (typeof value === 'boolean') {
+      formData.append(key, value ? 'true' : 'false'); // 불리언 값을 문자열로 변환
+    } else {
+      formData.append(key, value.toString());
+    }
+  }
+};
+
 // 크루 생성
 export const createCrew = async (
   newCrewData: CreateCrewData,
 ): Promise<CrewResponse> => {
   const formData = new FormData();
-  formData.append('crewName', newCrewData.crewName);
-  formData.append('description', newCrewData.description);
-  formData.append('activityRegion', newCrewData.activityRegion);
-  formData.append('runRecordOpen', String(newCrewData.runRecordOpen));
-  formData.append('leaderRequired', String(newCrewData.leaderRequired));
-
-  if (newCrewData.crewCapacity) {
-    formData.append('crewCapacity', String(newCrewData.crewCapacity));
-  }
-
-  if (newCrewData.crewImage) {
-    formData.append('crewImage', newCrewData.crewImage);
-  }
-
-  if (newCrewData.minYear) {
-    formData.append('minYear', String(newCrewData.minYear));
-  }
-
-  if (newCrewData.maxYear) {
-    formData.append('maxYear', String(newCrewData.maxYear));
-  }
-
-  if (newCrewData.gender) {
-    formData.append('gender', newCrewData.gender);
-  }
+  appendFormData(formData, 'crewName', newCrewData.crewName);
+  appendFormData(formData, 'description', newCrewData.description);
+  appendFormData(formData, 'activityRegion', newCrewData.activityRegion);
+  appendFormData(formData, 'runRecordOpen', newCrewData.runRecordOpen);
+  appendFormData(formData, 'leaderRequired', newCrewData.leaderRequired);
+  appendFormData(formData, 'crewCapacity', newCrewData.crewCapacity);
+  appendFormData(formData, 'crewImage', newCrewData.crewImage);
+  appendFormData(formData, 'minYear', newCrewData.minYear);
+  appendFormData(formData, 'maxYear', newCrewData.maxYear);
+  appendFormData(formData, 'gender', newCrewData.gender);
 
   const response = await axiosInstance.post<CrewResponse>('/crew', formData, {
     headers: {
@@ -52,30 +52,15 @@ export const updateCrew = async (
   newCrewData: UpdateCrewData,
 ): Promise<CrewResponse> => {
   const formData = new FormData();
-  formData.append('description', newCrewData.description);
-  formData.append('activityRegion', newCrewData.activityRegion);
-  formData.append('runRecordOpen', String(newCrewData.runRecordOpen));
-  formData.append('leaderRequired', String(newCrewData.leaderRequired));
-
-  if (newCrewData.crewCapacity) {
-    formData.append('crewCapacity', String(newCrewData.crewCapacity));
-  }
-
-  if (newCrewData.crewImage) {
-    formData.append('crewImage', newCrewData.crewImage);
-  }
-
-  if (newCrewData.minYear) {
-    formData.append('minYear', String(newCrewData.minYear));
-  }
-
-  if (newCrewData.maxYear) {
-    formData.append('maxYear', String(newCrewData.maxYear));
-  }
-
-  if (newCrewData.gender) {
-    formData.append('gender', newCrewData.gender);
-  }
+  appendFormData(formData, 'description', newCrewData.description);
+  appendFormData(formData, 'activityRegion', newCrewData.activityRegion);
+  appendFormData(formData, 'runRecordOpen', newCrewData.runRecordOpen);
+  appendFormData(formData, 'leaderRequired', newCrewData.leaderRequired);
+  appendFormData(formData, 'crewCapacity', newCrewData.crewCapacity);
+  appendFormData(formData, 'crewImage', newCrewData.crewImage);
+  appendFormData(formData, 'minYear', newCrewData.minYear);
+  appendFormData(formData, 'maxYear', newCrewData.maxYear);
+  appendFormData(formData, 'gender', newCrewData.gender);
 
   const response = await axiosInstance.put<CrewResponse>(
     `/crew/${crewId}`,
