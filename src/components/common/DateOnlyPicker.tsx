@@ -46,18 +46,6 @@ const DateOnlyPicker = ({
 
   return (
     <div className="relative inline-block">
-<<<<<<< HEAD
-      <div onClick={toggleDatePicker} className="cursor-pointer">
-        <DatePicker
-          selected={selectedDate ? new Date(selectedDate) : null}
-          onChange={handleDateChange}
-          dateFormat="yyyy-MM-dd"
-          className={`input input-bordered max-w-xs ${error && 'textarea-error'}`}
-          placeholderText="날짜를 선택하세요"
-          open={isDatePickerOpen} // 드롭다운 상태
-          onClickOutside={() => setIsDatePickerOpen(false)}
-        />
-=======
       <DatePicker
         selected={selectedDate ? new Date(selectedDate) : undefined}
         onChange={(date) => handleDateChange(date || undefined)}
@@ -65,7 +53,6 @@ const DateOnlyPicker = ({
         className={`input input-bordered max-w-xs ${error && 'textarea-error'}`}
         placeholderText="날짜를 선택하세요"
       />
->>>>>>> 5c1cb76303f2d083a64e599d59ae70672300dea6
 
         {selectedDate && (
           <div className="mt-4 flex items-center gap-2">
