@@ -6,20 +6,20 @@ import { DateTime } from 'luxon';
 import Button from './Button';
 
 interface TimePickerProps {
-  onTimeChange: (time: string | null) => void;
-  initialTime?: string | null;
+  onTimeChange: (time?: string) => void;
+  initialTime?: string;
   error?: string;
   placeholder?: string;
 }
 
 const TimePicker = ({
   onTimeChange,
-  initialTime = null,
+  initialTime,
   error,
   placeholder,
 }: TimePickerProps) => {
-  const [selectedTime, setSelectedTime] = useState<string | null>(
-    initialTime || null,
+  const [selectedTime, setSelectedTime] = useState<string | undefined>(
+    initialTime,
   );
   const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
 
@@ -27,22 +27,22 @@ const TimePicker = ({
     setIsTimePickerOpen((prev) => !prev);
   };
 
-  const handleTimeChange = (time: Date | null) => {
+  const handleTimeChange = (time?: Date) => {
     if (time) {
       const newTime = DateTime.fromJSDate(time).toFormat('HH:mm');
       setSelectedTime(newTime);
       setIsTimePickerOpen(false); // 시간 선택 후 드롭다운 닫기
       onTimeChange(newTime);
     } else {
-      setSelectedTime(null);
-      onTimeChange(null);
+      setSelectedTime(undefined);
+      onTimeChange(undefined);
     }
   };
 
   const clearSelectedTime = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // 기본 동작 방지
-    setSelectedTime(null);
-    onTimeChange(null);
+    setSelectedTime(undefined);
+    onTimeChange(undefined);
   };
 
   return (
@@ -50,9 +50,9 @@ const TimePicker = ({
       <div onClick={toggleTimePicker} className="cursor-pointer">
         <DatePicker
           selected={
-            selectedTime ? new Date(`1970-01-01T${selectedTime}:00`) : null
+            selectedTime ? new Date(`1970-01-01T${selectedTime}:00`) : undefined
           }
-          onChange={handleTimeChange}
+          onChange={(date) => handleTimeChange(date || undefined)}
           showTimeSelect
           showTimeSelectOnly
           timeIntervals={30}

@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface TextInputProps {
-  value: string;
-  onChange: (value: string) => void;
+  value?: string;
+  onChange: (value?: string) => void;
   type?: string; // input 타입
   placeholder?: string;
   required?: boolean;
@@ -28,13 +28,19 @@ const TextInput = ({
   const inputWidthClass = width ? `max-w-${width}` : 'max-w-xs';
   const textareaWidthClass = width ? `w-${width}` : 'w-1/2';
 
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+  ) => {
+    onChange(e.target.value);
+  };
+
   return (
     <>
       {as === 'textarea' ? (
         <textarea
           className={`textarea textarea-bordered ${textareaWidthClass} ${error && 'textarea-error'}`}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={handleChange}
           placeholder={placeholder}
           maxLength={maxLength}
           required={required}
@@ -45,7 +51,7 @@ const TextInput = ({
           className={`input input-bordered w-full ${inputWidthClass} ${error && 'input-error'}`}
           type={type}
           value={value}
-          onChange={(e) => onChange(e.target.value)}
+          onChange={handleChange}
           placeholder={placeholder}
           required={required}
           maxLength={maxLength}

@@ -7,18 +7,18 @@ import { DateTime } from 'luxon';
 import Button from './Button';
 
 interface DatePickerProps {
-  onDateChange: (date: string | null) => void;
-  initialDate?: string | null;
+  onDateChange: (date?: string) => void;
+  initialDate?: string;
   error?: string;
 }
 
 const DateOnlyPicker = ({
   onDateChange,
-  initialDate = null,
+  initialDate,
   error,
 }: DatePickerProps) => {
-  const [selectedDate, setSelectedDate] = useState<string | null>(
-    initialDate || null,
+  const [selectedDate, setSelectedDate] = useState<string | undefined>(
+    initialDate,
   );
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
@@ -26,26 +26,27 @@ const DateOnlyPicker = ({
     setIsDatePickerOpen((prev) => !prev);
   };
 
-  const handleDateChange = (date: Date | null) => {
+  const handleDateChange = (date?: Date) => {
     if (date) {
       const newDate = DateTime.fromJSDate(date).toFormat('yyyy-MM-dd');
       setSelectedDate(newDate);
       setIsDatePickerOpen(false);
       onDateChange(newDate);
     } else {
-      setSelectedDate(null);
-      onDateChange(null);
+      setSelectedDate(undefined);
+      onDateChange(undefined);
     }
   };
 
   const clearSelectedDate = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // 기본 동작 방지
-    setSelectedDate(null);
-    onDateChange(null);
+    setSelectedDate(undefined);
+    onDateChange(undefined);
   };
 
   return (
     <div className="relative inline-block">
+<<<<<<< HEAD
       <div onClick={toggleDatePicker} className="cursor-pointer">
         <DatePicker
           selected={selectedDate ? new Date(selectedDate) : null}
@@ -56,6 +57,15 @@ const DateOnlyPicker = ({
           open={isDatePickerOpen} // 드롭다운 상태
           onClickOutside={() => setIsDatePickerOpen(false)}
         />
+=======
+      <DatePicker
+        selected={selectedDate ? new Date(selectedDate) : undefined}
+        onChange={(date) => handleDateChange(date || undefined)}
+        dateFormat="yyyy-MM-dd"
+        className={`input input-bordered max-w-xs ${error && 'textarea-error'}`}
+        placeholderText="날짜를 선택하세요"
+      />
+>>>>>>> 5c1cb76303f2d083a64e599d59ae70672300dea6
 
         {selectedDate && (
           <div className="mt-4 flex items-center gap-2">

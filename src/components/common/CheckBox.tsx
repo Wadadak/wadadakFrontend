@@ -1,9 +1,9 @@
 import React from 'react';
 
 interface CheckBoxProps {
-  options: { id: string | number; name: string }[]; // 옵션 배열 프롭스
-  selectedValues: string[];
-  onChange: (selectedValues: string[]) => void;
+  options: { id: string | number; name: string | number }[]; // 옵션 배열 프롭스
+  selectedValues?: (string | number)[];
+  onChange: (selectedValues?: (string | number)[]) => void;
   multiple?: boolean; // 다중 선택 가능 여부
   size?: 'xs' | 'sm' | 'md' | 'lg'; // 사이즈를 위한 프롭
   error?: string;
@@ -11,13 +11,13 @@ interface CheckBoxProps {
 
 const CheckBox = ({
   options,
-  selectedValues,
+  selectedValues = [],
   onChange,
   multiple = false,
   error,
 }: CheckBoxProps) => {
-  const handleCheckBoxChange = (id: string, checked: boolean) => {
-    let newSelectedValues: string[];
+  const handleCheckBoxChange = (id: string | number, checked: boolean) => {
+    let newSelectedValues: (string | number)[];
 
     if (multiple) {
       newSelectedValues = checked
@@ -27,7 +27,8 @@ const CheckBox = ({
       newSelectedValues = checked ? [id] : [];
     }
 
-    onChange(newSelectedValues);
+    // 선택된 값이 없다면 undefined를 반환
+    onChange(newSelectedValues.length > 0 ? newSelectedValues : undefined);
   };
 
   return (
