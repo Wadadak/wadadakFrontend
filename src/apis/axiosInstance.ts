@@ -38,9 +38,6 @@ axiosInstance.interceptors.request.use(
       '/crew',
       '/region',
       '/crew/regular',
-      '/crew/{crew_id}/regular',
-      '/crew/{crew_id}/regular/{regular_id}',
-      '/crew/{crew_id}',
     ];
 
     // GET 메서드만 토큰이 필요 없는 엔드포인트
