@@ -35,7 +35,6 @@ axiosInstance.interceptors.request.use(
       '/user/signup/email-verify',
       '/user/signup/nickname-verify',
       '/oauth2/authorization/google',
-      '/crew',
       '/region',
       '/crew/regular',
     ];
