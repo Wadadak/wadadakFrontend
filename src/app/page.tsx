@@ -3,7 +3,6 @@ import React from 'react';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
 import MainPageList from '@/components/crew/MainPageList';
-import { mockCrewList } from '@/mocks/mockData/mockCrewList';
 import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
 import { mockMyRunningInfo } from '@/mocks/mockData/mockRunList';
 
@@ -24,7 +23,7 @@ const index = () => {
         </div>
       </TitleBanner>
       <Wrapper>
-        <MainPageList crews={mockCrewList} />
+        <MainPageList />
       </Wrapper>
     </>
   );

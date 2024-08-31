@@ -1,21 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import CrewCard from './CrewCard';
-import Pagination from '../common/Pagination';
-import { useCrewList } from '@/hooks/crew/useCrewList';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
+import { useJoinedCrewList } from '@/hooks/crew/useCrewList';
 
-const CrewList = () => {
-  const [currentPage, setCurrentPage] = useState(0);
-  const itemsPerPage = 9; // 한 페이지에 표시할 항목
-  const pageRangeDisplayed = 5;
-
-  const { data, isLoading, isError, error } = useCrewList({
-    size: itemsPerPage,
-    page: currentPage,
-  });
+const JoinedCrewList = () => {
+  const { data, isLoading, isError, error } = useJoinedCrewList();
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -29,7 +21,7 @@ const CrewList = () => {
     );
   }
 
-  const { crews, totalPages } = data || { crews: [], totalPages: 1 };
+  const { crews } = data || { crews: [] };
 
   return (
     <div className="container mx-auto">
@@ -46,15 +38,8 @@ const CrewList = () => {
           />
         ))}
       </div>
-
-      <Pagination
-        totalPages={totalPages}
-        currentPage={currentPage}
-        onPageChange={setCurrentPage}
-        pageRangeDisplayed={pageRangeDisplayed}
-      />
     </div>
   );
 };
 
-export default CrewList;
+export default JoinedCrewList;

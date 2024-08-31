@@ -1,59 +1,70 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import CrewCard from './CrewCard';
-import { Crew } from '@/types/crewTypes';
 import Button from '../common/Button';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorComponent from '../common/ErrorComponent';
+import { useCrewList } from '@/hooks/crew/useCrewList';
+import { useRouter } from 'next/navigation';
 
-interface CrewListProps {
-  crews: Crew[];
-}
+const MainPageList = () => {
+  const router = useRouter();
 
-const itemsToShowInitially = 9;
-const itemsToAddLoadMore = 9;
+  const { data, isLoading, isError, error } = useCrewList({
+    size: 9,
+    page: 0,
+  });
 
-const MainPageList = ({ crews }: CrewListProps) => {
-  const [visibleItemsCount, setVisibleItemsCount] =
-    useState(itemsToShowInitially);
+  const { crews } = data || { crews: [] };
 
-  const loadMoreItems = () => {
-    setVisibleItemsCount((prevCount) => prevCount + itemsToAddLoadMore);
+  const handleExploreCrews = () => {
+    router.push('/crew');
   };
-
-  const collapseItems = () => {
-    setVisibleItemsCount(itemsToShowInitially);
-  };
-
-  const currentCards = crews.slice(0, visibleItemsCount);
 
   return (
     <div className="container mx-auto">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-items-center">
-        {currentCards.map((crew) => (
-          <CrewCard
-            key={crew.crewId}
-            crewId={crew.crewId}
-            crewName={crew.crewName}
-            crewOccupancy={crew.crewOccupancy}
-            crewCapacity={crew.crewCapacity}
-            crewImage={crew.crewImage}
-            activityRegion={crew.activityRegion}
-            regularRunningInfo={crew.regularRunningInfo}
-          />
-        ))}
+      <div className="flex flex-col sm:flex-row justify-between items-start mb-8">
+        <div className="mb-4 sm:mb-0">
+          <h1 className="text-4xl font-bold">추천 러닝 크루</h1>
+          <p className="text-lg mt-2 mb-4">인기 러닝 크루를 지금 만나보세요!</p>
+          <Button wide={true} onClick={handleExploreCrews} color="secondary">
+            더 알아보기
+          </Button>
+        </div>
       </div>
-
-      <div className="text-center mt-8">
-        {visibleItemsCount < crews.length ? (
-          <Button onClick={loadMoreItems} wide={true}>
-            더보기
-          </Button>
-        ) : (
-          <Button onClick={collapseItems} wide={true}>
-            접기
-          </Button>
+      {/* 에러 또는 로딩 상태가 있으면 하단에 표시 */}
+      <div>
+        {isLoading && (
+          <div className="mt-8">
+            <LoadingSpinner />
+          </div>
+        )}
+        {isError && (
+          <div className="mt-8">
+            <ErrorComponent
+              message={
+                error?.message || '크루 목록을 불러오는 데 실패했습니다.'
+              }
+            />
+          </div>
         )}
       </div>
+      {!isLoading && !isError && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-items-center">
+          {crews?.map((crew) => (
+            <CrewCard
+              key={crew.crewId}
+              crewId={crew.crewId}
+              crewName={crew.crewName}
+              crewOccupancy={crew.crewOccupancy}
+              crewCapacity={crew.crewCapacity}
+              crewImage={crew.crewImage}
+              activityRegion={crew.activityRegion}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 };

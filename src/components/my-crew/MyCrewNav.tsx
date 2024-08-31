@@ -12,14 +12,14 @@ const MyCrewNav = ({ crewId }: MyCrewNavProps) => {
         <Link href={`/my-crews/${crewId}`}>홈</Link>
       </li>
       <li>
-        <a>러닝 일정</a>
+        <Link href={`/my-crews/${crewId}/schedule`}>러닝 일정</Link>
       </li>
-      <li>
+      {/* <li>
         <a>채팅방</a>
       </li>
       <li>
         <a>게시판</a>
-      </li>
+      </li> */}
       <li>
         <Link href={`/my-crews/${crewId}/info`}>크루 정보</Link>
       </li>

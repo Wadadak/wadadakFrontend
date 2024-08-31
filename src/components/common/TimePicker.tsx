@@ -61,6 +61,7 @@ const TimePicker = ({
           className={`input input-bordered max-w-xs ${error && 'textarea-error'}`}
           placeholderText={placeholder}
           open={isTimePickerOpen} // 드롭다운 상태
+          onClickOutside={() => setIsTimePickerOpen(false)}
         />
       </div>
 

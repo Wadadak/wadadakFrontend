@@ -30,6 +30,7 @@ const DateOnlyPicker = ({
     if (date) {
       const newDate = DateTime.fromJSDate(date).toFormat('yyyy-MM-dd');
       setSelectedDate(newDate);
+      setIsDatePickerOpen(false);
       onDateChange(newDate);
     } else {
       setSelectedDate(undefined);
