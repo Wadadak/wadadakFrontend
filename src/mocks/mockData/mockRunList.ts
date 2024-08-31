@@ -19,6 +19,7 @@ interface MyRunningInfo {
   averageRunningTime: string;
 }
 
+//임시 내 러닝정보
 export const mockMyRunningInfo: MyRunningInfo = {
   totalDistance: 143.2,
   totalRunningCount: 23,

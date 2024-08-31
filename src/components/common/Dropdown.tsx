@@ -7,13 +7,13 @@ export interface DropdownOption {
 
 interface DropdownProps {
   options: DropdownOption[]; // 드롭다운에 표시할 옵션 배열
-  onChange: (value: string | number) => void;
+  onChange: (value?: string | number) => void;
   placeholder?: string;
   required?: boolean;
   selectedValue?: string | number; // 선택된 값들
   width?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'; // 너비를 위한 프롭
   disabled?: boolean; // 첫 번째 옵션(placeholder) disabled 여부
-  error?: string;
+  errorMessage?: string;
 }
 
 const Dropdown = ({
@@ -24,7 +24,7 @@ const Dropdown = ({
   selectedValue,
   width = 'xs',
   disabled = true,
-  error,
+  errorMessage,
 }: DropdownProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     onChange(e.target.value);
@@ -34,8 +34,8 @@ const Dropdown = ({
   return (
     <>
       <select
-        className={`select select-bordered ${widthClass}  ${error && 'select-error'}`}
-        value={selectedValue || ''}
+        className={`select select-bordered ${widthClass}  ${errorMessage && 'select-error'}`}
+        value={selectedValue}
         onChange={handleChange}
         required={required}
       >
@@ -48,7 +48,9 @@ const Dropdown = ({
           </option>
         ))}
       </select>
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {errorMessage && (
+        <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
+      )}
     </>
   );
 };

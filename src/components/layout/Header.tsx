@@ -9,14 +9,15 @@ import {
 import Avatar from '../common/Avatar';
 import { useRouter } from 'next/navigation';
 import SearchBar from '../common/SearchBar';
-import { useRecoilValue } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import { loginState } from '@/recoil/atoms/userState';
 import LoginMenu from '../login/LoginMenu';
 import LogoutMenu from '../login/LogoutMenu';
 
 const Header = () => {
   const router = useRouter();
-  const isLogin = useRecoilValue(loginState); //hctodo: 임시 로그인 상태
+  // const isLogin = useRecoilValue(loginState); //hctodo: 임시 로그인 상태
+  const [isLogin, setLogin] = useRecoilState(loginState); //hctodo: 임시 로그인 상태
 
   const handleSearch = (value: string) => {
     alert(value);
@@ -49,4 +50,3 @@ const Header = () => {
 };
 
 export default Header;
-

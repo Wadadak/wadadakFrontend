@@ -27,27 +27,38 @@ axiosInstance.interceptors.request.use(
     const token = getAccessToken(); // 쿠키로 변경 가능
 
     // 토큰이 필요하지 않은 엔드포인트
-    // 로그인, 회원가입과 같은 비회원용 엔드포인트 목록입니다.
-    const pubicEndpoints = [
+    const publicEndpoints = [
       '/login',
+      'https://accounts.google.com/o/oauth2/v2/auth?client_id=570209002929-esgj2qidamovae074v43ivravvd4b3up.apps.googleusercontent.com&redirect_uri=http://localhost:8080/login/oauth&response_type=code&scope=email',
       '/user/signup',
       '/user/signup/email-send',
       '/user/signup/email-verify',
       '/user/signup/nickname-verify',
       '/oauth2/authorization/google',
-      '/crew',
       '/region',
       '/crew/regular',
-      'crew/{crew_id}/regular',
+    ];
+
+    // GET 메서드만 토큰이 필요 없는 엔드포인트
+    const publicGetEndpoints = [
+      '/crew',
+      '/crew/{crew_id}/regular',
       '/crew/{crew_id}/regular/{regular_id}',
       '/crew/{crew_id}',
     ];
 
+    // 토큰이 필요 없는 엔드포인트인지 확인
+    const isPublicEndpoint = publicEndpoints.some((endpoint) =>
+      config.url?.startsWith(endpoint),
+    );
+
+    // GET 메서드로 토큰이 필요 없는 엔드포인트인지 확인
+    const isPublicGetEndpoint =
+      config.method === 'get' &&
+      publicGetEndpoints.some((endpoint) => config.url?.startsWith(endpoint));
+
     // 토큰이 필요한 엔드포인트에만 토큰을 헤더에 추가
-    if (
-      token &&
-      !pubicEndpoints.some((endpoint) => config.url?.startsWith(endpoint))
-    ) {
+    if (token && !isPublicEndpoint && !isPublicGetEndpoint) {
       if (config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -99,3 +110,5 @@ axiosInstance.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+export default axiosInstance;

@@ -1,9 +1,8 @@
 import React from 'react';
-import MyCrewInfo from '@/components/my-crew/MyCrewInfo';
-import MyCrewLayout from '@/components/my-crew/MyCrewLayout';
+import MyCrewInfo from '@/components/crew-info/MyCrewInfo';
 
 const MyCrewInfoPage = () => {
-  return <MyCrewInfo step />;
+  return <MyCrewInfo />;
 };
 
 export default MyCrewInfoPage;

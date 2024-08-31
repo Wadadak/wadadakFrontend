@@ -8,8 +8,12 @@ import TextInput from '@/components/common/TextInput';
 import { ToggleButton } from '@/components/common/ToggleButtion';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
+import { useUserInfo } from '@/hooks/user/useUserInfo';
 import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
-import { mockRunningList } from '@/mocks/mockData/mockRunList';
+import {
+  mockMyRunningInfo,
+  mockRunningList,
+} from '@/mocks/mockData/mockRunList';
 import {
   faPen,
   faPenToSquare,
@@ -20,6 +24,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const MyPage = () => {
+  const { data, isLoading, error } = useUserInfo(1); //hctodo 임시데이터
   const router = useRouter();
   const [tabSelect, setTabSelect] = useState(false);
   const [isRunningProfileOn, setIsRunningProfileOn] = useState<boolean>(false);
@@ -43,9 +48,7 @@ const MyPage = () => {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <TitleBanner>
-        <div className="py-16">🏃🏻내 정보</div>
-      </TitleBanner>
+      <TitleBanner>🏃🏻내 정보</TitleBanner>
       {/* 총 거리 */}
       <Wrapper>
         <div className="flex flex-col w-full">
@@ -64,13 +67,24 @@ const MyPage = () => {
           </div>
           <div className="flex flex-col space-y-8">
             <div className="flex flex-col items-center space-y-1">
-              <div className="text-[128px] font-extrabold">2453.3</div>
+              <div className="text-[128px] font-extrabold">
+                {mockMyRunningInfo.totalDistance} km
+              </div>
               <div className="font-bold">총 거리</div>
             </div>
             <div className="flex justify-center mt-8 space-x-16">
-              <MyRecordItem record={'128'} name={'총 러닝 횟수'} />
-              <MyRecordItem record={"5'32''"} name={'평균 페이스'} />
-              <MyRecordItem record={'164'} name={'평균 칼로리'} />
+              <MyRecordItem
+                record={String(mockMyRunningInfo.totalRunningCount)}
+                name={'총 러닝 횟수'}
+              />
+              <MyRecordItem
+                record={mockMyRunningInfo.averagePace}
+                name={'평균 페이스'}
+              />
+              <MyRecordItem
+                record={mockMyRunningInfo.averageRunningTime}
+                name={'평균 기록'}
+              />
             </div>
             <button
               className="text-[14px] text-gray-400 underline underline-offset-4"

@@ -11,7 +11,8 @@ import Layout from '@/components/layout/Layout';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      staleTime: 3000, // 3초 @서율님 제가 임의로 3초 처리 해놨습니다. 다른 의견 있으시면 수정해주세요!
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
     },
   },
 });
