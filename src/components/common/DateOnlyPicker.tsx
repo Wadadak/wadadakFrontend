@@ -20,6 +20,11 @@ const DateOnlyPicker = ({
   const [selectedDate, setSelectedDate] = useState<string | undefined>(
     initialDate,
   );
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
+  const toggleDatePicker = () => {
+    setIsDatePickerOpen((prev) => !prev);
+  };
 
   const handleDateChange = (date?: Date) => {
     if (date) {
@@ -40,13 +45,16 @@ const DateOnlyPicker = ({
 
   return (
     <div className="relative inline-block">
-      <DatePicker
-        selected={selectedDate ? new Date(selectedDate) : undefined}
-        onChange={(date) => handleDateChange(date || undefined)}
-        dateFormat="yyyy-MM-dd"
-        className={`input input-bordered max-w-xs ${error && 'textarea-error'}`}
-        placeholderText="날짜를 선택하세요"
-      />
+      <div onClick={toggleDatePicker} className="cursor-pointer">
+        <DatePicker
+          selected={selectedDate ? new Date(selectedDate) : undefined}
+          onChange={(date) => handleDateChange(date || undefined)}
+          dateFormat="yyyy-MM-dd"
+          className={`input input-bordered max-w-xs ${error && 'textarea-error'}`}
+          placeholderText="날짜를 선택하세요"
+          open={isDatePickerOpen} // 드롭다운 상태
+        />
+      </div>
 
       {selectedDate && (
         <div className="mt-4 flex items-center gap-2">
