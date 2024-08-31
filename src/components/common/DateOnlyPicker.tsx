@@ -54,18 +54,17 @@ const DateOnlyPicker = ({
         placeholderText="날짜를 선택하세요"
       />
 
-        {selectedDate && (
-          <div className="mt-4 flex items-center gap-2">
-            <p>
-              선택된 날짜: <strong>{selectedDate}</strong>
-            </p>
-            <Button onClick={clearSelectedDate} size="sm">
-              선택 취소
-            </Button>
-          </div>
-        )}
-        {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
-      </div>
+      {selectedDate && (
+        <div className="mt-4 flex items-center gap-2">
+          <p>
+            선택된 날짜: <strong>{selectedDate}</strong>
+          </p>
+          <Button onClick={clearSelectedDate} size="sm">
+            선택 취소
+          </Button>
+        </div>
+      )}
+      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
     </div>
   );
 };
