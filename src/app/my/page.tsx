@@ -70,7 +70,7 @@ const MyPage = () => {
             <div className="flex justify-center mt-8 space-x-16">
               <MyRecordItem record={'128'} name={'총 러닝 횟수'} />
               <MyRecordItem record={"5'32''"} name={'평균 페이스'} />
-              <MyRecordItem record={'164'} name={'평균 칼로리'} />
+              <MyRecordItem record={'164'} name={'평균 시간'} />
             </div>
             <button
               className="text-[14px] text-gray-400 underline underline-offset-4"
