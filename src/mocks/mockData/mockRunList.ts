@@ -12,6 +12,21 @@ interface MockRunningList {
   pagination: null;
 }
 
+interface MyRunningInfo {
+  totalDistance: number;
+  totalRunningCount: number;
+  averagePace: string;
+  averageRunningTime: string;
+}
+
+//임시 내 러닝정보
+export const mockMyRunningInfo: MyRunningInfo = {
+  totalDistance: 143.2,
+  totalRunningCount: 23,
+  averagePace: '4\'55"',
+  averageRunningTime: '0:35:21',
+};
+
 export const mockRunningList: MockRunningList = {
   data: [
     {
