@@ -2,8 +2,8 @@ import React from 'react';
 import Dropdown from './Dropdown';
 
 interface YearOfBirthDropdownProps {
-  selectedYear: number | null;
-  onYearChange: (year: number) => void;
+  selectedYear?: number;
+  onYearChange: (year?: number) => void;
   placeholder?: string;
   required?: boolean;
   disabled?: boolean; // 첫 번째 옵션(placeholder) disabled 여부
@@ -36,8 +36,8 @@ const YearOfBirthDropdown = ({
   return (
     <Dropdown
       options={options}
-      onChange={(value) => onYearChange(Number(value))}
-      selectedValue={selectedYear ? String(selectedYear) : undefined}
+      onChange={(value) => onYearChange(value ? Number(value) : undefined)}
+      selectedValue={selectedYear}
       placeholder={placeholder}
       required={required}
       disabled={disabled}

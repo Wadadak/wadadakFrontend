@@ -1,38 +1,34 @@
 import React from 'react';
 
 interface PaginationProps {
-  totalItems: number;
-  itemsPerPage: number; // 한 페이지당 아이템
+  totalPages: number;
   currentPage: number;
   onPageChange: (page: number) => void;
   pageRangeDisplayed: number; // 표시할 페이지 범위
 }
 
 const Pagination = ({
-  totalItems,
-  itemsPerPage,
+  totalPages,
   currentPage,
   onPageChange,
   pageRangeDisplayed,
 }: PaginationProps) => {
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
   // 페이지 구간 계산
   const currentRangeStart =
-    Math.floor((currentPage - 1) / pageRangeDisplayed) * pageRangeDisplayed + 1;
+    Math.floor(currentPage / pageRangeDisplayed) * pageRangeDisplayed;
   const currentRangeEnd = Math.min(
     currentRangeStart + pageRangeDisplayed - 1,
-    totalPages,
+    totalPages - 1,
   );
 
   const handlePreviousRange = () => {
-    if (currentRangeStart > 1) {
-      onPageChange(currentRangeStart - pageRangeDisplayed);
+    if (currentRangeStart > 0) {
+      onPageChange(currentRangeStart - 1);
     }
   };
 
   const handleNextRange = () => {
-    if (currentRangeEnd < totalPages) {
+    if (currentRangeEnd < totalPages - 1) {
       onPageChange(currentRangeEnd + 1);
     }
   };
@@ -42,36 +38,36 @@ const Pagination = ({
   };
 
   const handleFirstPage = () => {
-    onPageChange(1);
+    onPageChange(0);
   };
 
   const handleLastPage = () => {
-    onPageChange(totalPages);
+    onPageChange(totalPages - 1);
   };
 
-  if (totalPages === 1) return null; // 페이지가 1개라면 표시x
+  if (totalPages <= 1) return null; // 페이지가 1개라면 표시x
 
   return (
     <div className="flex justify-center mx-auto space-x-2 mt-6">
       <button
         className={`join-item px-3 py-1 rounded-lg border border-transparent transition duration-200 ${
-          currentPage === 1
+          currentPage === 0
             ? 'text-gray-300 cursor-not-allowed'
             : 'text-primary hover:bg-gray-200 hover:text-white'
         }`}
         onClick={handleFirstPage}
-        disabled={currentPage === 1}
+        disabled={currentPage === 0}
       >
         《
       </button>
       <button
         className={`join-item px-3 py-1 rounded-lg border border-transparent transition duration-200 ${
-          currentRangeStart === 1
+          currentRangeStart === 0
             ? 'text-gray-300 cursor-not-allowed'
             : 'text-primary hover:bg-gray-200 hover:text-white'
         }`}
         onClick={handlePreviousRange}
-        disabled={currentRangeStart === 1}
+        disabled={currentRangeStart === 0}
       >
         〈
       </button>
@@ -88,30 +84,30 @@ const Pagination = ({
             }`}
             onClick={() => handlePageClick(page)}
           >
-            {page}
+            {page + 1}
           </button>
         );
       })}
 
       <button
         className={`join-item px-3 py-1 rounded-lg border border-transparent transition duration-200 ${
-          currentRangeEnd === totalPages
+          currentRangeEnd === totalPages - 1
             ? 'text-gray-300 cursor-not-allowed'
             : 'text-primary hover:bg-gray-200 hover:text-white'
         }`}
         onClick={handleNextRange}
-        disabled={currentRangeEnd === totalPages}
+        disabled={currentRangeEnd === totalPages - 1}
       >
         〉
       </button>
       <button
         className={`join-item px-3 py-1 rounded-lg border border-transparent transition duration-200 ${
-          currentPage === totalPages
+          currentPage === totalPages - 1
             ? 'text-gray-300 cursor-not-allowed'
             : 'text-primary hover:bg-gray-200 hover:text-white'
         }`}
         onClick={handleLastPage}
-        disabled={currentPage === totalPages}
+        disabled={currentPage === totalPages - 1}
       >
         》
       </button>

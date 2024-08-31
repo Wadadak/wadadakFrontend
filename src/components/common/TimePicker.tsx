@@ -6,53 +6,53 @@ import { DateTime } from 'luxon';
 import Button from './Button';
 
 interface TimePickerProps {
-  onTimeChange: (time: string | null) => void;
-  initialTime?: string | null;
+  onTimeChange: (time?: string) => void;
+  initialTime?: string;
   error?: string;
   placeholder?: string;
 }
 
 const TimePicker = ({
   onTimeChange,
-  initialTime = null,
+  initialTime,
   error,
   placeholder,
 }: TimePickerProps) => {
-  const [selectedTime, setSelectedTime] = useState<string | null>(
-    initialTime || null,
+  const [selectedTime, setSelectedTime] = useState<string | undefined>(
+    initialTime,
   );
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+  const [isTimePickerOpen, setIsTimePickerOpen] = useState(false);
 
-  const toggleDatePicker = () => {
-    setIsDatePickerOpen((prev) => !prev);
+  const toggleTimePicker = () => {
+    setIsTimePickerOpen((prev) => !prev);
   };
 
-  const handleTimeChange = (time: Date | null) => {
+  const handleTimeChange = (time?: Date) => {
     if (time) {
       const newTime = DateTime.fromJSDate(time).toFormat('HH:mm');
       setSelectedTime(newTime);
-      setIsDatePickerOpen(false); // 시간 선택 후 드롭다운 닫기
+      setIsTimePickerOpen(false); // 시간 선택 후 드롭다운 닫기
       onTimeChange(newTime);
     } else {
-      setSelectedTime(null);
-      onTimeChange(null);
+      setSelectedTime(undefined);
+      onTimeChange(undefined);
     }
   };
 
   const clearSelectedTime = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // 기본 동작 방지
-    setSelectedTime(null);
-    onTimeChange(null);
+    setSelectedTime(undefined);
+    onTimeChange(undefined);
   };
 
   return (
     <div className="relative inline-block">
-      <div onClick={toggleDatePicker} className="cursor-pointer">
+      <div onClick={toggleTimePicker} className="cursor-pointer">
         <DatePicker
           selected={
-            selectedTime ? new Date(`1970-01-01T${selectedTime}:00`) : null
+            selectedTime ? new Date(`1970-01-01T${selectedTime}:00`) : undefined
           }
-          onChange={handleTimeChange}
+          onChange={(date) => handleTimeChange(date || undefined)}
           showTimeSelect
           showTimeSelectOnly
           timeIntervals={30}
@@ -60,7 +60,7 @@ const TimePicker = ({
           dateFormat="HH:mm"
           className={`input input-bordered max-w-xs ${error && 'textarea-error'}`}
           placeholderText={placeholder}
-          open={isDatePickerOpen} // 드롭다운 상태
+          open={isTimePickerOpen} // 드롭다운 상태
         />
       </div>
 
