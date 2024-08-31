@@ -39,14 +39,21 @@ export const useCrewList = (params: CrewListParams) => {
 };
 
 // 가입한 크루 리스트
-export const fetchJoinedCrewList = async (): Promise<JoinedCrewSummary[]> => {
-  const response =
-    await axiosInstance.get<JoinedCrewSummary[]>('/crew/participate');
-  return response.data;
+export const fetchJoinedCrewList = async (): Promise<{
+  crews: JoinedCrewSummary[];
+}> => {
+  const response = await axiosInstance.get<{
+    content: JoinedCrewSummary[];
+  }>('/crew/participate');
+  return {
+    crews: response.data.content,
+  };
 };
 
 export const useJoinedCrewList = () => {
-  return useQuery<JoinedCrewSummary[]>({
+  return useQuery<{
+    crews: JoinedCrewSummary[];
+  }>({
     queryKey: ['joinedCrewList'],
     queryFn: fetchJoinedCrewList,
   });

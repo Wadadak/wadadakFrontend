@@ -1,49 +1,89 @@
 import React from 'react';
-import { Crew, RegularRunningInfo } from '@/types/crewTypes';
 import RegularRunningInfoTable from './RegularRunningInfoTable';
 import Button from '../common/Button';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorComponent from '../common/ErrorComponent';
+import { useCrewInfo } from '@/hooks/crew/useCrewInfo';
+import { useCrewRunningInfo } from '@/hooks/crew/useCrewRunningInfo';
+import { RunningInfo } from '@/types/crewTypes';
 
 interface CrewDetailInfoProps {
-  crew: Crew;
+  crewId: number;
   children: React.ReactNode;
   userRole?: 'LEADER' | 'STAFF' | 'MEMBER';
   onDeleteRunningInfo?: (id: number) => void; // 삭제 핸들러 함수
-  onEditRunningInfo?: (info: RegularRunningInfo | null) => void; // 추가 및 수정 핸들러 함수
+  onEditRunningInfo?: (info?: RunningInfo) => void; // 추가 및 수정 핸들러 함수
   canManage?: boolean;
 }
 
 const CrewDetailInfo = ({
-  crew,
+  crewId,
   children,
   userRole,
   onDeleteRunningInfo,
   onEditRunningInfo,
   canManage = false,
 }: CrewDetailInfoProps) => {
+  const {
+    data: crew,
+    isLoading: crewLoading,
+    isError: crewError,
+    error: crewErrorMessage,
+  } = useCrewInfo(crewId);
+
+  const {
+    data: regularRunningInfo,
+    isLoading: runningInfoLoading,
+    isError: runningInfoError,
+    error: runningInfoErrorMessage,
+  } = useCrewRunningInfo(crewId);
+
   const defaultImage = '/images/default.png';
 
+  if (crewLoading || runningInfoLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (crewError || runningInfoError || !crew) {
+    return (
+      <ErrorComponent
+        message={
+          crewErrorMessage?.message ||
+          runningInfoErrorMessage?.message ||
+          '크루 정보를 불러오는 데 실패했습니다.'
+        }
+      />
+    );
+  }
+
   const renderAgeRange = () => {
-    if (crew.minAge !== null && crew.maxAge !== null) {
+    if (crew.limit.minYear && crew.limit.maxYear) {
       // 둘 다 선택된 경우
       return (
         <p className="text-lg">
-          연령대 : {crew.maxAge}년생 ~ {crew.minAge}년생
+          연령대 : {crew.limit.maxYear}년생 ~ {crew.limit.minYear}년생
         </p>
       );
-    } else if (crew.minAge !== null && crew.maxAge === null) {
+    } else if (
+      crew.limit.minYear !== undefined &&
+      crew.limit.maxYear === undefined
+    ) {
       // 최소 연령만 선택된 경우
-      return <p className="text-lg">연령대 : {crew.minAge}년생부터</p>;
-    } else if (crew.minAge === null && crew.maxAge !== null) {
+      return <p className="text-lg">연령대 : {crew.limit.minYear}년생부터</p>;
+    } else if (
+      crew.limit.minYear === undefined &&
+      crew.limit.maxYear !== undefined
+    ) {
       // 최대 연령만 선택된 경우
-      return <p className="text-lg">연령대 : {crew.maxAge}년생까지</p>;
+      return <p className="text-lg">연령대 : {crew.limit.maxYear}년생까지</p>;
     } else {
       // 둘 다 선택되지 않은 경우
       return <p className="text-lg">연령 제한 없음</p>;
     }
   };
 
-  const renderGender = crew.genderRestriction
-    ? `성별 : ${crew.genderRestriction}만`
+  const renderGender = crew.limit.gender
+    ? `성별 : ${crew.limit.gender}만`
     : '성별 제한 없음';
 
   return (
@@ -70,7 +110,7 @@ const CrewDetailInfo = ({
             </p>
             {renderAgeRange()}
             <p className="text-lg">{renderGender}</p>
-            {crew.publicRecordRequired && (
+            {crew.limit.leaderRequired && (
               <p className="text-lg">러닝 프로필 공개 필수</p>
             )}
             {/* NOTE 가입 승인 */}
@@ -87,7 +127,7 @@ const CrewDetailInfo = ({
           <p className="card-title">정기 러닝 정보</p>
           {canManage && (userRole === 'LEADER' || userRole === 'STAFF') && (
             <Button
-              onClick={() => onEditRunningInfo?.(null)}
+              onClick={() => onEditRunningInfo?.()}
               size="sm"
               color="secondary"
             >
@@ -96,7 +136,7 @@ const CrewDetailInfo = ({
           )}
         </div>
         <RegularRunningInfoTable
-          regularRunningInfo={crew.regularRunningInfo || []}
+          regularRunningInfo={regularRunningInfo?.data}
           userRole={userRole}
           onEditRunningInfo={canManage ? onEditRunningInfo : undefined}
           onDeleteRunningInfo={canManage ? onDeleteRunningInfo : undefined}
