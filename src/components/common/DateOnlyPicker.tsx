@@ -7,42 +7,42 @@ import { DateTime } from 'luxon';
 import Button from './Button';
 
 interface DatePickerProps {
-  onDateChange: (date: string | null) => void;
-  initialDate?: string | null;
+  onDateChange: (date?: string) => void;
+  initialDate?: string;
   error?: string;
 }
 
 const DateOnlyPicker = ({
   onDateChange,
-  initialDate = null,
+  initialDate,
   error,
 }: DatePickerProps) => {
-  const [selectedDate, setSelectedDate] = useState<string | null>(
-    initialDate || null,
+  const [selectedDate, setSelectedDate] = useState<string | undefined>(
+    initialDate,
   );
 
-  const handleDateChange = (date: Date | null) => {
+  const handleDateChange = (date?: Date) => {
     if (date) {
       const newDate = DateTime.fromJSDate(date).toFormat('yyyy-MM-dd');
       setSelectedDate(newDate);
       onDateChange(newDate);
     } else {
-      setSelectedDate(null);
-      onDateChange(null);
+      setSelectedDate(undefined);
+      onDateChange(undefined);
     }
   };
 
   const clearSelectedDate = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault(); // 기본 동작 방지
-    setSelectedDate(null);
-    onDateChange(null);
+    setSelectedDate(undefined);
+    onDateChange(undefined);
   };
 
   return (
     <div className="relative inline-block">
       <DatePicker
-        selected={selectedDate ? new Date(selectedDate) : null}
-        onChange={handleDateChange}
+        selected={selectedDate ? new Date(selectedDate) : undefined}
+        onChange={(date) => handleDateChange(date || undefined)}
         dateFormat="yyyy-MM-dd"
         className={`input input-bordered max-w-xs ${error && 'textarea-error'}`}
         placeholderText="날짜를 선택하세요"

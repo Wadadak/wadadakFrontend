@@ -5,8 +5,8 @@ import LoadingSpinner from './LoadingSpinner';
 import ErrorComponent from './ErrorComponent';
 
 interface RegionDropdownProps {
-  selectedRegion?: string | number | null;
-  onRegionChange: (region: string | number) => void;
+  selectedRegion?: string | number;
+  onRegionChange: (region?: string | number) => void;
   placeholder?: string;
   required?: boolean;
   disabled?: boolean; // 첫 번째 옵션(placeholder) disabled 여부
@@ -33,15 +33,10 @@ const RegionDropdown = ({
       />
     );
 
-  // 드롭다운 값 변경 핸들러
-  const handleRegionChange = (value: string | number) => {
-    onRegionChange(value); // 상위 컴포넌트에 선택된 값 전달
-  };
-
   return (
     <Dropdown
       options={regions || []}
-      onChange={handleRegionChange}
+      onChange={onRegionChange}
       selectedValue={selectedRegion}
       placeholder={placeholder}
       required={required}

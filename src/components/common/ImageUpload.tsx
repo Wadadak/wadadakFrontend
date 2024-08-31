@@ -4,18 +4,18 @@ import React, { useState } from 'react';
 import Avatar from './Avatar';
 
 interface ImageUploadProps {
-  onImageChange: (file: File | null) => void;
+  onImageChange: (file?: File) => void;
   error?: string; // 에러 메시지 프롭스
 }
 
 const ImageUpload = ({ onImageChange, error }: ImageUploadProps) => {
   const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files ? e.target.files[0] : null;
+    const file = e.target.files ? e.target.files[0] : undefined;
     if (file && file.type.startsWith('image/')) {
       onImageChange(file);
       // 시간 있을 때 프리뷰 구현
     } else {
-      onImageChange(null);
+      onImageChange(undefined);
     }
   };
 
