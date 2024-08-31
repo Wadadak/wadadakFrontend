@@ -8,17 +8,13 @@ import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
 
 const CrewList = () => {
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const itemsPerPage = 9; // 한 페이지에 표시할 항목
   const pageRangeDisplayed = 5;
 
-  // const endIndex = currentPage * itemsPerPage;
-  // const startIndex = endIndex - itemsPerPage;
-  // const currentCards = crews.slice(startIndex, endIndex);
-
   const { data, isLoading, isError, error } = useCrewList({
     size: itemsPerPage,
-    page: currentPage,
+    page: currentPage - 1,
   });
 
   if (isLoading) {
@@ -33,7 +29,7 @@ const CrewList = () => {
     );
   }
 
-  const { crews, totalCrews } = data || { crews: [], totalCrews: 0 };
+  const { crews, totalPages } = data || { crews: [], totalPages: 1 };
 
   return (
     <div className="container mx-auto">
@@ -52,7 +48,7 @@ const CrewList = () => {
       </div>
 
       <Pagination
-        totalItems={totalCrews}
+        totalItems={totalPages}
         itemsPerPage={itemsPerPage}
         currentPage={currentPage}
         onPageChange={setCurrentPage}
