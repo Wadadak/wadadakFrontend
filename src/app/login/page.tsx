@@ -40,8 +40,6 @@ const LoginPage = () => {
   const { mutate: login } = useLogin(
     (data) => {
       setLogin(true);
-      localStorage.setItem('accessToken', data.accessToken);
-      localStorage.setItem('refreshToken', data.refreshToken);
 
       alert('로그인 성공');
       router.push('/');
@@ -101,7 +99,6 @@ const LoginPage = () => {
 
 export default LoginPage;
 
-
 const decodeBase64Url = (base64Url: string): string => {
   // Base64Url을 Base64로 변환
   const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
@@ -109,7 +106,11 @@ const decodeBase64Url = (base64Url: string): string => {
   return atob(base64);
 };
 
-export const extractUserIdFromToken = (token: string): number | null => {
+export const extractUserIdFromToken = (token: string | null): number | null => {
+  if (!token) {
+    return null;
+  }
+
   try {
     // JWT를 점(.)으로 나눔
     const [header, payload, signature] = token.split('.');
