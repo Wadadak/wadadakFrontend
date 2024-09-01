@@ -3,18 +3,14 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { useUserRoles } from './useUserRoles';
 import { useCrewInfo } from './useCrewInfo';
-import {
-  CreateCrewData,
-  CrewResponse,
-  UpdateCrewData,
-} from '@/types/crewTypes';
-import { createCrew, updateCrew } from '@/apis/crewApi';
+import { CrewResponse, UpdateCrewData } from '@/types/crewTypes';
+import { updateCrew } from '@/apis/crewApi';
 import { useRouter } from 'next/navigation';
 
-export const useCrewForm = () => {
+export const useUpdateCrewForm = () => {
   const crewId = Number(useParams().crewId);
-  const isEditing = Boolean(crewId);
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   // 권한 확인
   const {
@@ -35,34 +31,31 @@ export const useCrewForm = () => {
   const [crewName, setCrewName] = useState<string>('');
   const [description, setDescription] = useState<string>('');
   const [crewCapacity, setCrewCapacity] = useState<number>();
-  const [activityRegion, setActivityRegion] = useState<string | undefined>(
-    undefined,
-  );
-  const [crewImage, setCrewImage] = useState<File | string | null>(null);
-  const [runRecordOpen, setRunRecordOpen] = useState<boolean | undefined>(
-    undefined,
-  );
-  const [minYear, setMinYear] = useState<number | null>(null);
-  const [maxYear, setMaxYear] = useState<number | null>(null);
-  const [gender, setGender] = useState<string>('');
-  const [leaderRequired, setLeaderRequired] = useState<boolean>();
+  const [activityRegion, setActivityRegion] = useState<string>('');
+  const [crewImage, setCrewImage] = useState<File | string>(); // URL 또는 파일 형식
+  const [runRecordOpen, setRunRecordOpen] = useState<boolean>(false);
+  const [minYear, setMinYear] = useState<number>();
+  const [maxYear, setMaxYear] = useState<number>();
+  const [gender, setGender] = useState<string>();
+  const [leaderRequired, setLeaderRequired] = useState<boolean>(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  const queryClient = useQueryClient();
 
   // NOTE 권한 확인
   useEffect(() => {
-    if (isEditing && userRole && !['LEADER', 'STAFF'].includes(userRole.role)) {
+    if (
+      !isRoleLoading &&
+      userRole &&
+      !['LEADER', 'STAFF'].includes(userRole.role)
+    ) {
       alert('수정 권한이 없습니다');
       router.push('/my-crews');
     }
-  }, [isEditing, userRole, isRoleLoading, router]);
+  }, [userRole, isRoleLoading, router]);
 
   // useEffect로 초기값 설정
-  // TODO 이미지 추가
   useEffect(() => {
-    if (isEditing && crewInfo) {
-      setCrewName(crewInfo.crewName);
+    if (crewInfo) {
+      setCrewName(crewInfo.crewName); // 크루 이름 설정 (읽기 전용)
       setDescription(crewInfo.description);
       setCrewCapacity(crewInfo.crewCapacity);
       setActivityRegion(crewInfo.activityRegion);
@@ -74,16 +67,10 @@ export const useCrewForm = () => {
       setGender(crewInfo.limit.gender);
       setCrewImage(crewInfo.crewImage);
     }
-  }, [isEditing, crewInfo]);
+  }, [crewInfo]);
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
-
-    if (!crewName) {
-      newErrors.crewName = '크루명을 입력하세요.';
-    } else if (crewName.length > 30) {
-      newErrors.crewName = '크루명은 30자 이내여야 합니다.';
-    }
 
     if (!description) {
       newErrors.description = '크루 소개를 입력하세요.';
@@ -100,9 +87,9 @@ export const useCrewForm = () => {
     }
 
     // FIXME 일단은 고정
-    // if (!leaderRequired) {
-    //   newErrors.leaderRequired = '선택하세요.';
-    // }
+    if (!leaderRequired) {
+      newErrors.leaderRequired = '선택하세요.';
+    }
 
     if (minYear && maxYear) {
       if (minYear < maxYear) {
@@ -113,28 +100,17 @@ export const useCrewForm = () => {
     return Object.keys(newErrors).length === 0; // 에러가 없으면 true 반환
   };
 
-  const mutation = useMutation<
-    CrewResponse,
-    Error,
-    CreateCrewData | UpdateCrewData
-  >({
-    mutationFn: async (
-      data: CreateCrewData | UpdateCrewData,
-    ): Promise<CrewResponse> => {
-      if (isEditing) {
-        return updateCrew(crewId, data as UpdateCrewData);
-      } else {
-        return createCrew(data as CreateCrewData);
-      }
+  const mutation = useMutation<CrewResponse, Error, UpdateCrewData>({
+    mutationFn: async (data: UpdateCrewData): Promise<CrewResponse> => {
+      return updateCrew(crewId, data);
     },
+
     onSuccess: () => {
       // 데이터 갱신하기 위해 연결된 데이터 무효화
       queryClient.invalidateQueries({
         queryKey: ['crewInfo', crewId],
       });
-      alert(
-        isEditing ? '크루 정보가 수정되었습니다.' : '크루가 생성되었습니다!',
-      );
+      alert('크루 정보가 수정되었습니다.');
       router.push(`/my-crews/${crewId}/info`);
     },
     onError: (error: Error) => {
@@ -146,14 +122,13 @@ export const useCrewForm = () => {
     e.preventDefault();
 
     if (validateForm()) {
-      const crewData: CreateCrewData | UpdateCrewData = {
-        crewName,
+      const crewData: UpdateCrewData = {
         description,
-        activityRegion: activityRegion!,
-        runRecordOpen: runRecordOpen!,
-        leaderRequired: leaderRequired!,
+        activityRegion,
+        runRecordOpen,
+        leaderRequired,
         crewCapacity,
-        crewImage: typeof crewImage === 'string' ? undefined : crewImage,
+        crewImage: typeof crewImage === 'string' ? undefined : crewImage, // 파일로 전송, URL이면 undefined
         minYear,
         maxYear,
         gender,
@@ -165,16 +140,16 @@ export const useCrewForm = () => {
     }
   };
 
-  const handleImageUpload = (file: File | null) => {
+  const handleImageUpload = (file?: File) => {
     if (file) {
       setCrewImage(file);
     } else {
-      setCrewImage(null); // 파일이 선택되지 않으면 null로 설정
+      setCrewImage(undefined); // 파일이 선택되지 않으면 null로 설정
     }
   };
 
   return {
-    crewName,
+    crewName, // 크루 이름을 반환하여 컴포넌트에서 읽기 전용으로 표시
     setCrewName,
     description,
     setDescription,

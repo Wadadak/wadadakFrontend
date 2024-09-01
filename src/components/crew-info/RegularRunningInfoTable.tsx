@@ -16,7 +16,7 @@ const RegularRunningInfoTable = ({
 }: RegularRunningInfoTableProps) => {
   return (
     <div>
-      {regularRunningInfo.length > 0 ? (
+      {regularRunningInfo?.length > 0 ? (
         <div className="overflow-x-auto rounded-lg border-2 border-accent">
           <table className="table">
             <thead>
