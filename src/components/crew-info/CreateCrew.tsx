@@ -77,11 +77,11 @@ const CreateCrew = () => {
               { id: 'true', name: '필수' },
               { id: 'false', name: '선택' },
             ]}
-            selectedValues={runRecordOpen ? ['true'] : ['false']}
+            selectedValues={runRecordOpen}
             onChange={(values) => setRunRecordOpen(values?.includes('true'))}
           />
         </Label>
-        // FIXME
+        {/* // FIXME */}
         {/* <Label label="가입 승인 여부" required>
           <CheckBox
             options={[

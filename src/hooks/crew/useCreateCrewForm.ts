@@ -42,10 +42,10 @@ export const useCreateCrewForm = () => {
       newErrors.runRecordOpen = '선택하세요.';
     }
 
-    // // FIXME
-    if (!leaderRequired) {
-      newErrors.leaderRequired = '선택하세요.';
-    }
+    // // // FIXME
+    // if (!leaderRequired) {
+    //   newErrors.leaderRequired = '선택하세요.';
+    // }
 
     if (minYear && maxYear) {
       if (minYear < maxYear) {
