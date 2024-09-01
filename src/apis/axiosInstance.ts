@@ -16,6 +16,7 @@ const axiosInstance: AxiosInstance = axios.create({
   timeout: 10000, // 요청 타임아웃 (10초)
   headers: {
     'Content-Type': 'application/json',
+
     // 필요 시 헤더 추가
   },
 });
@@ -37,6 +38,7 @@ axiosInstance.interceptors.request.use(
       '/oauth2/authorization/google',
       '/region',
       '/crew/regular',
+      '/token/refresh',
     ];
 
     // GET 메서드만 토큰이 필요 없는 엔드포인트
@@ -60,7 +62,12 @@ axiosInstance.interceptors.request.use(
     // 토큰이 필요한 엔드포인트에만 토큰을 헤더에 추가
     if (token && !isPublicEndpoint && !isPublicGetEndpoint) {
       if (config.headers) {
-        config.headers.Authorization = `Bearer ${token}`;
+        // config.headers.Authorization = `Bearer ${token}`;
+        // 임시 토큰
+        // config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcklkIjozLCJzdWIiOiJlbWFpbDMiLCJpYXQiOjE3MjUxOTAzNjMsImV4cCI6MTcyNTE5MjE2M30.hlD6Put61Cx2euIo8WuOdyhJ8_H8PmujUbXi2QShq38`;
+        // config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcklkIjozLCJzdWIiOiJlbWFpbDMiLCJpYXQiOjE3MjUxOTAzNjMsImV4cCI6MTcyNTE5MjE2M30.hlD6Put61Cx2euIo8WuOdyhJ8_H8PmujUbXi2QShq38
+        // `;
+        config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcklkIjoxMiwic3ViIjoiZmxvd2Vyb253YWxsMzFAZ21haWwuY29tIiwiaWF0IjoxNzI1MjAwMjkyLCJleHAiOjE3MjUyMDIwOTJ9.XvYOCwQaDum9DZm4mWRVnM8JC6E3pHfVWKPVZiNVC0A`;
       }
     }
     return config;
