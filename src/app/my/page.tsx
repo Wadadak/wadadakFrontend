@@ -36,9 +36,9 @@ const MyPage = () => {
   const [showAddRecord, setShowAddRecord] = useState(false);
   const [showWeeklyGoal, setShowWeeklyGoal] = useState(false);
 
-  const [distance, setDistance] = useState<string>('');
-  const [time, setTime] = useState<string>('');
-  const [pace, setPace] = useState<string>('');
+  const [distance, setDistance] = useState<string | undefined>('');
+  const [time, setTime] = useState<string | undefined>('');
+  const [pace, setPace] = useState<string | undefined>('');
 
   const [editRunningId, setEditRunningId] = useState<number | undefined>();
 
@@ -54,8 +54,8 @@ const MyPage = () => {
         <div className="flex flex-col w-full">
           <div className="flex items-center justify-end space-x-6">
             <div className="flex items-center space-x-3">
-              <Avatar size="w-8" src={mockMyInfo.profileImage} />
-              <div className="font-bold">{mockMyInfo.nickname}</div>
+              <Avatar size="w-8" src={data?.profileImage} />
+              <div className="font-bold">{data?.nickname}</div>
             </div>
             <Button
               onClick={() => {
@@ -444,10 +444,10 @@ interface AddRecordModalProps {
   onClose: () => void;
 }
 const AddRecordModal = ({ isOpen, onClose }: AddRecordModalProps) => {
-  const [date, setDate] = useState<string>('');
-  const [distance, setDistance] = useState<string>('');
-  const [record, setRecord] = useState<string>('');
-  const [pace, setPace] = useState<string>('');
+  const [date, setDate] = useState<string | undefined>('');
+  const [distance, setDistance] = useState<string | undefined>('');
+  const [record, setRecord] = useState<string | undefined>('');
+  const [pace, setPace] = useState<string | undefined>('');
 
   return (
     <SimpleModal isOpen={isOpen} onClose={onClose} title={'기록 추가'}>
@@ -530,10 +530,12 @@ const EditRecordModal = ({ id, isOpen, onClose }: EditRecordModalProps) => {
   //id=2인 api를 호출해서 나온 값으로 여기를 채워줘야해
   const data = mockRunningList.data[id - 1]; // 2024-08-02
 
-  const [date, setDate] = useState<string>(data.runningDate);
-  const [distance, setDistance] = useState<string>(String(data.distance));
-  const [record, setRecord] = useState<string>(data.runningTime);
-  const [pace, setPace] = useState<string>(data.pace);
+  const [date, setDate] = useState<string | undefined>(data.runningDate);
+  const [distance, setDistance] = useState<string | undefined>(
+    String(data.distance),
+  );
+  const [record, setRecord] = useState<string | undefined>(data.runningTime);
+  const [pace, setPace] = useState<string | undefined>(data.pace);
 
   useEffect(() => {
     setDate(data.runningDate);
