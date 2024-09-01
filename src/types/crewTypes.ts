@@ -8,7 +8,7 @@ export interface CreateCrewData {
   runRecordOpen: boolean; // 공개 기록이 필요한지 여부
   minYear?: number;
   maxYear?: number;
-  gender?: 'MALE' | 'FEMALE'; // 성별 제한 (없을 경우 빈 문자열)
+  gender?: string; // 성별 제한
   leaderRequired: boolean;
 }
 
