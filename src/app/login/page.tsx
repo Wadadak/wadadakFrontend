@@ -55,10 +55,6 @@ const LoginPage = () => {
       <div className="flex justify-center py-16">
         <div className="card w-[450px] bg-base-100 shadow-2xl">
           <div className="space-y-3 card-body">
-            {/* hctodo: 나중에 지울 텍스트 */}
-            <div className="text-xs">
-              임시로 wadadak@gmail.com/1234로 로그인 가능합니다
-            </div>
             {/* email */}
             <Label label="이메일" textSize="sm">
               <TextInput
