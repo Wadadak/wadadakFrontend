@@ -1,8 +1,8 @@
 import React from 'react';
 
 interface NumberInputProps {
-  value: number | null;
-  onChange: (value: number | null) => void;
+  value?: number;
+  onChange: (value?: number) => void;
   placeholder?: string;
   required?: boolean;
   min?: number; // 최소값 제한
@@ -28,17 +28,14 @@ const NumberInput = ({
 
     // 입력값 비어질 때 상태 업데이트
     if (inputValue === '') {
-      onChange(null);
+      onChange(undefined);
       return;
     }
 
     const numericValue = parseInt(inputValue, 10);
 
-    // 최소값
-    if (!isNaN(numericValue) && numericValue >= min) {
-      onChange(numericValue);
-    } else if (numericValue < min) {
-      onChange(min);
+    if (!isNaN(numericValue)) {
+      onChange(numericValue >= min ? numericValue : min); // 최소값보다 작으면 최소값으로 설정
     }
   };
 
@@ -47,7 +44,7 @@ const NumberInput = ({
       <input
         className={`input input-bordered w-full ${widthClass} ${error && 'input-error'}}`}
         type="text"
-        value={value !== null ? value : ''}
+        value={value}
         onChange={handleChange}
         placeholder={placeholder}
         required={required}

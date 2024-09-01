@@ -11,14 +11,14 @@ const MyCrewPage = () => {
     <>
       <TitleBanner>가입한 크루</TitleBanner>
       <Wrapper>
-        <div className="text-right mb-4">
+        {/* TODO 가입 대기 중인 크루가 있을 경우에만  */}
+        {/* <div className="text-right mb-4">
           <Link href="/my-crews/wait">
-            {/* 가입 대기 중인 크루가 있을 경우에만  */}
             <Button color="accent" size="sm">
               가입 대기 중 크루
             </Button>
           </Link>
-        </div>
+        </div> */}
         <CrewList crews={mockCrewList} myCrew />
       </Wrapper>
     </>
