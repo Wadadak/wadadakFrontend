@@ -6,6 +6,7 @@ import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
 import Button from '../common/Button';
 import { loginState } from '@/recoil/atoms/userState';
 import { useRecoilState } from 'recoil';
+import AvatarWithDropdown from '../common/AvatarWithDropdown';
 
 const LoginMenu = () => {
   const router = useRouter();
@@ -28,10 +29,13 @@ const LoginMenu = () => {
         icon={faBell}
         onMenuClick={() => router.push('/alarm')}
       />
-      <Avatar
-        src={mockMyInfo.profileImage}
-        onAvatarClick={() => router.push('/my')}
-      />
+      <AvatarWithDropdown src={''} />
+      {/* <div className="">
+        <Avatar
+          src={mockMyInfo.profileImage}
+          onAvatarClick={() => router.push('/my')}
+        />
+      </div>
       <Button
         size="sm"
         onClick={() => {
@@ -40,7 +44,7 @@ const LoginMenu = () => {
         }}
       >
         로그아웃
-      </Button>
+      </Button> */}
     </div>
   );
 };

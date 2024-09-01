@@ -16,8 +16,7 @@ import LogoutMenu from '../login/LogoutMenu';
 
 const Header = () => {
   const router = useRouter();
-  // const isLogin = useRecoilValue(loginState); //hctodo: 임시 로그인 상태
-  const [isLogin, setLogin] = useRecoilState(loginState); //hctodo: 임시 로그인 상태
+  const isLogin = useRecoilValue(loginState); //hctodo: 임시 로그인 상태
 
   const handleSearch = (value: string) => {
     alert(value);
