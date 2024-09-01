@@ -77,7 +77,7 @@ const CreateCrew = () => {
               { id: 'true', name: '필수' },
               { id: 'false', name: '선택' },
             ]}
-            selectedValues={runRecordOpen}
+            selectedValues={runRecordOpen ? ['true'] : ['false']}
             onChange={(values) => setRunRecordOpen(values?.includes('true'))}
           />
         </Label>

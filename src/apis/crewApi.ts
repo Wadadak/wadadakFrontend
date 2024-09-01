@@ -16,6 +16,9 @@ const appendFormData = (
   if (value !== undefined && value !== null) {
     if (typeof value === 'boolean') {
       formData.append(key, value ? 'true' : 'false'); // 불리언 값을 문자열로 변환
+    } else if (typeof value === 'object' && value instanceof Blob) {
+      // 파일(Blob이나 File 객체)은 그대로 추가
+      formData.append(key, value);
     } else {
       formData.append(key, value.toString());
     }
@@ -37,6 +40,11 @@ export const createCrew = async (
   appendFormData(formData, 'minYear', newCrewData.minYear);
   appendFormData(formData, 'maxYear', newCrewData.maxYear);
   appendFormData(formData, 'gender', newCrewData.gender);
+
+  // FormData의 내용을 확인
+  formData.forEach((value, key) => {
+    console.log(key, value);
+  });
 
   const response = await axiosInstance.post<CrewResponse>('/crew', formData, {
     headers: {

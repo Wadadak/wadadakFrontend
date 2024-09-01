@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 
 export const useCreateCrewForm = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [crewName, setCrewName] = useState<string>();
   const [description, setDescription] = useState<string>();
@@ -60,6 +61,7 @@ export const useCreateCrewForm = () => {
     mutationFn: async (data: CreateCrewData): Promise<CrewResponse> =>
       createCrew(data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['crewList'] });
       alert('크루가 생성되었습니다!');
       router.push(`/my-crews`);
     },
