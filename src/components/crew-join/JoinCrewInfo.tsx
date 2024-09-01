@@ -5,10 +5,10 @@ import { mockCrewList } from '@/mocks/mockData/mockCrewList';
 import CrewDetailInfo from '@/components/crew-info/CrewDetailInfo';
 import Button from '../common/Button';
 import SimpleModal from '../common/SimpleModal';
-import { useParams } from 'next/navigation';
 import Wrapper from '@/components/layout/Wrapper';
 import useModal from '@/hooks/useModal';
 import TextInput from '../common/TextInput';
+import { useApplyForCrew } from '@/hooks/crew/useApplyForCrew';
 
 const JoinCrewInfo = () => {
   const crew = mockCrewList[0];
@@ -16,32 +16,20 @@ const JoinCrewInfo = () => {
   const messageModal = useModal();
   const confirmModal = useModal();
   const cancelModal = useModal();
-  const [message, setMessage] = useState('');
-  // TODO api 연결시 useQuery 사용
-  const [isPendingApproval, setIsPendingApproval] = useState(false);
+  const [message, setMessage] = useState<string>();
 
-  // TODO API 연결 시 useMutation 사용
-  // const mutation = useMutation(sendMessage, {
-  //   onSuccess: () => {
-  //     alert('메시지가 성공적으로 전송되었습니다.');
-  //     onClose(); // 전송 성공 시 모달 닫기
-  //   },
-  //   onError: () => {
-  //     alert('메시지 전송에 실패했습니다.');
-  //   },
-  // });
+  const mutation = useApplyForCrew();
 
   const handleSubmit = () => {
-    console.log('가입 신청 메시지:', message);
     messageModal.handleCloseModal();
     confirmModal.handleOpenModal();
   };
 
   const handleFinalSubmit = () => {
     // TODO API 연결 시 mutation.mutate(message);로 변경
-    console.log('가입 신청 메시지:', message);
-    confirmModal.handleCloseModal();
-    alert('가입이 완료되었습니다!');
+    // console.log('가입 신청 메시지:', message);
+    // confirmModal.handleCloseModal();
+    // alert('가입이 완료되었습니다!');
     // NOTE 가입 승인
     // if (crew?.approvalRequired) {
     //   setIsPendingApproval(true);
@@ -49,7 +37,23 @@ const JoinCrewInfo = () => {
     // } else {
     //   alert('가입이 완료되었습니다!');
     // }
-  };
+    const handleFinalSubmit = () => {
+      if (crew?.crewId) {
+        mutation.mutate(
+          { crewId: crew.crewId, message },
+          {
+            onSuccess: () => {
+              confirmModal.handleCloseModal();
+              alert('가입이 완료되었습니다!');
+            },
+            onError: () => {
+              alert('가입 신청에 실패했습니다. 다시 시도해 주세요.');
+            },
+          },
+        );
+      }
+    };
+  
 
   // NOTE 가입 승인
   // const handleCancel = () => {

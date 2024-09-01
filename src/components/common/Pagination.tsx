@@ -15,26 +15,26 @@ const Pagination = ({
 }: PaginationProps) => {
   // 페이지 구간 계산
   const currentRangeStart =
-    Math.floor((currentPage - 1) / pageRangeDisplayed) * pageRangeDisplayed + 1;
+    Math.floor(currentPage / pageRangeDisplayed) * pageRangeDisplayed;
   const currentRangeEnd = Math.min(
     currentRangeStart + pageRangeDisplayed - 1,
-    totalPages,
+    totalPages - 1,
   );
 
   const handlePreviousRange = () => {
-    if (currentRangeStart > 1) {
-      onPageChange(currentRangeStart - pageRangeDisplayed - 1);
+    if (currentRangeStart > 0) {
+      onPageChange(currentRangeStart - 1);
     }
   };
 
   const handleNextRange = () => {
-    if (currentRangeEnd < totalPages) {
-      onPageChange(currentRangeEnd);
+    if (currentRangeEnd < totalPages - 1) {
+      onPageChange(currentRangeEnd + 1);
     }
   };
 
   const handlePageClick = (page: number) => {
-    onPageChange(page - 1);
+    onPageChange(page);
   };
 
   const handleFirstPage = () => {
@@ -62,12 +62,12 @@ const Pagination = ({
       </button>
       <button
         className={`join-item px-3 py-1 rounded-lg border border-transparent transition duration-200 ${
-          currentRangeStart === 1
+          currentRangeStart === 0
             ? 'text-gray-300 cursor-not-allowed'
             : 'text-primary hover:bg-gray-200 hover:text-white'
         }`}
         onClick={handlePreviousRange}
-        disabled={currentRangeStart === 1}
+        disabled={currentRangeStart === 0}
       >
         〈
       </button>
@@ -78,25 +78,25 @@ const Pagination = ({
           <button
             key={page}
             className={`join-item px-3 py-1 rounded-lg border border-transparent transition duration-200 ${
-              currentPage === page - 1
+              currentPage === page
                 ? 'bg-accent text-white'
                 : 'text-secondary hover:bg-gray-200 hover:text-white'
             }`}
             onClick={() => handlePageClick(page)}
           >
-            {page}
+            {page + 1}
           </button>
         );
       })}
 
       <button
         className={`join-item px-3 py-1 rounded-lg border border-transparent transition duration-200 ${
-          currentRangeEnd === totalPages
+          currentRangeEnd === totalPages - 1
             ? 'text-gray-300 cursor-not-allowed'
             : 'text-primary hover:bg-gray-200 hover:text-white'
         }`}
         onClick={handleNextRange}
-        disabled={currentRangeEnd === totalPages}
+        disabled={currentRangeEnd === totalPages - 1}
       >
         〉
       </button>
