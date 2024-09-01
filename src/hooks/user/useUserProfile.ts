@@ -15,10 +15,10 @@ export const fetchUserProfile = async (
 };
 
 // 사용자 정보 조회 훅
-export const useUserProfile = (userId: number) => {
+export const useUserProfile = (userId: number, enabled?: boolean) => {
   return useQuery<UserProfileResponse, Error>({
     queryKey: ['userInfo', userId],
     queryFn: () => fetchUserProfile(userId),
-    enabled: false,
+    enabled: enabled ? enabled : false,
   });
 };

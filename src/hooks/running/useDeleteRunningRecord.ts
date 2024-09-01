@@ -47,19 +47,3 @@
 //     },
 //   });
 // };
-
-// // 자주 사용될 것 같은 함수이니 util 폴더에 따로 빼두는 것도 좋을 것 같습니다.
-// // FormData에 속성을 추가하는 유틸리티 함수
-// const appendFormData = (
-//   formData: FormData,
-//   key: string,
-//   value: string | Blob | number | boolean | undefined,
-// ) => {
-//   if (value !== undefined && value !== null) {
-//     if (typeof value === 'boolean') {
-//       formData.append(key, value ? 'true' : 'false'); // 불리언 값을 문자열로 변환
-//     } else {
-//       formData.append(key, value.toString());
-//     }
-//   }
-// };

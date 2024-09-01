@@ -8,7 +8,7 @@ export interface SignupRequest {
   name?: string;
   nickName?: string;
   phoneNumber?: string;
-  profileImage?: File | Blob;
+  profileImage?: File | Blob | string;
   gender?: genderType;
   birthYear?: number;
   activityRegion?: string;
@@ -18,7 +18,7 @@ export interface SignupRequest {
   birthYearVisibility?: visibilityType;
 }
 
-export interface UserProfileResponse {
+export interface UserProfileResponse extends SignupRequest {
   user_id: number;
 }
 
@@ -49,4 +49,22 @@ export interface LoginRequest {
 export interface LoginResponse {
   accessJwt: string;
   refreshJwt: string;
+}
+
+export interface EditProfileRequest {
+  nickname?: string;
+  gender?: number;
+  birthYear?: number;
+  activityRegion?: string;
+  profileImage?: File | Blob | string;
+  nameVisibility?: visibilityType;
+  phoneNumberVisibility?: visibilityType;
+  genderVisibility?: visibilityType;
+  birthYearVisibility?: visibilityType;
+}
+
+export interface EditProfileResponse extends EditProfileRequest {
+  user_id: number;
+  username: string;
+  phoneNumber: string;
 }
