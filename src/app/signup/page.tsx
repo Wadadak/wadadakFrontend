@@ -9,6 +9,7 @@ import TextInput from '@/components/common/TextInput';
 import { ToggleButton } from '@/components/common/ToggleButtion';
 import YearOfBirthDropdown from '@/components/common/YearOfBirthDropdown';
 import { TitleBanner } from '@/components/layout/TitleBanner';
+import { useLogin } from '@/hooks/user/useLogin';
 import { useSignup } from '@/hooks/user/useSignup';
 import { useRegions } from '@/hooks/useRegions';
 import { loginState } from '@/recoil/atoms/userState';
@@ -95,21 +96,23 @@ const SignUpPage = () => {
     };
 
     signup(body);
-
-    // console.log('SignUpPage body', body);
-    // alert('회원가입이 완료되었습니다.');
-    // setLogin(true);
-    // router.push('/');
-
-    //api call
-    // executeMutation(body);
   };
+
+  const { mutate: login } = useLogin(
+    () => {
+      alert('회원가입이 완료되었습니다.');
+
+      setLogin(true);
+      router.push('/');
+    },
+    (message) => {
+      alert(message);
+    },
+  );
 
   const { mutate: signup } = useSignup(
     () => {
-      alert('회원가입이 완료되었습니다.');
-      setLogin(true);
-      router.push('/');
+      login({ email, password });
     },
     (message) => {
       alert(message);
