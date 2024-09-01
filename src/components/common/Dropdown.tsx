@@ -42,14 +42,14 @@ const Dropdown = ({
         <option value="" selected disabled={disabled}>
           {placeholder}
         </option>
-        {options.map((option) => (
+        {options?.map((option) => (
           <option key={option.id} value={option.id}>
             {option.name}
           </option>
         ))}
       </select>
       {errorMessage && (
-        <p className="text-red-500 text-sm mt-1">{errorMessage}</p>
+        <p className="mt-1 text-sm text-red-500">{errorMessage}</p>
       )}
     </>
   );
