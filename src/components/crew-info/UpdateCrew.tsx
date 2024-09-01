@@ -9,9 +9,9 @@ import Button from '@/components/common/Button';
 import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
 import ImageUpload from '../common/ImageUpload';
 import RegionDropdown from '../common/RegionDropdown';
-import { useCreateCrewForm } from '@/hooks/crew/useCreateCrewForm';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
+import { useUpdateCrewForm } from '@/hooks/crew/useUpdateCrewForm';
 
 const CreateCrew = () => {
   const {
@@ -37,20 +37,39 @@ const CreateCrew = () => {
     setGender,
     handleSubmit,
     errors,
-  } = useCreateCrewForm();
+    isRoleLoading,
+    isInfoLoading,
+    isRoleError,
+    isInfoError,
+    roleError,
+    infoError,
+  } = useUpdateCrewForm();
+
+  if (isRoleLoading || isInfoLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isRoleError) {
+    return (
+      <ErrorComponent
+        message={roleError?.message || '권한을 확인하지 못했습니다.'}
+      />
+    );
+  }
+
+  if (isInfoError) {
+    return (
+      <ErrorComponent
+        message={infoError?.message || '크루 정보를 불러오는 데 실패했습니다.'}
+      />
+    );
+  }
 
   return (
     <>
       <div className="pb-5">
         <Label label="크루명" required>
-          <TextInput
-            value={crewName}
-            onChange={setCrewName}
-            placeholder="크루명을 입력하세요"
-            required
-            maxLength={30}
-            error={errors.name}
-          />
+          <div className="text-2xl font-bold">{crewName}</div>
         </Label>
         <Label label="크루 소개" required>
           <TextInput
@@ -78,7 +97,7 @@ const CreateCrew = () => {
               { id: 'false', name: '선택' },
             ]}
             selectedValues={runRecordOpen ? ['true'] : ['false']}
-            onChange={(values) => setRunRecordOpen(values?.includes('true'))}
+            onChange={(values) => setRunRecordOpen(values.includes('true'))}
           />
         </Label>
         // FIXME
@@ -102,18 +121,11 @@ const CreateCrew = () => {
         <Label label="성별 제한">
           <CheckBox
             options={[
-              { id: 'MALE', name: '남성' },
-              { id: 'FEMALE', name: '여성' },
+              { id: 'male', name: '남성' },
+              { id: 'female', name: '여성' },
             ]}
-            selectedValues={gender ? [gender] : undefined}
-            onChange={(values) => {
-              if (values && values.length > 0) {
-                const selectedGender = values[0] as 'MALE' | 'FEMALE';
-                setGender(selectedGender);
-              } else {
-                setGender(undefined);
-              }
-            }}
+            selectedValues={[gender || '']}
+            onChange={(values) => setGender(values[0])}
           />
         </Label>
         <Label label="연령대 제한">
