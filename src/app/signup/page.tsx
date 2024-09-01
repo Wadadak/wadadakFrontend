@@ -183,11 +183,7 @@ const SignUpPage = () => {
               <Label label={'프로필 이미지'} textSize="sm">
                 <div className="flex items-center space-x-5">
                   <Avatar size="w-24" />
-                  <ImageUpload
-                    onImageChange={function (file?: File): void {
-                      throw new Error('Function not implemented.');
-                    }}
-                  />
+                  <ImageUpload onImageChange={setProfileImage} />
                 </div>
               </Label>
               {/* phoneNumber */}
