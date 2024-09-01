@@ -11,18 +11,15 @@ const fetchCrewList = async (
   params: CrewListParams,
 ): Promise<{
   crews: CrewSummary[];
-  totalCrews: number; // 전체 아이템 수
   totalPages: number;
 }> => {
   const response = await axiosInstance.get<{
     content: CrewSummary[];
-    totalElements: number;
     totalPages: number;
   }>('/crew', { params });
   // 응답 데이터에서 필요한 값을 추출하여 반환
   return {
     crews: response.data.content,
-    totalCrews: response.data.totalElements,
     totalPages: response.data.totalPages,
   };
 };
@@ -30,7 +27,6 @@ const fetchCrewList = async (
 export const useCrewList = (params: CrewListParams) => {
   return useQuery<{
     crews: CrewSummary[];
-    totalCrews: number;
     totalPages: number;
   }>({
     queryKey: ['crewList', params],

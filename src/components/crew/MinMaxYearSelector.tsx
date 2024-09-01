@@ -2,11 +2,11 @@ import React from 'react';
 import YearOfBirthDropdown from '../common/YearOfBirthDropdown';
 
 interface MinMaxYearProps {
-  minAge: number | null;
-  maxAge: number | null;
-  onMinAgeChange: (age: number) => void;
-  onMaxAgeChange: (age: number) => void;
-  error?: string;
+  minAge?: number;
+  maxAge?: number;
+  onMinAgeChange: (age?: number) => void;
+  onMaxAgeChange: (age?: number) => void;
+  errorMessage?: string;
 }
 
 const MinMaxYearSelector = ({
@@ -14,7 +14,7 @@ const MinMaxYearSelector = ({
   maxAge,
   onMinAgeChange,
   onMaxAgeChange,
-  error,
+  errorMessage,
 }: MinMaxYearProps) => {
   return (
     <div className="flex flex-row space-x-4">
@@ -22,13 +22,13 @@ const MinMaxYearSelector = ({
         selectedYear={minAge}
         onYearChange={onMinAgeChange}
         placeholder="최소 연령"
-        error={error}
+        errorMessage={errorMessage}
       />
       <YearOfBirthDropdown
         selectedYear={maxAge}
         onYearChange={onMaxAgeChange}
         placeholder="최대 연령"
-        error={error}
+        errorMessage={errorMessage}
       />
     </div>
   );
