@@ -1,11 +1,12 @@
 import { faBell, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Avatar from '../common/Avatar';
 import { useRouter } from 'next/navigation';
-import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
+import AvatarWithDropdown from '../common/AvatarWithDropdown';
+import { useLoginUser } from '@/hooks/user/useLoginUser';
 
 const LoginMenu = () => {
   const router = useRouter();
+  const { loginUser } = useLoginUser();
 
   return (
     <div className="flex items-center space-x-6">
@@ -24,10 +25,7 @@ const LoginMenu = () => {
         icon={faBell}
         onMenuClick={() => router.push('/alarm')}
       />
-      <Avatar
-        src={mockMyInfo.profileImage}
-        onAvatarClick={() => router.push('/my')}
-      />
+      <AvatarWithDropdown src={loginUser?.profileImage} />
     </div>
   );
 };

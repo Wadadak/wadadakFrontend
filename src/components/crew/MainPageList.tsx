@@ -13,7 +13,7 @@ const MainPageList = () => {
 
   const { data, isLoading, isError, error } = useCrewList({
     size: 9,
-    page: 1,
+    page: 0,
   });
 
   const { crews } = data || { crews: [] };

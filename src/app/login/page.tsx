@@ -3,16 +3,18 @@
 import Label from '@/components/common/Label';
 import TextInput from '@/components/common/TextInput';
 import { TitleBanner } from '@/components/layout/TitleBanner';
+import { useLogin } from '@/hooks/user/useLogin';
 import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
 import { loginState } from '@/recoil/atoms/userState';
+import { LoginRequest } from '@/types/userTypes';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useRecoilState, useRecoilValue, useSetRecoilState } from 'recoil';
 
 const LoginPage = () => {
   const [isLogin, setLogin] = useRecoilState(loginState);
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
+  const [email, setEmail] = useState<string>();
+  const [password, setPassword] = useState<string>();
   const router = useRouter();
 
   const handleLogin = () => {
@@ -27,23 +29,25 @@ const LoginPage = () => {
       return;
     }
 
-    if (email === mockMyInfo.email && password === mockMyInfo.password) {
-      //hctodo 임시처리
-      alert('로그인 성공');
-      setLogin(true);
-      router.push('/');
-    } else {
-      if (email !== mockMyInfo.email) {
-        alert('존재하지 않는 이메일입니다.');
-        return;
-      }
+    const body: LoginRequest = {
+      email,
+      password,
+    };
 
-      if (password !== mockMyInfo.password) {
-        alert('비밀번호가 일치하지 않습니다.');
-        return;
-      }
-    }
+    login(body);
   };
+
+  const { mutate: login } = useLogin(
+    (data) => {
+      setLogin(true);
+
+      alert('로그인 성공');
+      router.push('/');
+    },
+    (message) => {
+      alert(message);
+    },
+  );
 
   return (
     <div className="flex flex-col bg-base-200">
@@ -67,6 +71,7 @@ const LoginPage = () => {
             {/* password */}
             <Label label="비밀번호" textSize="sm">
               <TextInput
+                type="password"
                 value={password}
                 placeholder="비밀번호 입력"
                 onChange={setPassword}
@@ -93,3 +98,48 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+const decodeBase64Url = (base64Url: string): string => {
+  // Base64Url을 Base64로 변환
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  // Base64 문자열을 디코딩하여 문자열로 변환
+  return atob(base64);
+};
+
+export const extractUserIdFromToken = (token: string | null): number | null => {
+  if (!token) {
+    return null;
+  }
+
+  try {
+    // JWT를 점(.)으로 나눔
+    const [header, payload, signature] = token.split('.');
+
+    if (!payload) {
+      throw new Error('Invalid JWT token');
+    }
+
+    // Payload 디코딩
+    const decodedPayload = decodeBase64Url(payload);
+    // JSON으로 파싱
+    const payloadObject = JSON.parse(decodedPayload);
+
+    // 사용자 ID 추출
+    const userId = payloadObject.userId;
+
+    if (typeof userId === 'number') {
+      return userId;
+    } else {
+      throw new Error('User ID not found in the payload');
+    }
+  } catch (error) {
+    console.error('Failed to extract user ID from token:', error);
+    return null;
+  }
+};
+
+//aaa1@gmail.com
+// {
+//   "accessJwt": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcklkIjoyMSwic3ViIjoiYWFhMUBnbWFpbC5jb20iLCJpYXQiOjE3MjUxNjM1MDYsImV4cCI6MTcyNTE2NTMwNn0.tcLi3ToM1aO7kllb-O5G8itm3XoI0oIazqZg06nSRiE",
+//   "refreshJwt": "eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcklkIjoyMSwic3ViIjoiYWFhMUBnbWFpbC5jb20iLCJpYXQiOjE3MjUxNjM1MDcsImV4cCI6MTcyNTc2ODMwN30.lIzMvrhLQJ-kWyR6RUBd_Svj0mzlx79ChlLCw0Q1lt0"
+// }

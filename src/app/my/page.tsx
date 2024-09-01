@@ -2,13 +2,12 @@
 
 import Avatar from '@/components/common/Avatar';
 import Button from '@/components/common/Button';
-import NumberInput from '@/components/common/NumberInput';
 import SimpleModal from '@/components/common/SimpleModal';
 import TextInput from '@/components/common/TextInput';
 import { ToggleButton } from '@/components/common/ToggleButtion';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
-import { useUserInfo } from '@/hooks/user/useUserInfo';
+import { useLoginUser } from '@/hooks/user/useLoginUser';
 import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
 import {
   mockMyRunningInfo,
@@ -24,7 +23,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const MyPage = () => {
-  const { data, isLoading, error } = useUserInfo(1); //hctodo 임시데이터
+  const { loginUser } = useLoginUser();
   const router = useRouter();
   const [tabSelect, setTabSelect] = useState(false);
   const [isRunningProfileOn, setIsRunningProfileOn] = useState<boolean>(false);
@@ -36,15 +35,27 @@ const MyPage = () => {
   const [showAddRecord, setShowAddRecord] = useState(false);
   const [showWeeklyGoal, setShowWeeklyGoal] = useState(false);
 
-  const [distance, setDistance] = useState<string | undefined>('');
-  const [time, setTime] = useState<string | undefined>('');
-  const [pace, setPace] = useState<string | undefined>('');
+  const [distance, setDistance] = useState<string>();
+  const [time, setTime] = useState<string>();
+  const [pace, setPace] = useState<string>();
 
   const [editRunningId, setEditRunningId] = useState<number | undefined>();
 
   useEffect(() => {
     setShowEditModal(true);
   }, [editRunningId]);
+
+  useEffect(() => {
+    console.log('loginUser', loginUser);
+  }, [loginUser]);
+
+  if (!loginUser) {
+    return (
+      <div className="h-[60vh] flex justify-center items-center">
+        잘못된 접근입니다
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -54,8 +65,8 @@ const MyPage = () => {
         <div className="flex flex-col w-full">
           <div className="flex items-center justify-end space-x-6">
             <div className="flex items-center space-x-3">
-              <Avatar size="w-8" src={data?.profileImage} />
-              <div className="font-bold">{data?.nickname}</div>
+              <Avatar size="w-8" src={loginUser?.profileImage} />
+              <div className="font-bold">{loginUser?.nickName}</div>
             </div>
             <Button
               onClick={() => {
@@ -444,10 +455,10 @@ interface AddRecordModalProps {
   onClose: () => void;
 }
 const AddRecordModal = ({ isOpen, onClose }: AddRecordModalProps) => {
-  const [date, setDate] = useState<string | undefined>('');
-  const [distance, setDistance] = useState<string | undefined>('');
-  const [record, setRecord] = useState<string | undefined>('');
-  const [pace, setPace] = useState<string | undefined>('');
+  const [date, setDate] = useState<string>();
+  const [distance, setDistance] = useState<string>();
+  const [record, setRecord] = useState<string>();
+  const [pace, setPace] = useState<string>();
 
   return (
     <SimpleModal isOpen={isOpen} onClose={onClose} title={'기록 추가'}>

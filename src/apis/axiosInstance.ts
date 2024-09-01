@@ -12,7 +12,7 @@ import {
 
 // Axios 인스턴스 생성
 const axiosInstance: AxiosInstance = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseURL: '/api',
   timeout: 10000, // 요청 타임아웃 (10초)
   headers: {
     'Content-Type': 'application/json',
