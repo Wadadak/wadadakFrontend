@@ -11,11 +11,6 @@ export const fetchUserProfile = async (
 ): Promise<UserProfileResponse> => {
   const response = await axiosInstance.get<UserProfileResponse>(
     `/user/${userId}/profile`,
-    {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      },
-    },
   );
   return response.data;
 };

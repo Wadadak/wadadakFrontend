@@ -8,11 +8,7 @@ import { setAccessToken } from '@/apis/authService';
 
 // 사용자 회원 가입 API 호출
 export const login = async (body: LoginRequest): Promise<LoginResponse> => {
-  const response = await axiosInstance.post<LoginResponse>('/login', body, {
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const response = await axiosInstance.post<LoginResponse>('/login', body);
   return response.data;
 };
 

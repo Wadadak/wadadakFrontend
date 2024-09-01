@@ -20,17 +20,6 @@ export interface SignupRequest {
 
 export interface UserProfileResponse {
   user_id: number;
-  username: string;
-  nickName: string;
-  profileImage: string;
-  phoneNumber: string;
-  gender: genderType;
-  birthYear: number;
-  activityRegion: string;
-  nameVisibility?: visibilityType;
-  phoneNumberVisibility?: visibilityType;
-  genderVisibility?: visibilityType;
-  birthYearVisibility?: visibilityType;
 }
 
 export interface SignupResponse {
@@ -49,11 +38,12 @@ export interface SignupResponse {
   phoneNumberVisibility: string;
   genderVisibility: string;
   birthYearVisibility: string;
+  profileImageVisibility: string;
 }
 
 export interface LoginRequest {
-  email?: string;
-  password?: string;
+  email: string;
+  password: string;
 }
 
 export interface LoginResponse {
