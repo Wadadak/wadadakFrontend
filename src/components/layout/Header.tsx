@@ -13,10 +13,11 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import { loginState } from '@/recoil/atoms/userState';
 import LoginMenu from '../login/LoginMenu';
 import LogoutMenu from '../login/LogoutMenu';
+import { useLoginUser } from '@/hooks/user/useLoginUser';
 
 const Header = () => {
   const router = useRouter();
-  const isLogin = useRecoilValue(loginState); //hctodo: 임시 로그인 상태
+  const { loginUser } = useLoginUser();
 
   const handleSearch = (value: string) => {
     alert(value);
@@ -41,7 +42,7 @@ const Header = () => {
             />
           </div>
           {/* 오른쪽 레이아웃 */}
-          {isLogin ? <LoginMenu /> : <LogoutMenu />}
+          {!!loginUser ? <LoginMenu /> : <LogoutMenu />}
         </div>
       </Wrapper>
     </div>

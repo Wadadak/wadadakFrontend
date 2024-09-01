@@ -18,8 +18,19 @@ export interface SignupRequest {
   birthYearVisibility?: visibilityType;
 }
 
-export interface UserInfoResponse extends SignupRequest {
+export interface UserProfileResponse {
   user_id: number;
+  username: string;
+  nickName: string;
+  profileImage: string;
+  phoneNumber: string;
+  gender: genderType;
+  birthYear: number;
+  activityRegion: string;
+  nameVisibility?: visibilityType;
+  phoneNumberVisibility?: visibilityType;
+  genderVisibility?: visibilityType;
+  birthYearVisibility?: visibilityType;
 }
 
 export interface SignupResponse {
@@ -46,6 +57,6 @@ export interface LoginRequest {
 }
 
 export interface LoginResponse {
-  accessToken: string;
-  refreshToken: string;
+  accessJwt: string;
+  refreshJwt: string;
 }

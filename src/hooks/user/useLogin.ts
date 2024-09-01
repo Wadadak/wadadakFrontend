@@ -4,6 +4,7 @@ import axiosInstance from '@/apis/axiosInstance';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { LoginRequest, LoginResponse } from '@/types/userTypes';
 import axios from 'axios';
+import { setAccessToken } from '@/apis/authService';
 
 // 사용자 회원 가입 API 호출
 export const login = async (body: LoginRequest): Promise<LoginResponse> => {
@@ -25,6 +26,8 @@ export const useLogin = (
     onSuccess: (data) => {
       onSuccess(data);
       console.log('로그인 성공:', data);
+
+      setAccessToken(data.accessJwt);
     },
     onError: (error) => {
       // 에러 처리 로직

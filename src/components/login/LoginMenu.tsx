@@ -1,16 +1,12 @@
 import { faBell, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import Avatar from '../common/Avatar';
 import { useRouter } from 'next/navigation';
-import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
-import Button from '../common/Button';
-import { loginState } from '@/recoil/atoms/userState';
-import { useRecoilState } from 'recoil';
 import AvatarWithDropdown from '../common/AvatarWithDropdown';
+import { useLoginUser } from '@/hooks/user/useLoginUser';
 
 const LoginMenu = () => {
   const router = useRouter();
-  const [isLogin, setLogin] = useRecoilState(loginState); //hctodo: 임시 로그인 상태
+  const { loginUser } = useLoginUser();
 
   return (
     <div className="flex items-center space-x-6">
@@ -29,22 +25,7 @@ const LoginMenu = () => {
         icon={faBell}
         onMenuClick={() => router.push('/alarm')}
       />
-      <AvatarWithDropdown src={''} />
-      {/* <div className="">
-        <Avatar
-          src={mockMyInfo.profileImage}
-          onAvatarClick={() => router.push('/my')}
-        />
-      </div>
-      <Button
-        size="sm"
-        onClick={() => {
-          setLogin(false);
-          router.push('/login');
-        }}
-      >
-        로그아웃
-      </Button> */}
+      <AvatarWithDropdown src={loginUser?.profileImage} />
     </div>
   );
 };
