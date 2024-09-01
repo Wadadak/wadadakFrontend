@@ -8,6 +8,7 @@ import TextInput from '@/components/common/TextInput';
 import { ToggleButton } from '@/components/common/ToggleButtion';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
+import { useUserInfo } from '@/hooks/user/useUserInfo';
 import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
 import {
   mockMyRunningInfo,
@@ -23,6 +24,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const MyPage = () => {
+  const { data, isLoading, error } = useUserInfo(1); //hctodo 임시데이터
   const router = useRouter();
   const [tabSelect, setTabSelect] = useState(false);
   const [isRunningProfileOn, setIsRunningProfileOn] = useState<boolean>(false);

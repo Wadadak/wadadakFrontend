@@ -6,6 +6,7 @@ interface LabelProps {
   label: string;
   required?: boolean;
   textSize?: 'xs' | 'sm' | 'base' | 'lg' | 'xl' | string;
+  textStyle?: string; // 테일윈드 텍스트 스타일
   children: React.ReactNode;
   htmlFor?: string;
 }
@@ -14,6 +15,7 @@ const Label = ({
   label,
   required = false,
   textSize = 'lg',
+  textStyle,
   children,
   htmlFor,
 }: LabelProps) => {
@@ -22,7 +24,7 @@ const Label = ({
   return (
     <label className="w-full py-2 form-control" htmlFor={htmlFor}>
       <div className="label">
-        <span className={`label-text ${textSizeClass}`}>
+        <span className={`label-text ${textSizeClass} ${textStyle}`}>
           {label}
           {/* 필수 표시 */}
           {required && <span className="text-red-500"> *</span>}
