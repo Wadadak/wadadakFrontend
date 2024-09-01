@@ -11,6 +11,8 @@ interface TextInputProps {
   as?: 'input' | 'textarea'; //input 또는 textarea 선택 (기본은 input)
   rows?: number; // textarea의 경우
   error?: string; // 에러 메시지 프롭스
+
+  disabled?: boolean; // 비활성화 여부
 }
 
 const TextInput = ({
@@ -24,6 +26,7 @@ const TextInput = ({
   as = 'input',
   rows = 5,
   error,
+  disabled,
 }: TextInputProps) => {
   const inputWidthClass = width ? `max-w-${width}` : 'max-w-xs';
   const textareaWidthClass = width ? `w-${width}` : 'w-1/2';
@@ -48,6 +51,7 @@ const TextInput = ({
         />
       ) : (
         <input
+          disabled={disabled}
           className={`input input-bordered w-full ${inputWidthClass} ${error && 'input-error'}`}
           type={type}
           value={value}
@@ -57,7 +61,7 @@ const TextInput = ({
           maxLength={maxLength}
         />
       )}
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </>
   );
 };
