@@ -1,21 +1,21 @@
 // 크루 상세 정보 조회
 
 import axiosInstance from '@/apis/axiosInstance';
-import { useMutation, useQuery } from '@tanstack/react-query';
-import { SignupRequest, SignupResponse } from '@/types/userTypes';
+import { useMutation } from '@tanstack/react-query';
+import { EditProfileResponse, EditProfileRequest } from '@/types/userTypes';
 import axios from 'axios';
 import { appendFormData } from '@/utilities';
+import { extractUserIdFromToken } from '@/app/login/page';
+import { get } from 'http';
+import { getAccessToken } from '@/apis/authService';
 
-// 사용자 회원 가입 API 호출
-export const signup = async (body: SignupRequest): Promise<SignupResponse> => {
+// 회원 정보 수정 API 호출
+export const editProfile = async (
+  body: EditProfileRequest,
+): Promise<EditProfileResponse> => {
   const formData = new FormData();
 
-  appendFormData(formData, 'email', body.email);
-  appendFormData(formData, 'password', body.password);
-  appendFormData(formData, 'confirmPassword', body.confirmPassword);
-  appendFormData(formData, 'name', body.name);
-  appendFormData(formData, 'nickName', body.nickName);
-  appendFormData(formData, 'phoneNumber', body.phoneNumber);
+  appendFormData(formData, 'nickname', body.nickname);
   appendFormData(formData, 'profileImage', body.profileImage);
   appendFormData(formData, 'gender', body.gender);
   appendFormData(formData, 'birthYear', body.birthYear);
@@ -25,8 +25,9 @@ export const signup = async (body: SignupRequest): Promise<SignupResponse> => {
   appendFormData(formData, 'genderVisibility', body.genderVisibility);
   appendFormData(formData, 'birthYearVisibility', body.birthYearVisibility);
 
-  const response = await axiosInstance.post<SignupResponse>(
-    '/user/signup',
+  const userId = extractUserIdFromToken(getAccessToken());
+  const response = await axiosInstance.put<EditProfileResponse>(
+    `/user/${userId}/profile`,
     formData,
     {
       headers: {
@@ -37,16 +38,16 @@ export const signup = async (body: SignupRequest): Promise<SignupResponse> => {
   return response.data;
 };
 
-// 회원가입 훅
-export const useSignup = (
+// 회원 정보 수정 훅
+export const useEditProfile = (
   onSuccess: () => void,
   onError: (message: string) => void,
 ) => {
-  return useMutation<SignupResponse, Error, SignupRequest>({
-    mutationFn: (body: SignupRequest) => signup(body),
+  return useMutation<EditProfileResponse, Error, EditProfileRequest>({
+    mutationFn: (body: EditProfileRequest) => editProfile(body),
     onSuccess: (data) => {
       onSuccess();
-      console.log('회원가입 성공:', data);
+      console.log('회원 정보 수정 성공:', data);
     },
     onError: (error) => {
       // 에러 처리 로직
@@ -56,7 +57,7 @@ export const useSignup = (
           console.error('잘못된 입력: ', error.response?.data);
           onError(error.response?.data?.message);
         } else {
-          console.error('회원가입 실패: ', error.message);
+          console.error('회원 정보 수정 실패: ', error.message);
           onError(error.response?.data?.message);
         }
       } else {

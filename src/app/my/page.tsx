@@ -7,8 +7,11 @@ import TextInput from '@/components/common/TextInput';
 import { ToggleButton } from '@/components/common/ToggleButtion';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
+import { AddRecordModal } from '@/components/my/AddRecordModal';
+import { EditRecordModal } from '@/components/my/EditRecordModal';
+import { useRunningList } from '@/hooks/running/useRunningList';
+import useModal from '@/hooks/useModal';
 import { useLoginUser } from '@/hooks/user/useLoginUser';
-import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
 import {
   mockMyRunningInfo,
   mockRunningList,
@@ -31,9 +34,12 @@ const MyPage = () => {
     useState<boolean>(false);
 
   const [recordTab, setRecordTab] = useState('round'); // round, week, month, year
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [showAddRecord, setShowAddRecord] = useState(false);
+  // const [showEditModal, setShowEditModal] = useState(false);
+  // const [showAddRecord, setShowAddRecord] = useState(false);
   const [showWeeklyGoal, setShowWeeklyGoal] = useState(false);
+
+  const addRecordModal = useModal();
+  const editRecordModal = useModal();
 
   const [distance, setDistance] = useState<string>();
   const [time, setTime] = useState<string>();
@@ -41,21 +47,25 @@ const MyPage = () => {
 
   const [editRunningId, setEditRunningId] = useState<number | undefined>();
 
+  const { data: runningList } = useRunningList();
+
   useEffect(() => {
-    setShowEditModal(true);
+    if (editRunningId !== undefined) {
+      editRecordModal.handleOpenModal();
+    }
   }, [editRunningId]);
 
   useEffect(() => {
     console.log('loginUser', loginUser);
   }, [loginUser]);
 
-  if (!loginUser) {
-    return (
-      <div className="h-[60vh] flex justify-center items-center">
-        잘못된 접근입니다
-      </div>
-    );
-  }
+  // if (!loginUser) {
+  //   return (
+  //     <div className="h-[60vh] flex justify-center items-center">
+  //       잘못된 접근입니다
+  //     </div>
+  //   );
+  // }
 
   return (
     <div className="flex flex-col items-center w-full">
@@ -63,19 +73,6 @@ const MyPage = () => {
       {/* 총 거리 */}
       <Wrapper>
         <div className="flex flex-col w-full">
-          <div className="flex items-center justify-end space-x-6">
-            <div className="flex items-center space-x-3">
-              <Avatar size="w-8" src={loginUser?.profileImage} />
-              <div className="font-bold">{loginUser?.nickName}</div>
-            </div>
-            <Button
-              onClick={() => {
-                router.push('/my/edit');
-              }}
-            >
-              프로필 수정
-            </Button>
-          </div>
           <div className="flex flex-col space-y-8">
             <div className="flex flex-col items-center space-y-1">
               <div className="text-[128px] font-extrabold">
@@ -99,9 +96,7 @@ const MyPage = () => {
             </div>
             <button
               className="text-[14px] text-gray-400 underline underline-offset-4"
-              onClick={() => {
-                setShowAddRecord(true);
-              }}
+              onClick={addRecordModal.handleOpenModal}
             >
               기록 추가하기
             </button>
@@ -286,7 +281,7 @@ const MyPage = () => {
               <Button
                 wide
                 onClick={() => {
-                  setShowAddRecord(true);
+                  addRecordModal.handleOpenModal();
                 }}
               >
                 <FontAwesomeIcon icon={faPen} />
@@ -296,19 +291,23 @@ const MyPage = () => {
           </div>
         </div>
       </Wrapper>
-      <EditRecordModal
-        id={editRunningId}
-        isOpen={showEditModal}
-        onClose={() => {
-          //수정을 완료하고 모달을 닫을때,
-          // refetch();
-          setShowEditModal(false);
-        }}
-      />
-      <AddRecordModal
-        isOpen={showAddRecord}
-        onClose={() => setShowAddRecord(false)}
-      />
+      {editRecordModal.isModalOpen && (
+        <EditRecordModal
+          id={editRunningId}
+          isOpen={editRecordModal.isModalOpen}
+          onClose={editRecordModal.handleCloseModal}
+        />
+      )}
+      {addRecordModal.isModalOpen && (
+        <AddRecordModal
+          isOpen={addRecordModal.isModalOpen}
+          onClose={addRecordModal.handleCloseModal}
+          onSuccess={() => {
+            //hctodo
+            //기록 리스트 다시 불러오기
+          }}
+        />
+      )}
       <SimpleModal
         isOpen={showWeeklyGoal}
         onClose={() => {
@@ -409,7 +408,7 @@ export const MyRecordItem = ({
   nameStyle,
 }: MyRecordItemProps) => {
   return (
-    <div className="flex flex-col items-center space-y-2">
+    <div className="w-[140px] flex flex-col items-center space-y-2">
       <FontAwesomeIcon
         icon={faRankingStar}
         className={`w-8 h-8 ${iconStyle}`}
@@ -438,207 +437,15 @@ const RunningRecordItem = ({
 }: RunningRecordItemProps) => {
   return (
     <div className="flex items-center px-5 py-4 border border-gray-200 rounded-lg">
-      <div className="flex space-x-5 text-[20px] font-bold divide-x divide-gray-300 grow">
-        {round && <div className="w-[100px] text-center">#{round}</div>}
-        <div className="px-8">{date}</div>
-        <div className="px-8">{distance}km</div>
-        <div className="px-8">{totalTime}</div>
-        <div className="px-8">{pace}</div>
+      <div className="flex text-[20px] font-bold divide-x divide-gray-300 grow">
+        {round && <div className="w-[80px] text-center">#{round}</div>}
+        <div className="w-[180px] text-center">{date}</div>
+        <div className="w-[180px] text-center">{distance}km</div>
+        <div className="w-[180px] text-center">{totalTime}</div>
+        <div className="w-[180px] text-center">{pace}</div>
       </div>
       {onButtonClick && <Button onClick={onButtonClick}>수정하기</Button>}
     </div>
   );
 };
 
-interface AddRecordModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-const AddRecordModal = ({ isOpen, onClose }: AddRecordModalProps) => {
-  const [date, setDate] = useState<string>();
-  const [distance, setDistance] = useState<string>();
-  const [record, setRecord] = useState<string>();
-  const [pace, setPace] = useState<string>();
-
-  return (
-    <SimpleModal isOpen={isOpen} onClose={onClose} title={'기록 추가'}>
-      <div className="flex flex-col space-y-7">
-        <div className="flex flex-col mt-3 space-y-3">
-          <div className="flex flex-col space-y-2">
-            <div className="font-semibold">날짜</div>
-            <TextInput
-              placeholder="날짜 입력"
-              value={date}
-              onChange={(value) => {
-                setDate(value);
-              }}
-              width="xl"
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <div className="font-semibold">거리</div>
-            <TextInput
-              placeholder="거리 입력"
-              value={distance}
-              onChange={(value) => {
-                setDistance(value);
-              }}
-              width="xl"
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <div className="font-semibold">시간</div>
-            <TextInput
-              placeholder="시간 입력"
-              value={record}
-              onChange={(value) => {
-                setRecord(value);
-              }}
-              width="xl"
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <div className="font-semibold">페이스</div>
-            <TextInput
-              placeholder="페이스 입력"
-              value={pace}
-              onChange={(value) => {
-                setPace(value);
-              }}
-              width="xl"
-            />
-          </div>
-        </div>
-        <Button
-          onClick={() => {
-            const query = {
-              date,
-              distance,
-              record,
-              pace,
-            };
-
-            console.log('query', query);
-
-            onClose();
-          }}
-        >
-          추가하기
-        </Button>
-      </div>
-    </SimpleModal>
-  );
-};
-
-interface EditRecordModalProps {
-  id?: number;
-  isOpen: boolean;
-  onClose: () => void;
-}
-const EditRecordModal = ({ id, isOpen, onClose }: EditRecordModalProps) => {
-  if (id === undefined) return <></>;
-
-  //id=2인 api를 호출해서 나온 값으로 여기를 채워줘야해
-  const data = mockRunningList.data[id - 1]; // 2024-08-02
-
-  const [date, setDate] = useState<string | undefined>(data.runningDate);
-  const [distance, setDistance] = useState<string | undefined>(
-    String(data.distance),
-  );
-  const [record, setRecord] = useState<string | undefined>(data.runningTime);
-  const [pace, setPace] = useState<string | undefined>(data.pace);
-
-  useEffect(() => {
-    setDate(data.runningDate);
-    setDistance(String(data.distance));
-    setRecord(data.runningTime);
-    setPace(data.pace);
-  }, [id]);
-
-  return (
-    <SimpleModal isOpen={isOpen} onClose={onClose} title={'기록 수정'}>
-      <div className="flex flex-col space-y-7">
-        <div className="flex flex-col mt-3 space-y-3">
-          <div className="flex flex-col space-y-2">
-            <div className="font-semibold">날짜</div>
-            <TextInput
-              placeholder="날짜 입력"
-              value={date}
-              onChange={(value) => {
-                setDate(value);
-              }}
-              width="xl"
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <div className="font-semibold">거리</div>
-            <TextInput
-              placeholder="거리 입력"
-              value={distance}
-              onChange={(value) => {
-                setDistance(value);
-              }}
-              width="xl"
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <div className="font-semibold">시간</div>
-            <TextInput
-              placeholder="시간 입력"
-              value={record}
-              onChange={(value) => {
-                setRecord(value);
-              }}
-              width="xl"
-            />
-          </div>
-          <div className="flex flex-col space-y-2">
-            <div className="font-semibold">페이스</div>
-            <TextInput
-              placeholder="페이스 입력"
-              value={pace}
-              onChange={(value) => {
-                setPace(value);
-              }}
-              width="xl"
-            />
-          </div>
-        </div>
-        <div className="flex justify-end space-x-3">
-          <Button
-            color="base-500"
-            onClick={() => {
-              alert(`#${data.runRecordId}을 삭제합니다.`);
-              //삭제 api를 호출
-              // 성공하면 모달 닫기.
-              onClose();
-            }}
-          >
-            삭제하기
-          </Button>
-          <Button
-            onClick={() => {
-              const query = {
-                date,
-                distance,
-                record,
-                pace,
-              };
-
-              console.log('query', query);
-
-              //query를 기록 수정하는 api에 보냄
-              //isSuccess == true이면
-
-              alert('수정되었습니다!');
-
-              onClose();
-            }}
-          >
-            수정하기
-          </Button>
-        </div>
-      </div>
-    </SimpleModal>
-  );
-};

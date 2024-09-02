@@ -3,7 +3,6 @@
 import axiosInstance from '@/apis/axiosInstance';
 import { useQuery } from '@tanstack/react-query';
 import { UserProfileResponse } from '@/types/userTypes';
-import { extractUserIdFromToken } from '@/app/login/page';
 
 // 사용자 정보 조회 api 호출
 export const fetchUserProfile = async (
@@ -16,10 +15,10 @@ export const fetchUserProfile = async (
 };
 
 // 사용자 정보 조회 훅
-export const useUserProfile = (userId: number) => {
+export const useUserProfile = (userId: number, enabled?: boolean) => {
   return useQuery<UserProfileResponse, Error>({
     queryKey: ['userInfo', userId],
     queryFn: () => fetchUserProfile(userId),
-    enabled: false,
+    enabled: enabled ? enabled : false,
   });
 };

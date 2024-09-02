@@ -23,7 +23,8 @@ export const useLogin = (
       onSuccess(data);
       console.log('로그인 성공:', data);
 
-      setAccessToken(data.accessJwt);
+      setAccessToken(data);
+      // setAccessToken(data.accessJwt);
     },
     onError: (error) => {
       // 에러 처리 로직

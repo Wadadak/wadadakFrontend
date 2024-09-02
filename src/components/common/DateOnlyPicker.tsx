@@ -58,7 +58,7 @@ const DateOnlyPicker = ({
       </div>
 
       {selectedDate && (
-        <div className="mt-4 flex items-center gap-2">
+        <div className="flex items-center gap-2 mt-4">
           <p>
             선택된 날짜: <strong>{selectedDate}</strong>
           </p>
@@ -67,7 +67,7 @@ const DateOnlyPicker = ({
           </Button>
         </div>
       )}
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </div>
   );
 };

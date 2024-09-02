@@ -49,7 +49,7 @@ const NumberInput = ({
         placeholder={placeholder}
         required={required}
       />
-      {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
+      {error && <p className="mt-1 text-sm text-red-500">{error}</p>}
     </>
   );
 };
