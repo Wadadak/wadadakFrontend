@@ -50,8 +50,6 @@ export interface LoginResponse {
   accessJwt: string;
   refreshJwt: string;
 }
-<<<<<<< HEAD
-=======
 
 export interface EditProfileRequest {
   nickname?: string;
@@ -70,4 +68,3 @@ export interface EditProfileResponse extends EditProfileRequest {
   username: string;
   phoneNumber: string;
 }
->>>>>>> d68ddeb35ab8c3d0b775e9b5242e5c7449511ced
