@@ -1,12 +1,18 @@
 export const getAccessToken = () => {
-  return localStorage.getItem('accessToken');
+  if (typeof window !== 'undefined') {
+    return localStorage.getItem('accessToken');
+  }
+  return null; // 서버 환경에서는 null을 반환
 };
 
 export const setAccessToken = (token: string) => {
-  localStorage.setItem('accessToken', token);
+  if (typeof window !== 'undefined') {
+    localStorage.setItem('accessToken', token);
+  }
 };
 
 export const removeAccessToken = () => {
-  localStorage.removeItem('accessToken');
+  if (typeof window !== 'undefined') {
+    localStorage.removeItem('accessToken');
+  }
 };
-

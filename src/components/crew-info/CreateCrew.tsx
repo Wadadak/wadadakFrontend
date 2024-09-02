@@ -81,7 +81,7 @@ const CreateCrew = () => {
             onChange={(values) => setRunRecordOpen(values?.includes('true'))}
           />
         </Label>
-        // FIXME
+        {/* // FIXME */}
         {/* <Label label="가입 승인 여부" required>
           <CheckBox
             options={[

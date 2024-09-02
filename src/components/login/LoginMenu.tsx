@@ -16,6 +16,11 @@ const LoginMenu = () => {
         onMenuClick={() => router.push('/my-crews')}
       />
       <HeaderMenu
+        name={'크루 만들기'}
+        icon={faBell}
+        onMenuClick={() => router.push('/create-crew')}
+      />
+      {/* <HeaderMenu
         name={'메시지'}
         icon={faBell}
         onMenuClick={() => router.push('/message')}
@@ -24,7 +29,7 @@ const LoginMenu = () => {
         name={'알림'}
         icon={faBell}
         onMenuClick={() => router.push('/alarm')}
-      />
+      /> */}
       <AvatarWithDropdown src={loginUser?.profileImage} />
     </div>
   );

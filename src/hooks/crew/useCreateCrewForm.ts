@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 
 export const useCreateCrewForm = () => {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   const [crewName, setCrewName] = useState<string>();
   const [description, setDescription] = useState<string>();
@@ -42,10 +43,10 @@ export const useCreateCrewForm = () => {
       newErrors.runRecordOpen = '선택하세요.';
     }
 
-    // // FIXME
-    if (!leaderRequired) {
-      newErrors.leaderRequired = '선택하세요.';
-    }
+    // // // FIXME
+    // if (!leaderRequired) {
+    //   newErrors.leaderRequired = '선택하세요.';
+    // }
 
     if (minYear && maxYear) {
       if (minYear < maxYear) {
@@ -60,6 +61,7 @@ export const useCreateCrewForm = () => {
     mutationFn: async (data: CreateCrewData): Promise<CrewResponse> =>
       createCrew(data),
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['crewList'] });
       alert('크루가 생성되었습니다!');
       router.push(`/my-crews`);
     },
