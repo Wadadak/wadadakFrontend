@@ -5,20 +5,16 @@ import { useUserProfile } from './useUserProfile';
 import { useEffect } from 'react';
 import { useRecoilState } from 'recoil';
 import { loginUserState } from '@/recoil/atoms/userState';
-import {
-  getAccessToken,
-  removeAccessToken,
-  removeRefreshToken,
-} from '@/apis/authService';
+import { getAccessToken, removeAccessToken } from '@/apis/authService';
 
 ///user/{user_id}/profile
 export const useLoginUser = () => {
   const [loginUser, setLoginUser] = useRecoilState(loginUserState);
-  const userId = extractUserIdFromToken(getAccessToken()) ?? 0;
-  const { data: user, refetch } = useUserProfile(userId);
+  const userId = extractUserIdFromToken(getAccessToken());
+  const { data: user, refetch } = useUserProfile(userId ?? 0);
 
   useEffect(() => {
-    if (userId > 0) {
+    if (userId && userId > 0) {
       refetch();
     }
   }, [userId]);
@@ -34,7 +30,6 @@ export const useLoginUser = () => {
     logout: () => {
       setLoginUser(undefined);
       removeAccessToken();
-      removeRefreshToken();
     },
   };
 };
