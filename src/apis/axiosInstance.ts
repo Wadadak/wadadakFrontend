@@ -91,8 +91,8 @@ axiosInstance.interceptors.response.use(
 
       try {
         // 토큰 갱신 요청
-        const { data } = await axiosInstance.post('/token/refresh');
-        const newAccessToken = data.accessToken;
+        const { data: newAccessToken } =
+          await axiosInstance.post('/token/refresh');
 
         // 새로 발급된 토큰은 localStorage에 저장하고, 헤더 업데이트
         setAccessToken(newAccessToken);
