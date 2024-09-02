@@ -12,10 +12,7 @@ const CrewList = () => {
   const itemsPerPage = 6; // 한 페이지에 표시할 항목
   const pageRangeDisplayed = 5;
 
-  const { data, isLoading, isError, error } = useCrewList({
-    size: itemsPerPage,
-    page: currentPage,
-  });
+  const { data, isLoading, isError, error } = useCrewList({});
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -28,6 +25,8 @@ const CrewList = () => {
       />
     );
   }
+
+  console.log('Received data:', data);
 
   const { crews, totalPages } = data || { crews: [], totalPages: 1 };
 
