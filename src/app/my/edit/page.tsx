@@ -65,7 +65,7 @@ const EditPage = () => {
 
   const handleEdit = () => {
     const body: EditProfileRequest = {
-      nickname: nickName,
+      nickName,
       gender: gender[0] === 'MALE' ? 0 : 1,
       birthYear: age,
       activityRegion: activityArea,

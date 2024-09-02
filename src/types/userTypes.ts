@@ -52,7 +52,7 @@ export interface LoginResponse {
 }
 
 export interface EditProfileRequest {
-  nickname?: string;
+  nickName?: string;
   gender?: number;
   birthYear?: number;
   activityRegion?: string;

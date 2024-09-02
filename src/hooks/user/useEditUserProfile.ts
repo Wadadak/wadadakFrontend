@@ -15,7 +15,7 @@ export const editProfile = async (
 ): Promise<EditProfileResponse> => {
   const formData = new FormData();
 
-  appendFormData(formData, 'nickname', body.nickname);
+  appendFormData(formData, 'nickName', body.nickName);
   appendFormData(formData, 'profileImage', body.profileImage);
   appendFormData(formData, 'gender', body.gender);
   appendFormData(formData, 'birthYear', body.birthYear);
@@ -27,7 +27,7 @@ export const editProfile = async (
 
   const userId = extractUserIdFromToken(getAccessToken());
   const response = await axiosInstance.put<EditProfileResponse>(
-    `/user/${userId}/profile`,
+    `/user/profile`,
     formData,
     {
       headers: {
