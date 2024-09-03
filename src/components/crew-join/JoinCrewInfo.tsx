@@ -126,8 +126,7 @@ const JoinCrewInfo = ({ crewId }: JoinCrewInfoProps) => {
           <div className="flex flex-col gap-4">
             <div>{message}</div>
             <div className="flex justify-end gap-2">
-              <Button color="accent" type="submit">
-                {/* <Button color="accent" onClick={handleFinalSubmit} type="submit"> */}
+              <Button color="accent" onClick={handleFinalSubmit} type="submit">
                 예
               </Button>
               <Button
