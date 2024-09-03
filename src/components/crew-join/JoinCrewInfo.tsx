@@ -9,7 +9,7 @@ import useModal from '@/hooks/useModal';
 import TextInput from '../common/TextInput';
 import { useApplyForCrew } from '@/hooks/crew/useApplyForCrew';
 import { useUserRoles } from '@/hooks/crew/useUserRoles';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { getAccessToken } from '@/apis/authService';
 
 interface JoinCrewInfoProps {
@@ -126,8 +126,7 @@ const JoinCrewInfo = ({ crewId }: JoinCrewInfoProps) => {
           <div className="flex flex-col gap-4">
             <div>{message}</div>
             <div className="flex justify-end gap-2">
-              <Button color="accent" type="submit">
-                {/* <Button color="accent" onClick={handleFinalSubmit} type="submit"> */}
+              <Button color="accent" onClick={handleFinalSubmit} type="submit">
                 예
               </Button>
               <Button

@@ -4,9 +4,9 @@ import Button from '../common/Button';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
 import { useCrewInfo } from '@/hooks/crew/useCrewInfo';
-// import { useCrewRunningInfo } from '@/hooks/crew/useCrewRunningInfo';
-import { RunningInfo, CrewInfoResponse, CrewLimit } from '@/types/crewTypes';
-// import { useUserRoles } from '@/hooks/crew/useUserRoles';
+import { useCrewRunningInfo } from '@/hooks/crew/useCrewRunningInfo';
+import { RunningInfo } from '@/types/crewTypes';
+import { useUserRoles } from '@/hooks/crew/useUserRoles';
 
 interface CrewDetailInfoProps {
   crewId: number;
@@ -46,20 +46,23 @@ const CrewDetailInfo = ({
 
   const formattedRegion = formatRegion(crew?.activityRegion);
 
-  // const {
-  //   data: userRoleData,
-  //   isLoading: roleLoading,
-  //   isError: roleError,
-  // } = useUserRoles(crewId);
+  const {
+    data: userRoleData,
+    isLoading: roleLoading,
+    isError: roleError,
+    error: roleErrorMessage,
+  } = useUserRoles(crewId);
 
-  // const userRole = userRoleData?.role;
+  const userRole = userRoleData?.role;
+  const canManage =
+    userRoleData?.role === 'LEADER' || userRoleData?.role === 'STAFF';
 
-  // const {
-  //   data: regularRunningInfo,
-  //   isLoading: runningInfoLoading,
-  //   isError: runningInfoError,
-  //   error: runningInfoErrorMessage,
-  // } = useCrewRunningInfo(crewId);
+  const {
+    data: regularRunningInfo,
+    isLoading: runningInfoLoading,
+    isError: runningInfoError,
+    error: runningInfoErrorMessage,
+  } = useCrewRunningInfo(crewId);
 
   if (crewLoading) {
     return <LoadingSpinner />;
@@ -75,23 +78,24 @@ const CrewDetailInfo = ({
     );
   }
 
-  // if (crewLoading || runningInfoLoading || roleLoading) {
-  //   return <LoadingSpinner />;
-  // }
+  if (crewLoading || runningInfoLoading || roleLoading) {
+    return <LoadingSpinner />;
+  }
 
-  // if (crewError || roleError || runningInfoError || !crew) {
-  //   return (
-  //     <ErrorComponent
-  //       message={
-  //         crewErrorMessage?.message ||
-  //         // runningInfoErrorMessage?.message ||
-  //         '크루 정보 또는 권한을 불러오는 데 실패했습니다.'
-  //       }
-  //     />
-  //   );
-  // }
+  if (crewError || runningInfoError || !crew) {
+    return (
+      <ErrorComponent
+        message={
+          runningInfoErrorMessage?.message ||
+          '크루 정보를 불러오는 데 실패했습니다.'
+        }
+      />
+    );
+  }
 
-  // const canManage = userRole === 'LEADER' || userRole === 'STAFF';
+  if (roleError) {
+    return <ErrorComponent message={roleErrorMessage.message} />;
+  }
 
   const renderAgeRange = () => {
     if (crew.limit.minYear && crew.limit.maxYear) {
@@ -167,7 +171,7 @@ const CrewDetailInfo = ({
         </div>
       </div>
       <div className="mb-4">
-        {/* <div className="flex justify-between items-center pb-2">
+        <div className="flex justify-between items-center pb-2">
           <p className="card-title">정기 러닝 정보</p>
           {canManage && (
             <Button
@@ -178,15 +182,15 @@ const CrewDetailInfo = ({
               정기 러닝 정보 추가
             </Button>
           )}
-        </div> */}
-        {/* <RegularRunningInfoTable
+        </div>
+        <RegularRunningInfoTable
           regularRunningInfo={regularRunningInfo?.data}
           userRole={userRole}
           onEditRunningInfo={canManage ? onEditRunningInfo : undefined}
           onDeleteRunningInfo={canManage ? onDeleteRunningInfo : undefined}
         />
-      </div> */}
-        {/* <div> */}
+      </div>
+      <div>
         <p className="card-title pb-2">오프라인 러닝 일정</p>
       </div>
     </div>
