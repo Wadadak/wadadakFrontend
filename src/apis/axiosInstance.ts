@@ -62,12 +62,7 @@ axiosInstance.interceptors.request.use(
     // 토큰이 필요한 엔드포인트에만 토큰을 헤더에 추가
     if (token && !isPublicEndpoint && !isPublicGetEndpoint) {
       if (config.headers) {
-        // config.headers.Authorization = `Bearer ${token}`;
-        // 임시 토큰
-        // config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcklkIjozLCJzdWIiOiJlbWFpbDMiLCJpYXQiOjE3MjUxOTAzNjMsImV4cCI6MTcyNTE5MjE2M30.hlD6Put61Cx2euIo8WuOdyhJ8_H8PmujUbXi2QShq38`;
-        // config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcklkIjozLCJzdWIiOiJlbWFpbDMiLCJpYXQiOjE3MjUxOTAzNjMsImV4cCI6MTcyNTE5MjE2M30.hlD6Put61Cx2euIo8WuOdyhJ8_H8PmujUbXi2QShq38
-        // `;
-        config.headers.Authorization = `Bearer eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJST0xFX1VTRVIiXSwidXNlcklkIjoxMiwic3ViIjoiZmxvd2Vyb253YWxsMzFAZ21haWwuY29tIiwiaWF0IjoxNzI1MjAwMjkyLCJleHAiOjE3MjUyMDIwOTJ9.XvYOCwQaDum9DZm4mWRVnM8JC6E3pHfVWKPVZiNVC0A`;
+        config.headers.Authorization = `Bearer ${token}`;
       }
     }
     return config;
@@ -96,8 +91,13 @@ axiosInstance.interceptors.response.use(
 
       try {
         // 토큰 갱신 요청
-        const { data } = await axiosInstance.post('/token/refresh');
-        const newAccessToken = data.accessToken;
+        const { data: newAccessToken } = await axiosInstance.post(
+          '/token/refresh',
+          null,
+          {
+            withCredentials: true,
+          },
+        );
 
         // 새로 발급된 토큰은 localStorage에 저장하고, 헤더 업데이트
         setAccessToken(newAccessToken);
@@ -107,9 +107,9 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         // 토큰 갱신실패 시, 토큰을 삭제하고 로그인 페이지로 리다이렉트
-        removeAccessToken();
-        alert('세션이 만료되었습니다. 다시 로그인해 주세요.');
-        window.location.href = '/login';
+        // removeAccessToken();
+        // alert('세션이 만료되었습니다. 다시 로그인해 주세요.');
+        // window.location.href = '/login';
         return Promise.reject(refreshError);
       }
     }

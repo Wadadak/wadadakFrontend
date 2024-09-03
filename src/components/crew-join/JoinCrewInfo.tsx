@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState } from 'react';
-import { mockCrewList } from '@/mocks/mockData/mockCrewList';
 import CrewDetailInfo from '@/components/crew-info/CrewDetailInfo';
 import Button from '../common/Button';
 import SimpleModal from '../common/SimpleModal';
@@ -9,16 +8,34 @@ import Wrapper from '@/components/layout/Wrapper';
 import useModal from '@/hooks/useModal';
 import TextInput from '../common/TextInput';
 import { useApplyForCrew } from '@/hooks/crew/useApplyForCrew';
+import { useCrewInfo } from '@/hooks/crew/useCrewInfo';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorComponent from '../common/ErrorComponent';
 
-const JoinCrewInfo = () => {
-  const crew = mockCrewList[0];
+interface JoinCrewInfoProps {
+  crewId: number;
+}
 
+const JoinCrewInfo = ({ crewId }: JoinCrewInfoProps) => {
   const messageModal = useModal();
   const confirmModal = useModal();
   const cancelModal = useModal();
   const [message, setMessage] = useState<string>();
 
+  const { data: crew, isLoading, isError } = useCrewInfo(crewId);
   const mutation = useApplyForCrew();
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isError || !crew) {
+    return (
+      <Wrapper>
+        <ErrorComponent message="크루 정보를 불러오는 데 실패했습니다." />
+      </Wrapper>
+    );
+  }
 
   const handleSubmit = () => {
     messageModal.handleCloseModal();
@@ -26,33 +43,20 @@ const JoinCrewInfo = () => {
   };
 
   const handleFinalSubmit = () => {
-    // TODO API 연결 시 mutation.mutate(message);로 변경
-    // console.log('가입 신청 메시지:', message);
-    // confirmModal.handleCloseModal();
-    // alert('가입이 완료되었습니다!');
-    // NOTE 가입 승인
-    // if (crew?.approvalRequired) {
-    //   setIsPendingApproval(true);
-    //   alert('가입 신청이 완료되었습니다. 관리자의 승인을 기다려주세요.');
-    // } else {
-    //   alert('가입이 완료되었습니다!');
-    // }
-    const handleFinalSubmit = () => {
-      if (crew?.crewId) {
-        mutation.mutate(
-          { crewId: crew.crewId, message },
-          {
-            onSuccess: () => {
-              confirmModal.handleCloseModal();
-              alert('가입이 완료되었습니다!');
-            },
-            onError: () => {
-              alert('가입 신청에 실패했습니다. 다시 시도해 주세요.');
-            },
+    if (crew?.crewId) {
+      mutation.mutate(
+        { crewId: crew.crewId, message },
+        {
+          onSuccess: () => {
+            confirmModal.handleCloseModal();
+            alert('가입이 완료되었습니다!');
           },
-        );
-      }
-    };
+          onError: () => {
+            alert('가입 신청에 실패했습니다. 다시 시도해 주세요.');
+          },
+        },
+      );
+    }
 
     // NOTE 가입 승인
     // const handleCancel = () => {

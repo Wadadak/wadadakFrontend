@@ -29,6 +29,8 @@ const CrewList = () => {
     );
   }
 
+  console.log('Received data:', data);
+
   const { crews, totalPages } = data || { crews: [], totalPages: 1 };
 
   return (
