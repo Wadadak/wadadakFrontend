@@ -9,12 +9,12 @@ import { useParams, useRouter } from 'next/navigation';
 import Wrapper from '@/components/layout/Wrapper';
 import useModal from '@/hooks/useModal';
 import RunningInfoForm from './RunningInfoForm';
-import { RegularRunningInfo } from '@/types/crewTypes';
+import { useUserRoles } from '@/hooks/crew/useUserRoles';
 
 const MyCrewInfo = () => {
   const { crewId } = useParams();
-  const crew = mockCrewList.find((c) => c.crewId === Number(crewId)); // TODO 실제 데이터로 교체
-  const userRole = 'LEADER'; // TODO 실제 사용자 역할로 교체
+  const { data: userRoleData } = useUserRoles(Number(crewId));
+  const userRole = userRoleData?.role;
 
   const deleteModal = useModal();
   const runningInfoEditModal = useModal();
@@ -24,13 +24,9 @@ const MyCrewInfo = () => {
   );
   const router = useRouter();
 
-  if (!crew) {
-    return <Wrapper>크루 정보가 없습니다.</Wrapper>;
-  }
-
   const handleLeaveCrew = () => {
     // TODO 크루 탈퇴 API 연동
-    alert(`${crew.crewName}에서 탈퇴하셨습니다.`);
+    alert('크루에서 탈퇴하셨습니다.');
     deleteModal.handleCloseModal();
     router.push('/');
   };
@@ -74,9 +70,7 @@ const MyCrewInfo = () => {
   return (
     <>
       <CrewDetailInfo
-        crew={crew}
-        userRole={userRole}
-        canManage={true}
+        crewId={Number(crewId)}
         onEditRunningInfo={openEditRunningInfoModal}
         onDeleteRunningInfo={handleDeleteRunningInfoById}
       >
