@@ -50,14 +50,14 @@ axiosInstance.interceptors.request.use(
     ];
 
     // 토큰이 필요 없는 엔드포인트인지 확인
-    const isPublicEndpoint = publicEndpoints.some((endpoint) =>
-      config.url?.startsWith(endpoint),
+    const isPublicEndpoint = publicEndpoints.some(
+      (endpoint) => config.url === endpoint,
     );
 
     // GET 메서드로 토큰이 필요 없는 엔드포인트인지 확인
     const isPublicGetEndpoint =
       config.method === 'get' &&
-      publicGetEndpoints.some((endpoint) => config.url?.startsWith(endpoint));
+      publicGetEndpoints.some((endpoint) => config.url === endpoint);
 
     // 토큰이 필요한 엔드포인트에만 토큰을 헤더에 추가
     if (token && !isPublicEndpoint && !isPublicGetEndpoint) {
