@@ -56,6 +56,7 @@ export interface CrewInfoResponse {
   crewOccupancy: number;
   activityRegion: string;
   runningCount?: number;
+  joined: boolean;
   limit: CrewLimit;
 }
 
@@ -68,7 +69,7 @@ export interface CrewSummary {
   crewCapacity?: number;
   crewOccupancy: number;
   activityRegion: string;
-  isJoined: boolean;
+  joined: boolean;
 }
 
 // 크루 리스트 파라미터

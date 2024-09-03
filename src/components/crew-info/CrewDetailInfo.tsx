@@ -1,33 +1,27 @@
 import React, { useState } from 'react';
 import RegularRunningInfoTable from './RegularRunningInfoTable';
 import Button from '../common/Button';
-import LoadingSpinner from '../common/LoadingSpinner';
-import ErrorComponent from '../common/ErrorComponent';
-import { useCrewInfo } from '@/hooks/crew/useCrewInfo';
-import { useCrewRunningInfo } from '@/hooks/crew/useCrewRunningInfo';
-import { RunningInfo } from '@/types/crewTypes';
-import { useUserRoles } from '@/hooks/crew/useUserRoles';
+import { RunningInfo, CrewInfoResponse } from '@/types/crewTypes';
 
 interface CrewDetailInfoProps {
-  crewId: number;
+  crew: CrewInfoResponse;
+  runningInfo: RunningInfo[]; // 상위 컴포넌트에서 전달받은 정기 러닝 정보
+  userRole?: 'LEADER' | 'STAFF' | 'MEMBER'; // 상위 컴포넌트에서 전달받은 사용자 권한
   children: React.ReactNode;
   onDeleteRunningInfo?: (id: number) => void; // 삭제 핸들러 함수
   onEditRunningInfo?: (info?: RunningInfo) => void; // 추가 및 수정 핸들러 함수
+  myCrew?: boolean;
 }
 
 const CrewDetailInfo = ({
-  crewId,
+  crew,
+  runningInfo,
+  userRole,
   children,
   onDeleteRunningInfo,
   onEditRunningInfo,
+  myCrew = false,
 }: CrewDetailInfoProps) => {
-  const {
-    data: crew,
-    isLoading: crewLoading,
-    isError: crewError,
-    error: crewErrorMessage,
-  } = useCrewInfo(crewId);
-
   const [imageSrc, setImageSrc] = useState(
     crew?.crewImage || '/images/default.png',
   );
@@ -46,56 +40,7 @@ const CrewDetailInfo = ({
 
   const formattedRegion = formatRegion(crew?.activityRegion);
 
-  const {
-    data: userRoleData,
-    isLoading: roleLoading,
-    isError: roleError,
-    error: roleErrorMessage,
-  } = useUserRoles(crewId);
-
-  const userRole = userRoleData?.role;
-  const canManage =
-    userRoleData?.role === 'LEADER' || userRoleData?.role === 'STAFF';
-
-  const {
-    data: regularRunningInfo,
-    isLoading: runningInfoLoading,
-    isError: runningInfoError,
-    error: runningInfoErrorMessage,
-  } = useCrewRunningInfo(crewId);
-
-  if (crewLoading) {
-    return <LoadingSpinner />;
-  }
-
-  if (crewError || !crew) {
-    return (
-      <ErrorComponent
-        message={
-          crewErrorMessage?.message || '크루 정보를 불러오는 데 실패했습니다.'
-        }
-      />
-    );
-  }
-
-  if (crewLoading || runningInfoLoading || roleLoading) {
-    return <LoadingSpinner />;
-  }
-
-  if (crewError || runningInfoError || !crew) {
-    return (
-      <ErrorComponent
-        message={
-          runningInfoErrorMessage?.message ||
-          '크루 정보를 불러오는 데 실패했습니다.'
-        }
-      />
-    );
-  }
-
-  if (roleError) {
-    return <ErrorComponent message={roleErrorMessage.message} />;
-  }
+  const canManage = userRole === 'LEADER' || userRole === 'STAFF';
 
   const renderAgeRange = () => {
     if (crew.limit.minYear && crew.limit.maxYear) {
@@ -149,12 +94,13 @@ const CrewDetailInfo = ({
           src={imageSrc}
           onError={handleImageError}
           alt={crew.crewName}
-          className="max-w-sm rounded-lg shadow-sm"
+          className="w-full max-w-sm h-72 object-cover rounded-lg shadow-sm" // 이미지 가로 제한 및 중앙 정렬
         />
         <div className="flex flex-col gap-4 self-start lg:self-auto">
           <div className="flex flex-col gap-2 pb-2 ">
             <p className="text-lg">
-              인원 : {crew.crewOccupancy}명 / {crew.crewCapacity}명
+              인원 : {crew.crewOccupancy}명 /{' '}
+              {crew.crewCapacity ? `${crew.crewCapacity}명` : '제한 없음'}
             </p>
             {renderAgeRange()}
             <p className="text-lg">{renderGender}</p>
@@ -173,7 +119,7 @@ const CrewDetailInfo = ({
       <div className="mb-4">
         <div className="flex justify-between items-center pb-2">
           <p className="card-title">정기 러닝 정보</p>
-          {canManage && (
+          {myCrew && canManage && (
             <Button
               onClick={() => onEditRunningInfo?.()}
               size="sm"
@@ -184,7 +130,7 @@ const CrewDetailInfo = ({
           )}
         </div>
         <RegularRunningInfoTable
-          regularRunningInfo={regularRunningInfo?.data}
+          regularRunningInfo={runningInfo}
           userRole={userRole}
           onEditRunningInfo={canManage ? onEditRunningInfo : undefined}
           onDeleteRunningInfo={canManage ? onDeleteRunningInfo : undefined}
