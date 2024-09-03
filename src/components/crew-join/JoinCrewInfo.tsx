@@ -9,7 +9,7 @@ import useModal from '@/hooks/useModal';
 import TextInput from '../common/TextInput';
 import { useApplyForCrew } from '@/hooks/crew/useApplyForCrew';
 import { useUserRoles } from '@/hooks/crew/useUserRoles';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { getAccessToken } from '@/apis/authService';
 
 interface JoinCrewInfoProps {

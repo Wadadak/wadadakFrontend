@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import CrewCard from './CrewCard';
 import Pagination from '../common/Pagination';
 import { useCrewList } from '@/hooks/crew/useCrewList';
+import { useUserRoles } from '@/hooks/crew/useUserRoles';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
 
@@ -16,6 +17,13 @@ const CrewList = () => {
     size: itemsPerPage,
     page: currentPage,
   });
+
+  // 권한 조회
+  const {
+    data: roleData,
+    isLoading: roleLoading,
+    isError: roleError,
+  } = useUserRoles();
 
   if (isLoading) {
     return <LoadingSpinner />;

@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useCrewRunningInfo } from '@/hooks/crew/useCrewRunningInfo';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
+import { useUserRoles } from '@/hooks/crew/useUserRoles';
 
 interface CrewCardProps {
   crewId: number;
@@ -32,6 +33,15 @@ const CrewCard = ({
     isLoading,
     isError,
   } = useCrewRunningInfo(crewId);
+
+  const {
+    data: roleData,
+    isLoading: roleLoading,
+    isError: roleError,
+  } = useUserRoles(crewId);
+
+  const role = roleData?.role;
+
   const router = useRouter();
   const [imageSrc, setImageSrc] = useState(crewImage || '/images/default.png');
 
@@ -75,8 +85,18 @@ const CrewCard = ({
       tabIndex={0}
       onClick={handleCardClick}
     >
-      <figure>
+      <figure className="relative">
         <img src={imageSrc} alt={crewName} onError={handleImageError} />
+        {role && myCrew && role === 'LEADER' && (
+          <div className="badge badge-accent absolute top-2 right-2 font-bold p-3 text-white">
+            내가 만든 크루
+          </div>
+        )}
+        {!myCrew && role && (
+          <div className="badge badge-accent absolute top-2 right-2 font-bold p-3 text-white">
+            {role === 'LEADER' ? '내가 만든 크루' : '가입한 크루'}
+          </div>
+        )}
       </figure>
       <div className="card-body">
         <h2 className="card-title">
@@ -85,6 +105,7 @@ const CrewCard = ({
             <div className="badge badge-secondary">{formattedRegion}</div>
           )}
         </h2>
+
         <p>
           인원 : {crewOccupancy}명 /{' '}
           {crewCapacity ? `${crewCapacity}명` : '제한 없음'}
@@ -106,8 +127,8 @@ const CrewCard = ({
               onMouseLeave={handleMouseLeave}
             >
               <div className="card-body p-3">
-                {isLoading && <LoadingSpinner />}
-                {isError && (
+                {(isLoading || roleLoading) && <LoadingSpinner />}
+                {(isError || roleError) && (
                   <ErrorComponent
                     message={'정기 러닝 정보를 불러오는 데 실패했습니다.'}
                   />

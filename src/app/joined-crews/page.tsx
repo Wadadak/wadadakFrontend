@@ -1,10 +1,11 @@
 import React from 'react';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
-import CrewList from '@/components/crew/CrewList';
-import { mockCrewList } from '@/mocks/mockData/mockCrewList';
 import Button from '@/components/common/Button';
+<<<<<<< HEAD
 import Link from 'next/link';
+=======
+>>>>>>> 09b567bd47eb3e8e19cc71598ca6070b43703c20
 import JoinedCrewList from '@/components/crew/JoinedCrewList';
 
 const MyCrewPage = () => {
