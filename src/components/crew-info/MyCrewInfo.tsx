@@ -9,7 +9,7 @@ import { useParams, useRouter } from 'next/navigation';
 import Wrapper from '@/components/layout/Wrapper';
 import useModal from '@/hooks/useModal';
 import RunningInfoForm from './RunningInfoForm';
-import { RegularRunningInfo } from '@/types/crewTypes';
+import { useUserRoles } from '@/hooks/crew/useUserRoles';
 
 const MyCrewInfo = () => {
   const { crewId } = useParams();

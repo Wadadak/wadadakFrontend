@@ -33,7 +33,21 @@ const CrewCard = ({
     isError,
   } = useCrewRunningInfo(crewId);
   const router = useRouter();
-  const defaultImage = '/images/default.png';
+  const [imageSrc, setImageSrc] = useState(crewImage || '/images/default.png');
+
+  // 문자열 처리 함수
+  const formatRegion = (region: string | null | undefined): string => {
+    if (!region) {
+      return '';
+    }
+    return region
+      .replace('광역시', '')
+      .replace('특별시', '')
+      .replace('특별자치시', '')
+      .replace('특별자치도', '');
+  };
+
+  const formattedRegion = formatRegion(activityRegion);
 
   const handleCardClick = () => {
     if (myCrew) {
@@ -51,6 +65,10 @@ const CrewCard = ({
     setShowTooltip(false);
   };
 
+  const handleImageError = () => {
+    setImageSrc('/images/default.png');
+  };
+
   return (
     <div
       className="card bg-base-100 w-full sm:max-w-md md:max-w-lg lg:max-w-xl  shadow-sm cursor-pointer focus:outline focus:outline-2  focus:outline-accent focus:outline-offset-0 hover:outline hover:outline-2 hover:outline-accent hover:outline-offset-0"
@@ -58,16 +76,18 @@ const CrewCard = ({
       onClick={handleCardClick}
     >
       <figure>
-        <img src={crewImage || defaultImage} alt={crewName} />
+        <img src={imageSrc} alt={crewName} onError={handleImageError} />
       </figure>
       <div className="card-body">
         <h2 className="card-title">
           {crewName}
-          <div className="badge badge-secondary">{activityRegion}</div>
+          {formattedRegion && (
+            <div className="badge badge-secondary">{formattedRegion}</div>
+          )}
         </h2>
         <p>
           인원 : {crewOccupancy}명 /{' '}
-          {crewCapacity !== undefined ? `${crewCapacity}명` : '제한 없음'}
+          {crewCapacity ? `${crewCapacity}명` : '제한 없음'}
         </p>
         <div className="card-actions justify-start relative">
           <div
