@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import CrewCard from './CrewCard';
 import Pagination from '../common/Pagination';
 import { useCrewList } from '@/hooks/crew/useCrewList';
+import { useUserRoles } from '@/hooks/crew/useUserRoles';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
 
@@ -12,7 +13,17 @@ const CrewList = () => {
   const itemsPerPage = 6; // 한 페이지에 표시할 항목
   const pageRangeDisplayed = 5;
 
-  const { data, isLoading, isError, error } = useCrewList({});
+  const { data, isLoading, isError, error } = useCrewList({
+    size: itemsPerPage,
+    page: currentPage,
+  });
+
+  // 권한 조회
+  const {
+    data: roleData,
+    isLoading: roleLoading,
+    isError: roleError,
+  } = useUserRoles();
 
   if (isLoading) {
     return <LoadingSpinner />;

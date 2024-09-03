@@ -6,7 +6,7 @@ export interface ApplyForCrewResponse {
   crewName: string;
   crewImage?: string | null;
   status: 'APPROVED' | 'PENDING' | 'REJECTED';
-  capacity: number;
+  capacity?: number;
   currentMemberCount: number;
   applyMessage?: string;
   description: string;

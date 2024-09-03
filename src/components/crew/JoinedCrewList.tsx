@@ -35,6 +35,7 @@ const JoinedCrewList = () => {
             crewCapacity={crew.crewCapacity}
             crewImage={crew.crewImage}
             activityRegion={crew.activityRegion}
+            myCrew={true}
           />
         ))}
       </div>
