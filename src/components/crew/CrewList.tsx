@@ -18,13 +18,6 @@ const CrewList = () => {
     page: currentPage,
   });
 
-  // 권한 조회
-  const {
-    data: roleData,
-    isLoading: roleLoading,
-    isError: roleError,
-  } = useUserRoles();
-
   if (isLoading) {
     return <LoadingSpinner />;
   }
