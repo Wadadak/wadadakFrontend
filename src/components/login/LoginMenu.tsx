@@ -13,7 +13,7 @@ const LoginMenu = () => {
       <HeaderMenu
         name={'마이 크루'}
         icon={faBell}
-        onMenuClick={() => router.push('/my-crews')}
+        onMenuClick={() => router.push('/joined-crews')}
       />
       <HeaderMenu
         name={'크루 만들기'}

@@ -1,10 +1,8 @@
 import React from 'react';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
-import CrewList from '@/components/crew/CrewList';
-import { mockCrewList } from '@/mocks/mockData/mockCrewList';
 import Button from '@/components/common/Button';
-import Link from 'next/link';
+import JoinedCrewList from '@/components/crew/JoinedCrewList';
 
 const MyCrewPage = () => {
   return (
@@ -19,7 +17,7 @@ const MyCrewPage = () => {
             </Button>
           </Link>
         </div> */}
-        <CrewList crews={mockCrewList} myCrew />
+        <JoinedCrewList />
       </Wrapper>
     </>
   );

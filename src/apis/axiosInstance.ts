@@ -51,14 +51,14 @@ axiosInstance.interceptors.request.use(
     ];
 
     // 토큰이 필요 없는 엔드포인트인지 확인
-    const isPublicEndpoint = publicEndpoints.some((endpoint) =>
-      config.url?.startsWith(endpoint),
+    const isPublicEndpoint = publicEndpoints.some(
+      (endpoint) => config.url === endpoint,
     );
 
     // GET 메서드로 토큰이 필요 없는 엔드포인트인지 확인
     const isPublicGetEndpoint =
       config.method === 'get' &&
-      publicGetEndpoints.some((endpoint) => config.url?.startsWith(endpoint));
+      publicGetEndpoints.some((endpoint) => config.url === endpoint);
 
     // 토큰이 필요한 엔드포인트에만 토큰을 헤더에 추가
     if (token && !isPublicEndpoint && !isPublicGetEndpoint) {
@@ -108,9 +108,9 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(originalRequest);
       } catch (refreshError) {
         // 토큰 갱신실패 시, 토큰을 삭제하고 로그인 페이지로 리다이렉트
-        // removeAccessToken();
-        // alert('세션이 만료되었습니다. 다시 로그인해 주세요.');
-        // window.location.href = '/login';
+        removeAccessToken();
+        alert('세션이 만료되었습니다. 다시 로그인해 주세요.');
+        window.location.href = '/login';
         return Promise.reject(refreshError);
       }
     }
