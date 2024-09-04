@@ -8,15 +8,14 @@ import Wrapper from '@/components/layout/Wrapper';
 import useModal from '@/hooks/useModal';
 import TextInput from '../common/TextInput';
 import { useApplyForCrew } from '@/hooks/crew/useApplyForCrew';
-import { useUserRoles } from '@/hooks/crew/useUserRoles';
-import { useParams, useRouter } from 'next/navigation';
+import { useCrewInfo } from '@/hooks/crew/useCrewInfo';
+import { useCrewRunningInfo } from '@/hooks/crew/useCrewRunningInfo';
+import { useRouter } from 'next/navigation';
 import { getAccessToken } from '@/apis/authService';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorComponent from '../common/ErrorComponent';
 
-interface JoinCrewInfoProps {
-  crewId: number;
-}
-
-const JoinCrewInfo = ({ crewId }: JoinCrewInfoProps) => {
+const JoinCrewInfo = ({ crewId }: { crewId: number }) => {
   const [accessToken, setAccessToken] = useState<string | null>(null);
 
   const messageModal = useModal();
@@ -31,14 +30,27 @@ const JoinCrewInfo = ({ crewId }: JoinCrewInfoProps) => {
     setAccessToken(token);
   }, []);
 
-  // 사용자 권한 확인
-  const { data: userRoleData } = useUserRoles(crewId);
-  const isMember =
-    userRoleData?.role === 'MEMBER' ||
-    userRoleData?.role === 'LEADER' ||
-    userRoleData?.role === 'STAFF';
+  // 크루 정보와 정기 러닝 정보 조회
+  const {
+    data: crewData,
+    isLoading: crewLoading,
+    isError: crewError,
+  } = useCrewInfo(crewId);
+  const {
+    data: runningInfoData,
+    isLoading: runningInfoLoading,
+    isError: runningInfoError,
+  } = useCrewRunningInfo(crewId);
 
   const mutation = useApplyForCrew();
+
+  if (crewLoading || runningInfoLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (crewError || runningInfoError || !crewData) {
+    return <ErrorComponent message="크루 정보를 불러오는데 실패했습니다." />;
+  }
 
   const handleSubmit = () => {
     messageModal.handleCloseModal();
@@ -46,7 +58,7 @@ const JoinCrewInfo = ({ crewId }: JoinCrewInfoProps) => {
   };
 
   const handleFinalSubmit = () => {
-    if (accessToken && !isMember) {
+    if (accessToken && !crewData?.joined) {
       mutation.mutate(
         { crewId, message },
         {
@@ -66,7 +78,7 @@ const JoinCrewInfo = ({ crewId }: JoinCrewInfoProps) => {
     if (!accessToken) {
       alert('로그인이 필요합니다.');
       router.push('/login'); // 로그인 페이지로 리디렉션
-    } else if (!isMember) {
+    } else if (!crewData?.joined) {
       messageModal.handleOpenModal();
     }
   };
@@ -81,8 +93,10 @@ const JoinCrewInfo = ({ crewId }: JoinCrewInfoProps) => {
 
   return (
     <Wrapper>
-      <CrewDetailInfo crewId={crewId}>
-        {!isMember && <Button onClick={handleJoinClick}>가입 신청</Button>}
+      <CrewDetailInfo crew={crewData} runningInfo={runningInfoData?.data || []}>
+        {!crewData?.joined && (
+          <Button onClick={handleJoinClick}>가입 신청</Button>
+        )}
         {/* NOTE 가입 승인 */}
         {/* {isPendingApproval ? (
           <div className="flex gap-2">

@@ -1,10 +1,10 @@
 import React, { ReactNode } from 'react';
 import Avatar from '../common/Avatar';
-import { CrewMembers } from '@/types/memberTypes';
 import { useRouter } from 'next/navigation';
+import { MemberSummary } from '@/hooks/crew/useMemberList';
 
 interface MemberListProps {
-  members: CrewMembers;
+  members: MemberSummary[];
   children: ReactNode;
 }
 
@@ -29,12 +29,15 @@ const MemberList = ({ members, children }: MemberListProps) => {
     >
       {members.map((member) => (
         <div
-          key={member.id}
+          key={member.memberNickName}
           className="p-4 bg-white shadow-sm rounded-lg flex items-center justify-between"
         >
           <div className="flex items-center gap-4">
-            <Avatar src={member.avatar} alt={member.name} />
-            <span className="font-bold">{member.name}</span>
+            <Avatar
+              src={member.memberProfileImage}
+              alt={member.memberNickName}
+            />
+            <span className="font-bold">{member.memberNickName}</span>
           </div>
           <div className="flex items-center gap-2">{children}</div>
         </div>

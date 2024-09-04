@@ -5,7 +5,7 @@ import CrewMemberList from '@/components/my-crew/CrewMemberList';
 const MembersPage = () => {
   return (
     <MyCrewLayout titleText="크루원">
-      <CrewMemberList step />
+      <CrewMemberList />
     </MyCrewLayout>
   );
 };

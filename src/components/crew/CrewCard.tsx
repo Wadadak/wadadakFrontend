@@ -34,11 +34,14 @@ const CrewCard = ({
     isError,
   } = useCrewRunningInfo(crewId);
 
+  // myCrew가 true일 때만 권한 정보를 호출
   const {
     data: roleData,
     isLoading: roleLoading,
     isError: roleError,
-  } = useUserRoles(crewId);
+  } = myCrew
+    ? useUserRoles(crewId)
+    : { data: null, isLoading: false, isError: false };
 
   const role = roleData?.role;
 
@@ -85,16 +88,21 @@ const CrewCard = ({
       tabIndex={0}
       onClick={handleCardClick}
     >
-      <figure className="relative">
-        <img src={imageSrc} alt={crewName} onError={handleImageError} />
+      <figure className="relative h-72 overflow-hidden">
+        <img
+          src={imageSrc}
+          alt={crewName}
+          onError={handleImageError}
+          className="w-full h-full object-cover" // 이미지가 부모 비율에 맞춰짐
+        />
         {role && myCrew && role === 'LEADER' && (
           <div className="badge badge-accent absolute top-2 right-2 font-bold p-3 text-white">
             내가 만든 크루
           </div>
         )}
-        {!myCrew && role && (
+        {role && myCrew && role === 'STAFF' && (
           <div className="badge badge-accent absolute top-2 right-2 font-bold p-3 text-white">
-            {role === 'LEADER' ? '내가 만든 크루' : '가입한 크루'}
+            운영 중인 크루
           </div>
         )}
       </figure>
