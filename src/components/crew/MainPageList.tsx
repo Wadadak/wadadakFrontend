@@ -28,7 +28,7 @@ const MainPageList = () => {
         <div className="mb-4 sm:mb-0">
           <h1 className="text-4xl font-bold">추천 러닝 크루</h1>
           <p className="text-lg mt-2 mb-4">인기 러닝 크루를 지금 만나보세요!</p>
-          <Button wide={true} onClick={handleExploreCrews} color="secondary">
+          <Button wide={true} onClick={handleExploreCrews} color="accent">
             더 알아보기
           </Button>
         </div>

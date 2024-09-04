@@ -18,7 +18,7 @@ export const LogoutBanner = () => {
       <p className="text-lg mb-4">
         지금 가입하고 나에게 딱 맞는 러닝 크루를 찾아보세요!
       </p>
-      <Button color="secondary" wide onClick={handleButtonClick}>
+      <Button color="accent" wide onClick={handleButtonClick}>
         지금 바로 가입하기!
       </Button>
     </>

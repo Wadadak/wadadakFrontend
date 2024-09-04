@@ -9,11 +9,7 @@ const LogoutMenu = () => {
       <Button size="sm" onClick={() => router.push('/login')}>
         로그인
       </Button>
-      <Button
-        size="sm"
-        color="secondary"
-        onClick={() => router.push('/signup')}
-      >
+      <Button size="sm" color="accent" onClick={() => router.push('/signup')}>
         회원가입
       </Button>
     </div>

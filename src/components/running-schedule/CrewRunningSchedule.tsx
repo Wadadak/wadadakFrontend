@@ -96,7 +96,7 @@ const CrewRunningSchedule = () => {
     <>
       <div className="flex justify-between items-center pb-2">
         <p className="card-title">다가오는 러닝 일정</p>
-        <Button onClick={handleAddSchedule} size="sm" color="secondary">
+        <Button onClick={handleAddSchedule} size="sm" color="accent">
           러닝 일정 추가
         </Button>
       </div>

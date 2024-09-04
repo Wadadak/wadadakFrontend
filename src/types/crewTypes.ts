@@ -113,9 +113,17 @@ export interface JoinedCrewSummary {
   activityRegion: string;
 }
 
-// 정기 러닝
+// 정기 러닝 응답
 export interface RunningInfo {
   id: number;
+  week: number;
+  count: number;
+  dayOfWeek: string[];
+  activityRegion: string;
+  time?: string;
+}
+
+export interface RunningInfoRequest {
   week: number;
   count: number;
   dayOfWeek: string[];

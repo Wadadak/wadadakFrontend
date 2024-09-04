@@ -129,7 +129,7 @@ const CrewDetailInfo = ({
             <Button
               onClick={() => onEditRunningInfo?.()}
               size="sm"
-              color="secondary"
+              color="accent"
             >
               정기 러닝 정보 추가
             </Button>
