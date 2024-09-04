@@ -38,7 +38,7 @@ const Button = ({
 
   return (
     <button
-      className={`btn ${outlineClass} ${colorClass} ${sizeClass} ${textColorClass} ${wideClass}`}
+      className={`btn ${outlineClass} ${sizeClass} ${textColorClass} ${wideClass}  ${colorClass}`}
       disabled={disabled}
       onClick={onClick}
       type={type}
