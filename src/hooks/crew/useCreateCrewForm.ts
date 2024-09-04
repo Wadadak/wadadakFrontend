@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { CreateCrewData, CrewResponse } from '@/types/crewTypes';
-import { createCrew } from '@/apis/crewApi';
+import { createCrew } from '@/apis/crew/crewApi';
 import { useRouter } from 'next/navigation';
 
 export const useCreateCrewForm = () => {

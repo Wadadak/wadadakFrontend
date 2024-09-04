@@ -4,23 +4,33 @@ import React from 'react';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import MyCrewNav from '@/components/my-crew/MyCrewNav';
 import { useParams } from 'next/navigation';
-import { mockCrewList } from '@/mocks/mockData/mockCrewList';
+import { useJoinedCrewList } from '@/hooks/crew/useCrewList';
 import { ReactNode } from 'react';
 import Wrapper from '@/components/layout/Wrapper';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorComponent from '../common/ErrorComponent';
 
 export interface LayoutProps {
-  titleText: ReactNode;
+  titleText: string;
   children: ReactNode;
 }
 
 const MyCrewLayout = ({ titleText, children }: LayoutProps) => {
   const { crewId } = useParams();
   const id = parseInt(crewId as string, 10);
-  const crew = mockCrewList.find((crew) => crew.crewId === id);
-  console.log(crew);
 
-  if (!crew) {
-    return <div>크루를 찾을 수 없습니다.</div>;
+  const { data: crew, isLoading, isError, error } = useJoinedCrewList();
+
+  if (isLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (isError) {
+    return (
+      <ErrorComponent
+        message={error.message || '크루 데이터 불러오는 데 실패했습니다.'}
+      />
+    );
   }
 
   return (

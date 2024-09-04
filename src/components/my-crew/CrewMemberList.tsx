@@ -3,27 +3,39 @@
 import React, { useState } from 'react';
 import AllMemberList from './AllMemberList';
 import Button from '../common/Button';
-import { mockCrewMembers } from '@/mocks/mockData/mockCrewMembers';
 import ApprovalAlert from './ApprovalAlert';
 import SimpleModal from '../common/SimpleModal';
+import { useParams } from 'next/navigation';
+import { useUserRoles } from '@/hooks/crew/useUserRoles';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorComponent from '../common/ErrorComponent';
 
-// ui 테스트용
-interface CrewMemberListProps {
-  step?: boolean;
-}
+const CrewMemberList = () => {
+  const { crewId } = useParams();
+  const id = parseInt(crewId as string, 10);
 
-const CrewMemberList = ({ step }: CrewMemberListProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const { data, isLoading, error } = useUserRoles(id);
+
   const handleOpenModal = (e: React.MouseEvent) => {
     e.stopPropagation();
     setIsModalOpen(true);
   };
   const handleCloseModal = () => setIsModalOpen(false);
 
+  if (isLoading) return <LoadingSpinner />;
+  if (error)
+    return (
+      <ErrorComponent message={error.message || '권한을 조회할 수 없습니다.'} />
+    );
+
+  const step = data?.role === 'LEADER' || data?.role === 'STAFF';
+
   return (
     <>
-      {step && <ApprovalAlert />}
-      <AllMemberList members={mockCrewMembers}>
+      {/* {step && <ApprovalAlert />} */}
+      <AllMemberList crewId={id}>
         <Button size="sm">1:1 채팅</Button>
         {step && (
           <Button outline size="sm" onClick={handleOpenModal}>

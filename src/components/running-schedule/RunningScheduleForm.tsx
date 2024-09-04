@@ -1,50 +1,36 @@
 'use client';
 
-import { RunningSchedule } from '@/types/crewTypes';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import DateOnlyPicker from '../common/DateOnlyPicker';
 import TimePicker from '../common/TimePicker';
 import Button from '../common/Button';
 import TextInput from '../common/TextInput';
 import CheckBox from '../common/CheckBox';
 import Label from '../common/Label';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useParams, useRouter } from 'next/navigation';
+import { createRunningSchedule } from '@/apis/crew/runningScheduleService';
+import { ScheduleRequest, ScheduleResponse } from '@/types/crewTypes';
 
 const CategoryOptions = [
   { id: 'REGULAR', name: '정기 러닝' },
   { id: 'ON_DEMAND', name: '번개 러닝' },
 ];
 
-interface RunningScheduleFormProps {
-  initialInfo?: RunningSchedule | null;
-  onSave: (schedule: RunningSchedule) => void;
-  currentUser: string;
-}
+const RunningScheduleForm = () => {
+  const { crewId } = useParams(); // useParams로 crewId 가져오기
+  const crewIdNumber = parseInt(crewId as string, 10); // 문자열을 숫자로 변환
+  const queryClient = useQueryClient();
+  const router = useRouter();
 
-const RunningScheduleForm = ({
-  onSave,
-  initialInfo,
-  currentUser,
-}: RunningScheduleFormProps) => {
-  const [title, setTitle] = useState<string>('');
+  const [title, setTitle] = useState<string>();
   const [category, setCategory] = useState<'REGULAR' | 'ON_DEMAND'>('REGULAR');
-  const [date, setDate] = useState<string | null>(null);
-  const [startTime, setStartTime] = useState<string | null>(null);
-  const [endTime, setEndTime] = useState<string | null>(null);
-  const [location, setLocation] = useState<string>('');
-  const [memo, setMemo] = useState<string>('');
+  const [date, setDate] = useState<string>();
+  const [startTime, setStartTime] = useState<string>();
+  const [endTime, setEndTime] = useState<string>();
+  const [location, setLocation] = useState<string>();
+  const [memo, setMemo] = useState<string>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
-
-  useEffect(() => {
-    if (initialInfo) {
-      setTitle(initialInfo.title);
-      setCategory(initialInfo.category);
-      setDate(initialInfo.date);
-      setStartTime(initialInfo.startTime);
-      setEndTime(initialInfo.endTime);
-      setLocation(initialInfo.location);
-      setMemo(initialInfo.memo);
-    }
-  }, [initialInfo]);
 
   // 유효성 검사
   const validateForm = () => {
@@ -72,30 +58,41 @@ const RunningScheduleForm = ({
     return Object.keys(newErrors).length === 0; // 에러가 없으면 true 반환
   };
 
+  const mutation = useMutation<ScheduleResponse, Error, ScheduleRequest>({
+    mutationFn: async (
+      newSchedule: ScheduleRequest,
+    ): Promise<ScheduleResponse> =>
+      createRunningSchedule(crewIdNumber, newSchedule),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['scheduleList'] });
+      alert('일정이 성공적으로 등록되었습니다!');
+      router.push(`/my-crews/${crewId}/schedule`);
+    },
+    onError: (error: Error) => {
+      console.error('일정 등록 중 오류 발생:', error);
+    },
+  });
+
   const handleSubmit = () => {
     if (validateForm()) {
-      const newSchedule: RunningSchedule = {
+      const newSchedule: ScheduleRequest = {
         title,
         category,
-        date,
-        startTime,
+        date: date!,
+        startTime: startTime!,
         endTime,
         memo,
-        location,
-        author: currentUser,
+        location: location!,
       };
 
-      // 수정 시 기존 ID를 포함해서 서버로 전송
-      if (initialInfo && initialInfo.activityId) {
-        newSchedule.activityId = initialInfo.activityId;
-      }
-
-      onSave(newSchedule);
+      mutation.mutate(newSchedule);
     }
   };
 
-  const handleCategoryChange = (value: 'REGULAR' | 'ON_DEMAND') => {
-    setCategory(value);
+  const handleCategoryChange = (values?: (string | number)[]) => {
+    if (values && values.length > 0) {
+      setCategory(values[0] as 'REGULAR' | 'ON_DEMAND');
+    }
   };
 
   return (
@@ -105,9 +102,7 @@ const RunningScheduleForm = ({
           <CheckBox
             options={CategoryOptions}
             selectedValues={[category]}
-            onChange={(values) =>
-              handleCategoryChange(values[0] as 'REGULAR' | 'ON_DEMAND')
-            }
+            onChange={handleCategoryChange}
             error={errors.category}
           />
         </Label>

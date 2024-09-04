@@ -1,6 +1,6 @@
 // 크루 생성, 크루 수정
 
-import axiosInstance from './axiosInstance';
+import axiosInstance from '../axiosInstance';
 import {
   CreateCrewData,
   UpdateCrewData,

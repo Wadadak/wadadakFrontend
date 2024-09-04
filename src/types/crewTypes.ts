@@ -112,16 +112,46 @@ export interface CrewRunningInfo {
   data: RunningInfo[];
 }
 
-// export interface RunningSchedule {
-//   activityId?: string;
-//   title: string;
-//   category: 'REGULAR' | 'ON_DEMAND'; // 정기 or 번개
-//   date: string | null; // yyyy-MM-dd 형식
-//   startTime: string | null; // HH:mm 형식
-//   endTime: string | null; // HH:mm 형식
-//   memo: string; // 메모, 200자 이내
-//   location: string; // 장소 (구체적인 주소)
-//   regularId?: number; // 정기러닝 ID (정기러닝 등록 시 필수, 선택적)
-//   author: string;
-//   participant?: number;
-// }
+export interface ScheduleRequest {
+  title?: string;
+  category: 'REGULAR' | 'ON_DEMAND'; // 정기 또는 번개
+  date: string; // yyyy-MM-dd 형식
+  startTime: string; // HH:mm 형식
+  endTime?: string; // HH:mm 형식
+  memo?: string;
+  location: string;
+  regularId?: number; // 정기러닝 ID (선택)
+}
+
+export interface ScheduleResponse {
+  activityId: number;
+  author: string;
+  category: string;
+  regularId?: number;
+  title?: string;
+  date: string;
+  startTime: string;
+  endTime?: string;
+  memo?: string;
+  location: string;
+  participant: number;
+}
+
+export interface UpcomingSchedule {
+  activityId: number;
+  title: string;
+  category: 'REGULAR' | 'ON_DEMAND';
+  regularId?: number | null;
+  author: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  memo: string;
+  location: string;
+  participant: number;
+}
+
+export interface UpcomingScheduleResponse {
+  schedules: UpcomingSchedule[];
+  totalPages: number;
+}

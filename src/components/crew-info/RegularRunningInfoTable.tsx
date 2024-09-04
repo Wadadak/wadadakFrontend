@@ -65,7 +65,9 @@ const RegularRunningInfoTable = ({
           </table>
         </div>
       ) : (
-        <p>정기 러닝 정보가 없습니다.</p>
+        <div className="py-5">
+          <p className="text-lg">정기 러닝 정보가 없습니다.</p>
+        </div>
       )}
     </div>
   );

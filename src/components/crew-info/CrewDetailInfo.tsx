@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
 import RegularRunningInfoTable from './RegularRunningInfoTable';
 import Button from '../common/Button';
-import { RunningInfo, CrewInfoResponse } from '@/types/crewTypes';
+import {
+  RunningInfo,
+  CrewInfoResponse,
+  UpcomingSchedule,
+} from '@/types/crewTypes';
+import ScheduleTable from '../running-schedule/ScheduleTable';
+import SimpleSchedule from '../running-schedule/SimpleSchedule';
 
 interface CrewDetailInfoProps {
   crew: CrewInfoResponse;
@@ -116,7 +122,7 @@ const CrewDetailInfo = ({
           </div>
         </div>
       </div>
-      <div className="mb-4">
+      <div className="mb-8">
         <div className="flex justify-between items-center pb-2">
           <p className="card-title">정기 러닝 정보</p>
           {myCrew && canManage && (
@@ -136,8 +142,9 @@ const CrewDetailInfo = ({
           onDeleteRunningInfo={canManage ? onDeleteRunningInfo : undefined}
         />
       </div>
-      <div>
-        <p className="card-title pb-2">오프라인 러닝 일정</p>
+
+      <div className="mb-4">
+        <SimpleSchedule />
       </div>
     </div>
   );

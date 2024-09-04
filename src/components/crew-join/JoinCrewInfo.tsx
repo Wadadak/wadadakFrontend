@@ -49,7 +49,7 @@ const JoinCrewInfo = ({ crewId }: { crewId: number }) => {
   }
 
   if (crewError || runningInfoError || !crewData) {
-    return <ErrorComponent message="크루 정보를 조회할 수 없습니다." />;
+    return <ErrorComponent message="크루 정보를 불러오는데 실패했습니다." />;
   }
 
   const handleSubmit = () => {
