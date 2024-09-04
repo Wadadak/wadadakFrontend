@@ -9,7 +9,10 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { DateTime } from 'luxon';
 import NumberInput from '../common/NumberInput';
 import { useAddRunningRecord } from '@/hooks/running/useAddRunningRecord';
-import { RunningRecordRequest } from '@/types/runningTypes';
+import { RunningGoalRequest, RunningRecordRequest } from '@/types/runningTypes';
+import { extractUserIdFromToken } from '@/app/login/page';
+import { getAccessToken } from '@/apis/authService';
+import { useAddRunningGoal } from '@/hooks/running/useAddRunningGoal';
 
 interface AddRecordModalProps {
   isOpen: boolean;
@@ -21,15 +24,18 @@ export const AddGoalModal = ({
   onClose,
   onSuccess,
 }: AddRecordModalProps) => {
-  const [date, setDate] = useState<string>();
-  const [distance, setDistance] = useState<string>();
-  const [record, setRecord] = useState<string>();
+  // const [date, setDate] = useState<string>();
+  const [totalDistance, setTotalDistance] = useState<string>();
+  const [totalRunningTime, setTotalRunningTime] = useState<string>();
+  const [runCount, setRunCount] = useState<string>();
+  const [paceHour, setPaceHour] = useState<number>();
   const [paceMinute, setPaceMinute] = useState<number>();
   const [paceSecond, setPaceSecond] = useState<number>();
+  const [isPublic, setIsPublic] = useState<boolean>();
 
   const [clickDatePicker, setClickDatePicker] = useState<boolean>(false);
 
-  const { mutate: addRecord } = useAddRunningRecord(
+  const { mutate: addGoal } = useAddRunningGoal(
     () => {
       alert('목표가 추가되었습니다.');
       onClose();
@@ -39,29 +45,36 @@ export const AddGoalModal = ({
     },
   );
 
-  const handleSubmitRecord = () => {
-    if (!distance || !record || !paceMinute || !paceSecond || !date) {
+  const handleSubmitGoal = () => {
+    if (
+      !totalDistance ||
+      !totalRunningTime ||
+      !paceMinute ||
+      !paceSecond ||
+      !runCount
+      // !date
+    ) {
       alert('모든 값을 입력해주세요.');
       return;
     }
 
-    const body: RunningRecordRequest = {
-      // runningDate: date,
-      goalId: 3626001,
-      distance: Number(distance),
-      runningTime: record,
-      pace: `${paceMinute}'${paceSecond}"`,
-      isPublic: 1,
+    const body: RunningGoalRequest = {
+      userId: extractUserIdFromToken(getAccessToken()) ?? 0,
+      totalDistance: Number(totalDistance),
+      totalRunningTime: Number(totalRunningTime),
+      runCount: Number(runCount),
+      averagePace: `PT${paceHour}H${paceMinute}M${paceSecond}S`,
+      isPublic: isPublic ? 1 : 0,
     };
 
     console.log('Add Record Modal body', body);
-    addRecord(body);
+    addGoal(body);
   };
 
   return (
-    <SimpleModal isOpen={isOpen} onClose={onClose} title={'기록 추가'}>
+    <SimpleModal isOpen={isOpen} onClose={onClose} title={'목표 추가'}>
       <div className="flex flex-col">
-        <Label label={'날짜'} textSize="md" textStyle="font-semibold">
+        {/* <Label label={'날짜'} textSize="md" textStyle="font-semibold">
           <div
             className="relative"
             onClick={() => setClickDatePicker((prev) => !prev)}
@@ -91,29 +104,54 @@ export const AddGoalModal = ({
               </div>
             )}
           </div>
-        </Label>
-        <Label label={'거리'} textSize="md" textStyle="font-semibold">
+        </Label> */}
+        <Label label={'목표 누적 거리'} textSize="md" textStyle="font-semibold">
           <TextInput
             placeholder="거리 입력"
-            value={distance}
-            onChange={(value) => {
-              setDistance(value);
-            }}
+            value={totalDistance}
+            onChange={setTotalDistance}
             width="lg"
           />
         </Label>
-        <Label label={'시간'} textSize="md" textStyle="font-semibold">
+        <Label
+          label={'목표 누적 러닝시간'}
+          textSize="md"
+          textStyle="font-semibold"
+        >
           <TextInput
             placeholder="시간 입력"
-            value={record}
-            onChange={(value) => {
-              setRecord(value);
-            }}
+            value={totalRunningTime}
+            onChange={setTotalRunningTime}
             width="lg"
           />
         </Label>
-        <Label label={'페이스'} textSize="md" textStyle="font-semibold">
+        <Label
+          label={'목표 누적 러닝 횟수'}
+          textSize="md"
+          textStyle="font-semibold"
+        >
+          <TextInput
+            placeholder="러닝 횟수 입력"
+            value={runCount}
+            onChange={setRunCount}
+            width="lg"
+          />
+        </Label>
+        <Label
+          label={'목표 평균 페이스'}
+          textSize="md"
+          textStyle="font-semibold"
+        >
           <div className="flex flex-col space-y-2">
+            <div className="flex items-center space-x-2">
+              <NumberInput
+                placeholder="시"
+                value={paceHour}
+                onChange={setPaceHour}
+                width="lg"
+              />
+              <div>시</div>
+            </div>
             <div className="flex items-center space-x-2">
               <NumberInput
                 placeholder="분"
@@ -136,7 +174,7 @@ export const AddGoalModal = ({
         </Label>
       </div>
       <div className="flex justify-end mt-3">
-        <Button onClick={handleSubmitRecord}>추가하기</Button>
+        <Button onClick={handleSubmitGoal}>추가하기</Button>
       </div>
     </SimpleModal>
   );

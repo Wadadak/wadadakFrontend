@@ -9,7 +9,7 @@ export const fetchUserProfile = async (
   userId: number,
 ): Promise<UserProfileResponse> => {
   const response = await axiosInstance.get<UserProfileResponse>(
-    `/user/${userId}/profile`,
+    `/user/${userId}/profile?userId=${userId}`,
   );
   return response.data;
 };

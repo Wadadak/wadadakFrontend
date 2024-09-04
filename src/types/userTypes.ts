@@ -73,5 +73,5 @@ export interface EditProfileResponse extends EditProfileRequest {
 export interface ChangePasswordRequest {
   oldPassword: string;
   newPassword: string;
-  checkNewPassword: string;
+  confirmNewPassword: string;
 }

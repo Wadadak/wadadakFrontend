@@ -7,7 +7,6 @@ import { useRecoilState } from 'recoil';
 import { loginUserState } from '@/recoil/atoms/userState';
 import { getAccessToken, removeAccessToken } from '@/apis/authService';
 
-///user/{user_id}/profile
 export const useLoginUser = () => {
   const [loginUser, setLoginUser] = useRecoilState(loginUserState);
   const userId = extractUserIdFromToken(getAccessToken());

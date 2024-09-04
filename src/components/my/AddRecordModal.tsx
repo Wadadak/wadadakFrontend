@@ -12,45 +12,50 @@ import { useAddRunningRecord } from '@/hooks/running/useAddRunningRecord';
 import { RunningRecordRequest } from '@/types/runningTypes';
 
 interface AddRecordModalProps {
+  goalId: number;
   isOpen: boolean;
   onClose: () => void;
   onSuccess: () => void;
 }
 export const AddRecordModal = ({
+  goalId,
   isOpen,
   onClose,
   onSuccess,
 }: AddRecordModalProps) => {
   const [date, setDate] = useState<string>();
   const [distance, setDistance] = useState<string>();
-  const [record, setRecord] = useState<string>();
-  const [paceMinute, setPaceMinute] = useState<number>();
-  const [paceSecond, setPaceSecond] = useState<number>();
+  const [timeHour, setTimeHour] = useState<string>();
+  const [timeMinute, setTimeMinute] = useState<string>();
+  const [timeSecond, setTimeSecond] = useState<string>();
+  const [paceMinute, setPaceMinute] = useState<string>();
+  const [paceSecond, setPaceSecond] = useState<string>();
 
-  const [clickDatePicker, setClickDatePicker] = useState<boolean>(false);
+  // const [clickDatePicker, setClickDatePicker] = useState<boolean>(false);
 
-  const { mutate: addRecord } = useAddRunningRecord(
-    () => {
-      alert('기록이 추가되었습니다.');
-      onClose();
-    },
-    (message) => {
-      alert(message);
-    },
-  );
+  const { mutate: addRecord } = useAddRunningRecord(() => {
+    alert('기록이 추가되었습니다.');
+    onClose();
+  }, alert);
 
   const handleSubmitRecord = () => {
-    if (!distance || !record || !paceMinute || !paceSecond || !date) {
+    if (
+      !distance ||
+      !timeHour ||
+      !timeMinute ||
+      !timeSecond ||
+      !paceMinute ||
+      !paceSecond
+    ) {
       alert('모든 값을 입력해주세요.');
       return;
     }
 
     const body: RunningRecordRequest = {
-      // runningDate: date,
-      goalId: 3626001,
+      goalId: 4,
       distance: Number(distance),
-      runningTime: record,
-      pace: `${paceMinute}'${paceSecond}"`,
+      runningTime: `${timeHour}:${timeMinute}:${timeSecond}`,
+      pace: `${paceMinute}:${paceSecond}`,
       isPublic: 1,
     };
 
@@ -61,7 +66,7 @@ export const AddRecordModal = ({
   return (
     <SimpleModal isOpen={isOpen} onClose={onClose} title={'기록 추가'}>
       <div className="flex flex-col">
-        <Label label={'날짜'} textSize="md" textStyle="font-semibold">
+        {/* <Label label={'날짜'} textSize="md" textStyle="font-semibold">
           <div
             className="relative"
             onClick={() => setClickDatePicker((prev) => !prev)}
@@ -91,31 +96,53 @@ export const AddRecordModal = ({
               </div>
             )}
           </div>
-        </Label>
+        </Label> */}
         <Label label={'거리'} textSize="md" textStyle="font-semibold">
-          <TextInput
-            placeholder="거리 입력"
-            value={distance}
-            onChange={(value) => {
-              setDistance(value);
-            }}
-            width="lg"
-          />
+          <div className="flex items-center space-x-2">
+            <TextInput
+              placeholder="거리 입력"
+              value={distance}
+              onChange={setDistance}
+              width="lg"
+            />
+            <div>km</div>
+          </div>
         </Label>
         <Label label={'시간'} textSize="md" textStyle="font-semibold">
-          <TextInput
-            placeholder="시간 입력"
-            value={record}
-            onChange={(value) => {
-              setRecord(value);
-            }}
-            width="lg"
-          />
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-center space-x-2">
+              <TextInput
+                placeholder="시"
+                value={timeHour}
+                onChange={setTimeHour}
+                width="lg"
+              />
+              <div>시</div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <TextInput
+                placeholder="분"
+                value={timeMinute}
+                onChange={setTimeMinute}
+                width="lg"
+              />
+              <div>분</div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <TextInput
+                placeholder="초"
+                value={timeSecond}
+                onChange={setTimeSecond}
+                width="lg"
+              />
+              <div>초</div>
+            </div>
+          </div>
         </Label>
         <Label label={'페이스'} textSize="md" textStyle="font-semibold">
           <div className="flex flex-col space-y-2">
             <div className="flex items-center space-x-2">
-              <NumberInput
+              <TextInput
                 placeholder="분"
                 value={paceMinute}
                 onChange={setPaceMinute}
@@ -124,7 +151,7 @@ export const AddRecordModal = ({
               <div>분</div>
             </div>
             <div className="flex items-center space-x-2">
-              <NumberInput
+              <TextInput
                 placeholder="초"
                 value={paceSecond}
                 onChange={setPaceSecond}

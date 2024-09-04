@@ -9,7 +9,7 @@ import { TotalRunningRecordResponse } from '@/types/runningTypes';
 export const fetchTotalRunningRecord =
   async (): Promise<TotalRunningRecordResponse> => {
     const response = await axiosInstance.get<TotalRunningRecordResponse>(
-      `/run/total?period=year`,
+      `/run/total?period=month`,
     );
 
     console.log('fetchTotalRunningRecord response', response);

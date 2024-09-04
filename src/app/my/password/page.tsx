@@ -59,7 +59,7 @@ const EditPage = () => {
     const body: ChangePasswordRequest = {
       oldPassword: password,
       newPassword: cPassword,
-      checkNewPassword: rPassword,
+      confirmNewPassword: rPassword,
     };
 
     changePassword(body);

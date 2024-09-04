@@ -50,3 +50,36 @@ export interface TotalRunningRecordResponse {
   isPublic: number;
 }
 
+export interface RunningGoalRequest {
+  userId: number;
+  totalDistance: number;
+  totalRunningTime: number;
+  averagePace: string;
+  runCount: number;
+  isPublic: number;
+}
+
+export interface RunningGoalResponse {
+  runGoalId: number;
+  distance: number;
+  pace: string;
+  runningTime: string;
+  runningCount: number;
+  createdAt: string;
+}
+
+export interface MyRunningGoalItem {
+  id: number;
+  userId: number;
+  totalDistance: number;
+  totalRunningTime: number;
+  averagePace: string;
+  isPublic: number;
+  runCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface MyRunningGoalResponse {
+  data: MyRunningGoalItem[];
+}

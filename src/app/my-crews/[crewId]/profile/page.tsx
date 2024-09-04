@@ -21,12 +21,14 @@ const ProfilePage = () => {
     </div>
   ) : (
     <div className="flex items-center justify-center py-40 space-x-5">
-      <div className="bg-slate-200 w-[350px] h-[350px]">
+      <div className="bg-slate-200 w-[350px] h-[350px] rounded-[16px] overflow-hidden">
         {data?.memberProfileImage}
       </div>
       <div className="flex flex-col items-center space-y-3">
         <div className="flex flex-col items-center space-y-2">
-          <div className="text-[32px] font-bold">{data?.memberNickName}</div>
+          <div className="text-[32px] font-bold">
+            {data?.memberNickName || '닉네임은니모니모'}
+          </div>
           <div className="text-[16px] text-gray-500">
             {data?.birthYear ? data?.birthYear + '생' : '출생연도 비공개'}/
             {data?.memberGender === 'MALE'

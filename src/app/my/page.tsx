@@ -7,8 +7,10 @@ import TextInput from '@/components/common/TextInput';
 import { ToggleButton } from '@/components/common/ToggleButtion';
 import { TitleBanner } from '@/components/layout/TitleBanner';
 import Wrapper from '@/components/layout/Wrapper';
+import { AddGoalModal } from '@/components/my/AddGoalModal';
 import { AddRecordModal } from '@/components/my/AddRecordModal';
 import { EditRecordModal } from '@/components/my/EditRecordModal';
+import { useRunningGoal } from '@/hooks/running/useRunningGoal';
 import { useRunningList } from '@/hooks/running/useRunningList';
 import { useTotalRunningRecord } from '@/hooks/running/useTotalRunningRecord';
 import useModal from '@/hooks/useModal';
@@ -17,9 +19,11 @@ import {
   mockMyRunningInfo,
   mockRunningList,
 } from '@/mocks/mockData/mockRunList';
+import { MyRunningGoalItem, MyRunningGoalResponse } from '@/types/runningTypes';
 import {
   faPen,
   faPenToSquare,
+  faPersonRunning,
   faRankingStar,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -39,6 +43,7 @@ const MyPage = () => {
   // const [showAddRecord, setShowAddRecord] = useState(false);
   const [showWeeklyGoal, setShowWeeklyGoal] = useState(false);
 
+  const addGoalModal = useModal();
   const addRecordModal = useModal();
   const editRecordModal = useModal();
 
@@ -50,6 +55,7 @@ const MyPage = () => {
 
   const { data: runningList } = useRunningList();
   const { data: totalRunningRecord } = useTotalRunningRecord();
+  const { data: runningGoal } = useRunningGoal();
 
   useEffect(() => {
     if (editRunningId !== undefined) {
@@ -107,7 +113,7 @@ const MyPage = () => {
               className="text-[14px] text-gray-400 underline underline-offset-4"
               onClick={addRecordModal.handleOpenModal}
             >
-              목표 추가하기
+              기록 추가하기
             </button>
           </div>
         </div>
@@ -116,68 +122,33 @@ const MyPage = () => {
       {/* 주,월,연 목표 */}
       <Wrapper>
         <div className="flex flex-col space-y-16">
-          <div className="flex flex-col space-y-7">
-            <div className="flex justify-center">
-              <div
-                role="tablist"
-                className="space-x-8 font-bold tabs tabs-bordered w-60"
-              >
-                <a
-                  role="tab"
-                  className="text-gray-500 tab"
-                  style={{ whiteSpace: 'nowrap' }}
-                  onClick={() => {
-                    setTabSelect(true);
-                  }}
-                >
-                  내 러닝
-                </a>
-                <a
-                  role="tab"
-                  className="text-gray-500 tab tab-active"
-                  style={{ whiteSpace: 'nowrap' }}
-                >
-                  내 크루
-                </a>
-                <a
-                  role="tab"
-                  className="text-gray-500 tab"
-                  style={{ whiteSpace: 'nowrap' }}
-                >
-                  내 활동
-                </a>
-              </div>
-            </div>
-            <div className="flex flex-col w-full space-y-12">
-              <div className="flex justify-end space-x-3">
-                <div className="font-bold">프로필 공개</div>
-                <ToggleButton
-                  onButtonClick={() =>
-                    setIsRunningProfileOn(!isRunningProfileOn)
-                  }
-                  isOn={isRunningProfileOn}
-                />
-              </div>
-              <div className="flex justify-center grid-cols-3 gap-[100px]">
-                <MyGoalItem
-                  title={'주간 목표'}
-                  progress={50}
-                  onItemClick={() => {
-                    setShowWeeklyGoal(true);
-                  }}
-                />
+          <div className="flex flex-col">
+            {runningGoal ? (
+              <div className="flex flex-col w-full">
                 <MyGoalItem
                   title={'월간 목표'}
                   progress={40}
-                  onItemClick={() => {}}
+                  onItemClick={addGoalModal.handleOpenModal}
+                  runningGoal={runningGoal?.[0]}
                 />
-                <MyGoalItem
-                  title={'연간 목표'}
-                  progress={80}
-                  onItemClick={() => {}}
-                />
+                <div className="flex justify-end mt-8 space-x-3">
+                  <div className="font-bold">프로필 공개</div>
+                  <ToggleButton
+                    onButtonClick={() =>
+                      setIsRunningProfileOn(!isRunningProfileOn)
+                    }
+                    isOn={runningGoal?.[0].isPublic === 1}
+                  />
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="flex items-center justify-center w-full py-16">
+                <div className="flex flex-col space-y-4">
+                  <div>나의 월간 목표가 없습니다.</div>
+                  <button className="btn">등록하기</button>
+                </div>
+              </div>
+            )}
           </div>
           {/* 기록 코드 리스트 */}
           <div className="flex flex-col space-y-7">
@@ -320,6 +291,15 @@ const MyPage = () => {
           </div>
         </div>
       </Wrapper>
+      {addGoalModal.isModalOpen && (
+        <AddGoalModal
+          isOpen={addGoalModal.isModalOpen}
+          onClose={addGoalModal.handleCloseModal}
+          onSuccess={() => {
+            //
+          }}
+        />
+      )}
       {editRecordModal.isModalOpen && (
         <EditRecordModal
           id={editRunningId}
@@ -329,6 +309,7 @@ const MyPage = () => {
       )}
       {addRecordModal.isModalOpen && (
         <AddRecordModal
+          goalId={runningGoal?.[0].id ?? 0}
           isOpen={addRecordModal.isModalOpen}
           onClose={addRecordModal.handleCloseModal}
           onSuccess={() => {
@@ -391,10 +372,57 @@ export default MyPage;
 interface MyGoalItemProps {
   title: string;
   progress: number;
+  runningGoal?: MyRunningGoalItem;
   onItemClick: () => void;
 }
 
-const MyGoalItem = ({ title, onItemClick, progress }: MyGoalItemProps) => {
+const MyGoalItem = ({
+  title,
+  onItemClick,
+  progress,
+  runningGoal,
+}: MyGoalItemProps) => {
+  console.log('runningGoal', runningGoal);
+  return (
+    <div className="flex flex-col">
+      <div className="flex flex-col items-center space-y-3">
+        {/* 월간 목표 수정하기 */}
+        <div
+          className="flex items-center justify-center mt-6 space-x-2 cursor-pointer"
+          onClick={onItemClick}
+        >
+          <div className="text-[24px] font-bold">나의 월간 목표</div>
+          <FontAwesomeIcon icon={faPenToSquare} />
+        </div>
+        <div className="flex items-center pt-8 space-x-7">
+          <MyGoalInnerItem
+            record={`${String(runningGoal?.totalDistance)}km`}
+            name={'목표 누적거리'}
+          />
+          <MyGoalInnerItem
+            record={`${String(runningGoal?.runCount)}회`}
+            name={'목표 누적횟수'}
+          />
+          <MyGoalInnerItem
+            record={String(runningGoal?.totalRunningTime ?? '없음')}
+            name={'목표 러닝시간'}
+          />
+          <MyGoalInnerItem
+            record={runningGoal?.averagePace?.replace('PT', '') ?? '없음'}
+            name={'목표 평균페이스'}
+          />
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const MyGoalItemCircle = ({
+  title,
+  onItemClick,
+  progress,
+  runningGoal,
+}: MyGoalItemProps) => {
   const style: React.CSSProperties = {
     '--value': progress,
     '--size': '8rem',
@@ -443,6 +471,24 @@ export const MyRecordItem = ({
         className={`w-8 h-8 ${iconStyle}`}
       />
       <div className={`text-4xl font-extrabold ${recordStyle}`}>{record}</div>
+      <div className={`font-bold text-gray-500 ${nameStyle}`}>{name}</div>
+    </div>
+  );
+};
+
+export const MyGoalInnerItem = ({
+  record,
+  name,
+  iconStyle,
+  recordStyle,
+  nameStyle,
+}: MyRecordItemProps) => {
+  return (
+    <div className="w-[240px] flex flex-col items-center space-y-2">
+      <FontAwesomeIcon icon={faPersonRunning} className="w-8 h-8" />
+      <div className={`text-4xl text-gray-300 font-extrabold ${recordStyle}`}>
+        {record}
+      </div>
       <div className={`font-bold text-gray-500 ${nameStyle}`}>{name}</div>
     </div>
   );
