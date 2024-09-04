@@ -14,6 +14,7 @@ import { useSignup } from '@/hooks/user/useSignup';
 import { useRegions } from '@/hooks/useRegions';
 import { loginState } from '@/recoil/atoms/userState';
 import { genderType, SignupRequest } from '@/types/userTypes';
+import { validateEmail, validatePassword } from '@/utilities';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -38,21 +39,6 @@ const SignUpPage = () => {
 
   const setLogin = useSetRecoilState(loginState);
   const regionList = useRegions().data;
-
-  const validateEmail = (email?: string): boolean => {
-    //기획: email 형식(xxx@xxx.xxx), 50자 이내
-    if (!email) return false;
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validatePassword = (password?: string): boolean => {
-    //기획: 숫자, 대소문자, 특수문자 1개 이상, 8자~50자
-    if (!password) return false;
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_\-+=<>?{}[\]~])[A-Za-z\d!@#$%^&*()_\-+=<>?{}[\]~]{8,50}$/;
-    return passwordRegex.test(password);
-  };
 
   const handleSignUp = () => {
     //유효성검사

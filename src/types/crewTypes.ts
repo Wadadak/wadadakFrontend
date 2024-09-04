@@ -1,3 +1,5 @@
+import { genderType } from './userTypes';
+
 // 크루 생성 요청 본문
 export interface CreateCrewData {
   crewName: string;
@@ -58,6 +60,20 @@ export interface CrewInfoResponse {
   runningCount?: number;
   joined: boolean;
   limit: CrewLimit;
+}
+
+//크루원 정보 조회 응답 본분
+
+export interface CrewMemberInfoResponse {
+  memberNickName: string;
+  memberProfileImage: string;
+  name?: string;
+  phoneNumber?: string;
+  birthYear?: string;
+  memberGender?: genderType;
+  memberActivityRegion: string;
+  role: string;
+  joinedAt: string;
 }
 
 // 크루 리스트

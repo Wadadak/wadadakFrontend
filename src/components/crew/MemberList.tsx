@@ -1,20 +1,26 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useEffect } from 'react';
 import Avatar from '../common/Avatar';
 import { useRouter } from 'next/navigation';
 import { MemberSummary } from '@/hooks/crew/useMemberList';
+import { useEditProfile } from '@/hooks/user/useEditUserProfile';
 
 interface MemberListProps {
+  crewId: number;
   members: MemberSummary[];
   children: ReactNode;
 }
 
-const MemberList = ({ members, children }: MemberListProps) => {
+const MemberList = ({ crewId, members, children }: MemberListProps) => {
   const router = useRouter();
 
   // TODO url 변경
-  const handleProfileClick = () => {
-    router.push(`/profile`);
+  const handleProfileClick = (memberId: number) => {
+    router.push(`/crew/${crewId}/profile?memberId=${memberId}`);
   };
+
+  useEffect(() => {
+    console.log('members', members);
+  }, [members]);
 
   // TODO url 변경
   const handleChatClick = (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -23,14 +29,12 @@ const MemberList = ({ members, children }: MemberListProps) => {
   };
 
   return (
-    <div
-      className="grid gap-4 md:grid-cols-2 cursor-pointer py-4"
-      onClick={handleProfileClick}
-    >
+    <div className="grid gap-4 py-4 cursor-pointer md:grid-cols-2">
       {members.map((member) => (
         <div
           key={member.memberNickName}
-          className="p-4 bg-white shadow-sm rounded-lg flex items-center justify-between"
+          className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm"
+          onClick={() => handleProfileClick(member.memberId)}
         >
           <div className="flex items-center gap-4">
             <Avatar

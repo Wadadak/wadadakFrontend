@@ -10,6 +10,7 @@ import Wrapper from '@/components/layout/Wrapper';
 import { AddRecordModal } from '@/components/my/AddRecordModal';
 import { EditRecordModal } from '@/components/my/EditRecordModal';
 import { useRunningList } from '@/hooks/running/useRunningList';
+import { useTotalRunningRecord } from '@/hooks/running/useTotalRunningRecord';
 import useModal from '@/hooks/useModal';
 import { useLoginUser } from '@/hooks/user/useLoginUser';
 import {
@@ -48,6 +49,7 @@ const MyPage = () => {
   const [editRunningId, setEditRunningId] = useState<number | undefined>();
 
   const { data: runningList } = useRunningList();
+  const { data: totalRunningRecord } = useTotalRunningRecord();
 
   useEffect(() => {
     if (editRunningId !== undefined) {
@@ -74,31 +76,38 @@ const MyPage = () => {
       <Wrapper>
         <div className="flex flex-col w-full">
           <div className="flex flex-col space-y-8">
+            <div className="flex justify-end space-x-3">
+              <div className="font-bold">프로필 공개</div>
+              <ToggleButton
+                onButtonClick={() => setIsRunningProfileOn(!isRunningProfileOn)}
+                isOn={isRunningProfileOn}
+              />
+            </div>
             <div className="flex flex-col items-center space-y-1">
               <div className="text-[128px] font-extrabold">
-                {mockMyRunningInfo.totalDistance} km
+                {totalRunningRecord?.distance ?? 123.4} km
               </div>
               <div className="font-bold">총 거리</div>
             </div>
             <div className="flex justify-center mt-8 space-x-16">
               <MyRecordItem
-                record={String(mockMyRunningInfo.totalRunningCount)}
+                record={String(totalRunningRecord?.runningTime ?? '123')}
                 name={'총 러닝 횟수'}
               />
               <MyRecordItem
-                record={mockMyRunningInfo.averagePace}
+                record={totalRunningRecord?.pace ?? '12\'34"'}
                 name={'평균 페이스'}
               />
               <MyRecordItem
-                record={mockMyRunningInfo.averageRunningTime}
-                name={'평균 기록'}
+                record={String(totalRunningRecord?.distance ?? '123.4')}
+                name={'총 거리 **'}
               />
             </div>
             <button
               className="text-[14px] text-gray-400 underline underline-offset-4"
               onClick={addRecordModal.handleOpenModal}
             >
-              기록 추가하기
+              목표 추가하기
             </button>
           </div>
         </div>
@@ -139,7 +148,6 @@ const MyPage = () => {
                 </a>
               </div>
             </div>
-
             <div className="flex flex-col w-full space-y-12">
               <div className="flex justify-end space-x-3">
                 <div className="font-bold">프로필 공개</div>
@@ -150,7 +158,6 @@ const MyPage = () => {
                   isOn={isRunningProfileOn}
                 />
               </div>
-
               <div className="flex justify-center grid-cols-3 gap-[100px]">
                 <MyGoalItem
                   title={'주간 목표'}
@@ -221,12 +228,12 @@ const MyPage = () => {
             </div>
             <div className="w-full h-1 bg-gray-100"></div>
             {recordTab === 'round' && (
-              <div className="flex flex-col space-y-4">
+              <>
                 {mockRunningList.data.map((item, index) => (
                   <RunningRecordItem
                     key={index}
                     round={item.runRecordId}
-                    date={item.runningDate}
+                    date={item.runningDate ?? ''}
                     distance={item.distance}
                     totalTime={item.runningTime}
                     pace={item.pace}
@@ -235,8 +242,30 @@ const MyPage = () => {
                     }}
                   />
                 ))}
-              </div>
+              </>
             )}
+            {/* {recordTab === 'round' &&
+              (runningList?.data && runningList?.data?.length > 0 ? (
+                <div className="flex flex-col space-y-4">
+                  {runningList?.data.map((item, index) => (
+                    <RunningRecordItem
+                      key={index}
+                      round={item.runRecordId}
+                      date={item.runningDate ?? ''}
+                      distance={item.distance}
+                      totalTime={item.runningTime}
+                      pace={item.pace}
+                      onButtonClick={() => {
+                        setEditRunningId(item.runRecordId);
+                      }}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="w-full py-10 text-center">
+                  데이터가 없습니다.
+                </div>
+              ))} */}
             {recordTab === 'week' && (
               <div className="flex flex-col space-y-4">
                 {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, index) => (

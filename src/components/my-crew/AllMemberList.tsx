@@ -48,13 +48,15 @@ const AllMemberList = ({
 
   return (
     <>
-      <div className="text-center text-3xl font-bold">{title}</div>
+      <div className="text-3xl font-bold text-center">{title}</div>
       {search && (
         <div className="flex justify-end">
           <SearchBar placeholder="크루원 검색" onSearch={handleSearch} />
         </div>
       )}
-      <MemberList members={members}>{children}</MemberList>
+      <MemberList crewId={crewId} members={members}>
+        {children}
+      </MemberList>
       <Pagination
         totalPages={totalPages}
         currentPage={currentPage}

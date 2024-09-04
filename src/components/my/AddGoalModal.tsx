@@ -16,7 +16,7 @@ interface AddRecordModalProps {
   onClose: () => void;
   onSuccess: () => void;
 }
-export const AddRecordModal = ({
+export const AddGoalModal = ({
   isOpen,
   onClose,
   onSuccess,
@@ -31,7 +31,7 @@ export const AddRecordModal = ({
 
   const { mutate: addRecord } = useAddRunningRecord(
     () => {
-      alert('기록이 추가되었습니다.');
+      alert('목표가 추가되었습니다.');
       onClose();
     },
     (message) => {

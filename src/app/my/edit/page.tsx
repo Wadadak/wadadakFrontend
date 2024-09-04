@@ -17,7 +17,7 @@ import { useUserProfile } from '@/hooks/user/useUserProfile';
 import { useRegions } from '@/hooks/useRegions';
 import { mockActivityRegions } from '@/mocks/mockData/mockActivityRegions';
 import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
-import { EditProfileRequest } from '@/types/userTypes';
+import { EditProfileRequest, genderType } from '@/types/userTypes';
 import { genderList } from '@/utilities';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
@@ -52,7 +52,7 @@ const EditPage = () => {
     console.log('내 프로필 정보', data);
     setName(data?.name);
     setNickName(data?.nickName);
-    setProfileImage(data?.profileImage as string);
+    setProfileImage(data?.imageUrl as string);
     setPhoneNumber(data?.phoneNumber);
     setGender([data?.gender ?? '']);
     setAge(data?.birthYear);
@@ -65,16 +65,20 @@ const EditPage = () => {
 
   const handleEdit = () => {
     const body: EditProfileRequest = {
-      nickname: nickName,
-      gender: gender[0] === 'MALE' ? 0 : 1,
+      nickName,
+      gender: gender[0] as genderType,
       birthYear: age,
       activityRegion: activityArea,
-      // profileImage,
       nameVisibility: isNameOn ? 'PUBLIC' : 'PRIVATE',
       phoneNumberVisibility: isPhoneNumberOn ? 'PUBLIC' : 'PRIVATE',
       genderVisibility: isGenderOn ? 'PUBLIC' : 'PRIVATE',
       birthYearVisibility: isAgeOn ? 'PUBLIC' : 'PRIVATE',
     };
+
+    // profileImage가 File 타입일 때만 추가
+    if (profileImage instanceof File) {
+      (body as any).profileImage = profileImage;
+    }
 
     console.log('수정 요청', body);
     editProfile(body);
@@ -122,7 +126,19 @@ const EditPage = () => {
               <div className="flex items-center space-x-5">
                 <div className="flex flex-col items-center space-y-2">
                   <Label label={'프로필 이미지'} textSize="sm" required>
-                    <Avatar size="w-24" src={profileImage as string} />
+                    <Avatar
+                      size="w-24"
+                      src={
+                        profileImage instanceof File
+                          ? URL.createObjectURL(profileImage)
+                          : (profileImage as string)
+
+                        // (profileImage?.replace(
+                        //     'https://running-service.s3.ap-northeast-2.amazonaws.com',
+                        //     '/img',
+                        //   ) as string)
+                      }
+                    />
                   </Label>
                   <ImageUpload
                     onImageChange={(file) => setProfileImage(file as File)}
@@ -214,17 +230,3 @@ const EditPage = () => {
 };
 
 export default EditPage;
-
-interface TitleProps {
-  title: string;
-  htmlFor: string;
-  required: boolean;
-}
-const Title = ({ title, htmlFor, required }: TitleProps) => {
-  return (
-    <label className="flex items-center justify-start label" htmlFor={htmlFor}>
-      <span className="label-text">{title}</span>
-      {required && <div className="ml-1 text-red-500">*</div>}
-    </label>
-  );
-};

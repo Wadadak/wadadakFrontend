@@ -7,8 +7,8 @@ import axios from 'axios';
 import { setAccessToken } from '@/apis/authService';
 
 // 사용자 회원 가입 API 호출
-export const login = async (body: LoginRequest): Promise<LoginResponse> => {
-  const response = await axiosInstance.post<LoginResponse>('/login', body, {
+export const login = async (body: LoginRequest): Promise<string> => {
+  const response = await axiosInstance.post<string>('/login', body, {
     withCredentials: true, // 쿠키를 포함한 응답을 받을 수 있도록 설정
   });
   return response.data;
@@ -16,10 +16,10 @@ export const login = async (body: LoginRequest): Promise<LoginResponse> => {
 
 // 회원가입 훅
 export const useLogin = (
-  onSuccess: (data: LoginResponse) => void,
+  onSuccess: (data: string) => void,
   onError: (message: string) => void,
 ) => {
-  return useMutation<LoginResponse, Error, LoginRequest>({
+  return useMutation<string, Error, LoginRequest>({
     mutationFn: (body: LoginRequest) => login(body),
     onSuccess: (data) => {
       onSuccess(data);
