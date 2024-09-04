@@ -12,6 +12,7 @@ interface MemberListParams {
 }
 
 export interface MemberSummary {
+  memberId: number;
   memberNickName: string;
   memberProfileImage: string;
 }
