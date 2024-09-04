@@ -20,7 +20,7 @@ const Approval = () => {
       >
         <Button
           size="sm"
-          color="secondary"
+          color="accent"
           onClick={approvalModal.handleOpenModal}
         >
           승인

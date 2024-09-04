@@ -166,7 +166,7 @@ const RunningScheduleForm = () => {
       <div className="flex w-full justify-end">
         <Button
           wide={true}
-          color="secondary"
+          color="accent"
           onClick={handleSubmit}
           type="submit"
         >

@@ -129,12 +129,7 @@ const CreateCrew = () => {
         </Label>
       </div>
       <div className="flex w-full justify-end">
-        <Button
-          wide={true}
-          color="secondary"
-          onClick={handleSubmit}
-          type="submit"
-        >
+        <Button wide={true} color="accent" onClick={handleSubmit} type="submit">
           제출하기
         </Button>
       </div>

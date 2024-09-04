@@ -5,9 +5,11 @@ import Button from '../common/Button';
 import CheckBox from '../common/CheckBox';
 import Dropdown from '../common/Dropdown';
 import TimePicker from '../common/TimePicker';
+import RegionDropdown from '../common/RegionDropdown';
 import Label from '../common/Label';
-import { mockActivityRegions } from '@/mocks/mockData/mockActivityRegions';
-import { RegularRunningInfo } from '@/types/crewTypes';
+import { RunningInfoRequest } from '@/types/crewTypes';
+import { useCreateRunningInfo } from '@/hooks/crew/useCreateRunningInfo';
+import { useParams, useRouter } from 'next/navigation';
 
 // 주기 옵션
 const frequencyOptions = [
@@ -47,43 +49,31 @@ const weekdayOptions = [
   { id: 'sunday', name: '일' },
 ];
 
-interface RunningInfoFormProps {
-  initialInfo?: RegularRunningInfo | null;
-  onSave: (info: RegularRunningInfo) => void;
-}
+const RunningInfoForm = () => {
+  const { crewId } = useParams(); // useParams로 crewId 가져오기
+  const crewIdNumber = parseInt(crewId as string, 10); // 숫자로 변환
 
-const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
-  const [activityRegion, setActivityRegion] = useState(
-    initialInfo?.activityRegion || '',
-  );
-  const [week, setWeek] = useState(initialInfo?.week || null);
-  const [count, setCount] = useState(initialInfo?.count || null);
-  const [dayOfWeek, setDayOfWeek] = useState<string[]>(
-    initialInfo?.dayOfWeek || [],
-  );
-  const [time, setTime] = useState<string | null>(initialInfo?.time || null);
+  const { mutate } = useCreateRunningInfo(crewIdNumber);
+
+  const [activityRegion, setActivityRegion] = useState<string>();
+  const [week, setWeek] = useState<number>();
+  const [count, setCount] = useState<number>();
+  const [dayOfWeek, setDayOfWeek] = useState<string[]>();
+  const [time, setTime] = useState<string>();
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  useEffect(() => {
-    if (initialInfo) {
-      setActivityRegion(initialInfo.activityRegion);
-      setWeek(initialInfo.week);
-      setCount(initialInfo.count);
-      setDayOfWeek(initialInfo.dayOfWeek);
-      setTime(initialInfo.time || null);
-    }
-  }, [initialInfo]);
-
   // 요일 선택
-  const handleWeekdayChange = (newSelectedValues: string[]) => {
-    setDayOfWeek(newSelectedValues);
-    if (newSelectedValues?.length > 0) {
-      setErrors((prevErrors) => ({ ...prevErrors, dayOfWeek: '' }));
+  const handleWeekdayChange = (newSelectedValues?: (string | number)[]) => {
+    if (newSelectedValues) {
+      setDayOfWeek(newSelectedValues as string[]);
+      if (newSelectedValues.length > 0) {
+        setErrors((prevErrors) => ({ ...prevErrors, dayOfWeek: '' }));
+      }
     }
   };
 
   // 시간 추가
-  const handleTimeChange = (newTime: string | null) => {
+  const handleTimeChange = (newTime?: string) => {
     setTime(newTime);
   };
 
@@ -105,7 +95,7 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
       newErrors.count = '유효한 빈도를 선택하세요.';
     }
 
-    if (dayOfWeek.length === 0) {
+    if (!dayOfWeek) {
       newErrors.dayOfWeek = '요일을 하나 이상 선택하세요.';
     }
 
@@ -116,22 +106,15 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
 
   const handleSubmit = () => {
     if (validateForm()) {
-      const requestData: RegularRunningInfo = {
-        week: Number(week),
-        count: Number(count),
-        dayOfWeek,
-        activityRegion: activityRegion.toString(),
-        time: time ? time : undefined, // 선택된 시간이 있을 경우 저장
+      const requestData: RunningInfoRequest = {
+        week: week!,
+        count: count!,
+        dayOfWeek: dayOfWeek!,
+        activityRegion: activityRegion!.toString(),
+        time: time || undefined, // 선택된 시간이 있을 경우 저장
       };
 
-      // 수정 시 기존 ID를 포함해서 서버로 전송
-      if (initialInfo && initialInfo.id) {
-        requestData.id = initialInfo.id;
-      }
-
-      onSave(requestData);
-
-      alert('성공적으로 제출되었습니다!');
+      mutate(requestData);
     } else {
       console.log('유효성 검사 실패:', errors);
     }
@@ -140,15 +123,11 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
   return (
     <>
       <Label label="활동 지역" required>
-        <Dropdown
-          options={mockActivityRegions}
-          placeholder="활동 지역"
-          onChange={(value) => {
-            setActivityRegion(value as string);
-            setErrors((prevErrors) => ({ ...prevErrors, activityRegion: '' }));
-          }}
+        <RegionDropdown
+          selectedRegion={activityRegion}
           required
-          error={errors.activityRegion}
+          onRegionChange={(value) => setActivityRegion(value as string)}
+          errorMessage={errors.location}
         />
       </Label>
       <Label label="주기" required>
@@ -160,7 +139,7 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
             setErrors((prevErrors) => ({ ...prevErrors, week: '' }));
           }}
           required
-          error={errors.week}
+          errorMessage={errors.week}
         />
       </Label>
       <Label label="빈도" required>
@@ -172,7 +151,7 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
             setErrors((prevErrors) => ({ ...prevErrors, count: '' }));
           }}
           required
-          error={errors.count}
+          errorMessage={errors.count}
         />
       </Label>
       <Label label="요일(복수 선택)" required>
@@ -187,18 +166,13 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
       <Label label="시간">
         <TimePicker
           onTimeChange={handleTimeChange}
-          initialTime={initialInfo?.time || time}
+          initialTime={time}
           placeholder="모임 시간"
         />
       </Label>
 
       <div className="flex w-full justify-center pt-4">
-        <Button
-          wide={true}
-          color="secondary"
-          onClick={handleSubmit}
-          type="submit"
-        >
+        <Button wide={true} color="accent" onClick={handleSubmit} type="submit">
           제출하기
         </Button>
       </div>
