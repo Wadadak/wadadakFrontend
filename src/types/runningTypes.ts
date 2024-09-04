@@ -8,7 +8,7 @@ export interface RunningRecord {
   distance: number;
   pace: string;
   runningTime: string;
-  runningDate: string;
+  runningDate?: string; // 명세서에 없음
   createdAt?: string;
 }
 
@@ -26,7 +26,10 @@ export interface RunningListResponse {
   pagination: Pagination;
 }
 
-export interface RunningRecordRequest extends RunningRecord {}
+export interface RunningRecordRequest extends RunningRecord {
+  goalId: number;
+  isPublic: number;
+}
 // {
 //   "distance": "5.0",
 //   "pace": "5' 30\"",
@@ -39,3 +42,11 @@ export interface RunningRecordResponse {
   message: string;
   runningRecord: RunningRecord;
 }
+
+export interface TotalRunningRecordResponse {
+  distance: number;
+  runningTime: number;
+  pace: string;
+  isPublic: number;
+}
+

@@ -8,6 +8,8 @@ const LoginMenu = () => {
   const router = useRouter();
   const { loginUser } = useLoginUser();
 
+  console.log('xxxx', loginUser);
+
   return (
     <div className="flex items-center space-x-6">
       <HeaderMenu
@@ -30,7 +32,7 @@ const LoginMenu = () => {
         icon={faBell}
         onMenuClick={() => router.push('/alarm')}
       /> */}
-      <AvatarWithDropdown src={loginUser?.profileImage} />
+      <AvatarWithDropdown src={loginUser?.imageUrl as string} />
     </div>
   );
 };

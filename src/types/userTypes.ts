@@ -20,6 +20,7 @@ export interface SignupRequest {
 
 export interface UserProfileResponse extends SignupRequest {
   user_id: number;
+  imageUrl?: string | null;
 }
 
 export interface SignupResponse {
@@ -53,7 +54,7 @@ export interface LoginResponse {
 
 export interface EditProfileRequest {
   nickName?: string;
-  gender?: number;
+  gender?: genderType;
   birthYear?: number;
   activityRegion?: string;
   profileImage?: File | Blob | string;
@@ -67,4 +68,10 @@ export interface EditProfileResponse extends EditProfileRequest {
   user_id: number;
   username: string;
   phoneNumber: string;
+}
+
+export interface ChangePasswordRequest {
+  oldPassword: string;
+  newPassword: string;
+  checkNewPassword: string;
 }

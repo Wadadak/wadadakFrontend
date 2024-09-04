@@ -47,6 +47,11 @@ const AvatarWithDropdown = ({ src }: AvatarWithDropdownProps) => {
     setIsHovered(false);
   };
 
+  const handleChangePasswordClick = () => {
+    router.push('/my/password');
+    setIsHovered(false);
+  };
+
   const handleLogoutClick = () => {
     alert('로그아웃 되었습니다.');
     logout();
@@ -103,6 +108,14 @@ const AvatarWithDropdown = ({ src }: AvatarWithDropdownProps) => {
                 className="w-full px-4 py-2 text-xs text-left hover:bg-gray-100"
               >
                 내 프로필 수정
+              </button>
+            </li>
+            <li>
+              <button
+                onClick={handleChangePasswordClick}
+                className="w-full px-4 py-2 text-xs text-left hover:bg-gray-100"
+              >
+                비밀번호 변경
               </button>
             </li>
             <li>
