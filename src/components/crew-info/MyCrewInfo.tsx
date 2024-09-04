@@ -1,28 +1,57 @@
 'use client';
 
 import React, { useState } from 'react';
-import { mockCrewList } from '@/mocks/mockData/mockCrewList';
 import CrewDetailInfo from '@/components/crew-info/CrewDetailInfo';
 import Button from '../common/Button';
 import SimpleModal from '../common/SimpleModal';
 import { useParams, useRouter } from 'next/navigation';
-import Wrapper from '@/components/layout/Wrapper';
 import useModal from '@/hooks/useModal';
 import RunningInfoForm from './RunningInfoForm';
 import { useUserRoles } from '@/hooks/crew/useUserRoles';
+import { RunningInfo } from '@/types/crewTypes';
+import { useCrewInfo } from '@/hooks/crew/useCrewInfo';
+import { useCrewRunningInfo } from '@/hooks/crew/useCrewRunningInfo';
+import LoadingSpinner from '../common/LoadingSpinner';
+import ErrorComponent from '../common/ErrorComponent';
 
 const MyCrewInfo = () => {
-  const { crewId } = useParams();
-  const { data: userRoleData } = useUserRoles(Number(crewId));
-  const userRole = userRoleData?.role;
+  const { crewId } = useParams(); // useParams로 crewId 가져오기
+  const crewIdNumber = parseInt(crewId as string, 10); // 문자열을 숫자로 변환
+  const router = useRouter();
 
+  // 모달 관리
   const deleteModal = useModal();
   const runningInfoEditModal = useModal();
   const runningInfoDeleteModal = useModal();
-  const [selectedInfo, setSelectedInfo] = useState<RegularRunningInfo | null>(
-    null,
-  );
-  const router = useRouter();
+
+  // 상태 관리
+  const [selectedInfo, setSelectedInfo] = useState<RunningInfo>();
+
+  // 권한 조회
+  const { data: userRoleData } = useUserRoles(crewIdNumber);
+  const userRole = userRoleData?.role;
+
+  // 크루 정보 조회
+  const {
+    data: crewData,
+    isLoading: crewLoading,
+    isError: crewError,
+  } = useCrewInfo(crewIdNumber);
+
+  // 정기 러닝 정보 조회
+  const {
+    data: runningInfoData,
+    isLoading: runningInfoLoading,
+    isError: runningInfoError,
+  } = useCrewRunningInfo(crewIdNumber);
+
+  if (crewLoading || runningInfoLoading) {
+    return <LoadingSpinner />;
+  }
+
+  if (crewError || runningInfoError || !crewData) {
+    return <ErrorComponent message="크루 정보를 불러오는데 실패했습니다." />;
+  }
 
   const handleLeaveCrew = () => {
     // TODO 크루 탈퇴 API 연동
@@ -31,30 +60,30 @@ const MyCrewInfo = () => {
     router.push('/');
   };
 
-  const handleSaveRunningInfo = (info: RegularRunningInfo) => {
+  const handleSaveRunningInfo = (info: RunningInfo) => {
     // TODO 추가/수정 API 연동
     console.log('저장된 정보:', info);
     runningInfoEditModal.handleCloseModal();
   };
 
-  const openEditRunningInfoModal = (info: RegularRunningInfo | null) => {
+  const openEditRunningInfoModal = (info: RunningInfo) => {
     setSelectedInfo(info);
     runningInfoEditModal.handleOpenModal();
   };
 
-  const openDeleteRunningInfoModal = (info: RegularRunningInfo) => {
+  const openDeleteRunningInfoModal = (info: RunningInfo) => {
     if (info && info.id !== undefined) {
       setSelectedInfo(info);
       runningInfoDeleteModal.handleOpenModal();
     }
   };
 
-  // 테이블에서 삭제 눌렀을 때 모달을 띄우는 함수
-  const handleDeleteRunningInfoById = (id: number) => {
-    const info = crew.regularRunningInfo?.find((info) => info.id === id);
-
-    if (info) {
-      openDeleteRunningInfoModal(info);
+  const handleDeleteRunningInfoById = (id: number | undefined) => {
+    if (id !== undefined) {
+      const info = crew.regularRunningInfo?.find((info) => info.id === id);
+      if (info) {
+        openDeleteRunningInfoModal(info);
+      }
     }
   };
 
@@ -70,9 +99,14 @@ const MyCrewInfo = () => {
   return (
     <>
       <CrewDetailInfo
-        crewId={Number(crewId)}
+        crew={crewData}
+        myCrew={true}
+        userRole={userRole}
+        runningInfo={runningInfoData?.data || []}
         onEditRunningInfo={openEditRunningInfoModal}
-        onDeleteRunningInfo={handleDeleteRunningInfoById}
+        onDeleteRunningInfo={(id: number) =>
+          openDeleteRunningInfoModal(runningInfoData?.crewId)
+        }
       >
         {(userRole === 'LEADER' || userRole === 'STAFF') && (
           <Button>수정하기</Button>

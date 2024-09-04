@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import CrewCard from './CrewCard';
 import Pagination from '../common/Pagination';
 import { useCrewList } from '@/hooks/crew/useCrewList';
-import { useUserRoles } from '@/hooks/crew/useUserRoles';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
 
@@ -17,13 +16,6 @@ const CrewList = () => {
     size: itemsPerPage,
     page: currentPage,
   });
-
-  // 권한 조회
-  const {
-    data: roleData,
-    isLoading: roleLoading,
-    isError: roleError,
-  } = useUserRoles();
 
   if (isLoading) {
     return <LoadingSpinner />;
@@ -39,14 +31,16 @@ const CrewList = () => {
 
   console.log('Received data:', data);
 
+  // 'joined'가 'false'인 크루만 필터링
   const { crews, totalPages } = data || { crews: [], totalPages: 1 };
+  const filteredCrews = crews.filter((crew) => !crew.joined);
 
   return (
     <div className="container mx-auto">
-      {crews?.length > 0 ? (
+      {filteredCrews?.length > 0 ? (
         <>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10 justify-items-center">
-            {crews?.map((crew) => (
+            {filteredCrews?.map((crew) => (
               <CrewCard
                 key={crew.crewId}
                 crewId={crew.crewId}

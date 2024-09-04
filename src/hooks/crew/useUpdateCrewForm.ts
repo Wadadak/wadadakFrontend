@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import { useUserRoles } from './useUserRoles';
 import { useCrewInfo } from './useCrewInfo';
 import { CrewResponse, UpdateCrewData } from '@/types/crewTypes';
-import { updateCrew } from '@/apis/crewApi';
+import { updateCrew } from '@/apis/crew/crewApi';
 import { useRouter } from 'next/navigation';
 
 export const useUpdateCrewForm = () => {

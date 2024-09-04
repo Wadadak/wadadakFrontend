@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { useRouter } from 'next/navigation';
 import AvatarWithDropdown from '../common/AvatarWithDropdown';
 import { useLoginUser } from '@/hooks/user/useLoginUser';
+import Button from '../common/Button';
 
 const LoginMenu = () => {
   const router = useRouter();
@@ -12,7 +13,25 @@ const LoginMenu = () => {
 
   return (
     <div className="flex items-center space-x-6">
-      <HeaderMenu
+      <div className="flex items-center space-x-3">
+        <Button
+          size="sm"
+          color="accent"
+          onClick={() => router.push('/joined-crews')}
+        >
+          마이 크루
+        </Button>
+        <Button
+          size="sm"
+          color="accent"
+          outline
+          onClick={() => router.push('/create-crew')}
+        >
+          크루 만들기
+        </Button>
+      </div>
+
+      {/* <HeaderMenu
         name={'마이 크루'}
         icon={faBell}
         onMenuClick={() => router.push('/joined-crews')}
@@ -21,7 +40,7 @@ const LoginMenu = () => {
         name={'크루 만들기'}
         icon={faBell}
         onMenuClick={() => router.push('/create-crew')}
-      />
+      /> */}
       {/* <HeaderMenu
         name={'메시지'}
         icon={faBell}
