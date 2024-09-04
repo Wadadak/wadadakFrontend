@@ -77,7 +77,7 @@ const RunningInfoForm = ({ initialInfo, onSave }: RunningInfoFormProps) => {
   // 요일 선택
   const handleWeekdayChange = (newSelectedValues: string[]) => {
     setDayOfWeek(newSelectedValues);
-    if (newSelectedValues.length > 0) {
+    if (newSelectedValues?.length > 0) {
       setErrors((prevErrors) => ({ ...prevErrors, dayOfWeek: '' }));
     }
   };
