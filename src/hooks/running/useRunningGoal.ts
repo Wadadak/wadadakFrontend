@@ -4,8 +4,8 @@ import { MyRunningGoalItem, MyRunningGoalResponse } from '@/types/runningTypes';
 
 // 러닝 기록 목록 조회 api 호출
 export const fetchRunningGoal = async (): Promise<MyRunningGoalItem[]> => {
-  const response =
-    await axiosInstance.get<MyRunningGoalItem[]>(`/run/goals/my`);
+  const response = await axiosInstance.get(`/run/goals/my`);
+  // await axiosInstance.get<MyRunningGoalItem[]>(`/run/goals/my`);
 
   console.log('fetchRunningGoal response', response);
   return response.data;

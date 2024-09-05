@@ -132,11 +132,6 @@ const EditPage = () => {
                         profileImage instanceof File
                           ? URL.createObjectURL(profileImage)
                           : (profileImage as string)
-
-                        // (profileImage?.replace(
-                        //     'https://running-service.s3.ap-northeast-2.amazonaws.com',
-                        //     '/img',
-                        //   ) as string)
                       }
                     />
                   </Label>

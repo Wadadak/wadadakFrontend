@@ -66,37 +66,6 @@ export const AddRecordModal = ({
   return (
     <SimpleModal isOpen={isOpen} onClose={onClose} title={'기록 추가'}>
       <div className="flex flex-col">
-        {/* <Label label={'날짜'} textSize="md" textStyle="font-semibold">
-          <div
-            className="relative"
-            onClick={() => setClickDatePicker((prev) => !prev)}
-          >
-            <TextInput
-              placeholder="날짜 입력"
-              value={date}
-              onChange={(value) => {
-                setDate(value);
-              }}
-              width="lg"
-            />
-            {clickDatePicker && (
-              <div className="absolute left-[32px] top-[52px]">
-                <DatePicker
-                  selected={undefined}
-                  onChange={(date) => {
-                    const dateTime =
-                      date && DateTime.fromJSDate(new Date(date));
-                    const formattedDate = dateTime?.toFormat('yyyy-MM-dd');
-                    setDate(formattedDate);
-                    setClickDatePicker(false);
-                  }}
-                  dateFormat="yyyy-MM-dd"
-                  open={clickDatePicker} // 드롭다운 상태
-                />
-              </div>
-            )}
-          </div>
-        </Label> */}
         <Label label={'거리'} textSize="md" textStyle="font-semibold">
           <div className="flex items-center space-x-2">
             <TextInput

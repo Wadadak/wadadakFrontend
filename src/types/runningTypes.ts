@@ -53,7 +53,7 @@ export interface TotalRunningRecordResponse {
 export interface RunningGoalRequest {
   userId: number;
   totalDistance: number;
-  totalRunningTime: number;
+  totalRunningTime: string;
   averagePace: string;
   runCount: number;
   isPublic: number;

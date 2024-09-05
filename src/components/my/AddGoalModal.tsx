@@ -28,9 +28,15 @@ export const AddGoalModal = ({
   const [totalDistance, setTotalDistance] = useState<string>();
   const [totalRunningTime, setTotalRunningTime] = useState<string>();
   const [runCount, setRunCount] = useState<string>();
-  const [paceHour, setPaceHour] = useState<number>();
+
+
+  const [timeHour, setTimeHour] = useState<number>();
+  const [timeMinute, setTimeMinute] = useState<number>();
+  const [timeSecond, setTimeSecond] = useState<number>();
+
   const [paceMinute, setPaceMinute] = useState<number>();
   const [paceSecond, setPaceSecond] = useState<number>();
+
   const [isPublic, setIsPublic] = useState<boolean>();
 
   const [clickDatePicker, setClickDatePicker] = useState<boolean>(false);
@@ -48,7 +54,9 @@ export const AddGoalModal = ({
   const handleSubmitGoal = () => {
     if (
       !totalDistance ||
-      !totalRunningTime ||
+      !timeHour ||
+      !timeMinute ||
+      !timeSecond ||
       !paceMinute ||
       !paceSecond ||
       !runCount
@@ -61,9 +69,9 @@ export const AddGoalModal = ({
     const body: RunningGoalRequest = {
       userId: extractUserIdFromToken(getAccessToken()) ?? 0,
       totalDistance: Number(totalDistance),
-      totalRunningTime: Number(totalRunningTime),
+      totalRunningTime: `${timeHour}:${timeMinute}:${timeSecond}`,
       runCount: Number(runCount),
-      averagePace: `PT${paceHour}H${paceMinute}M${paceSecond}S`,
+      averagePace: `${paceMinute}:${paceSecond}`,
       isPublic: isPublic ? 1 : 0,
     };
 
@@ -74,37 +82,6 @@ export const AddGoalModal = ({
   return (
     <SimpleModal isOpen={isOpen} onClose={onClose} title={'목표 추가'}>
       <div className="flex flex-col">
-        {/* <Label label={'날짜'} textSize="md" textStyle="font-semibold">
-          <div
-            className="relative"
-            onClick={() => setClickDatePicker((prev) => !prev)}
-          >
-            <TextInput
-              placeholder="날짜 입력"
-              value={date}
-              onChange={(value) => {
-                setDate(value);
-              }}
-              width="lg"
-            />
-            {clickDatePicker && (
-              <div className="absolute left-[32px] top-[52px]">
-                <DatePicker
-                  selected={undefined}
-                  onChange={(date) => {
-                    const dateTime =
-                      date && DateTime.fromJSDate(new Date(date));
-                    const formattedDate = dateTime?.toFormat('yyyy-MM-dd');
-                    setDate(formattedDate);
-                    setClickDatePicker(false);
-                  }}
-                  dateFormat="yyyy-MM-dd"
-                  open={clickDatePicker} // 드롭다운 상태
-                />
-              </div>
-            )}
-          </div>
-        </Label> */}
         <Label label={'목표 누적 거리'} textSize="md" textStyle="font-semibold">
           <TextInput
             placeholder="거리 입력"
@@ -118,12 +95,35 @@ export const AddGoalModal = ({
           textSize="md"
           textStyle="font-semibold"
         >
-          <TextInput
-            placeholder="시간 입력"
-            value={totalRunningTime}
-            onChange={setTotalRunningTime}
-            width="lg"
-          />
+          <div className="flex flex-col space-y-2">
+            <div className="flex items-center space-x-2">
+              <NumberInput
+                placeholder="시"
+                value={timeHour}
+                onChange={setTimeHour}
+                width="lg"
+              />
+              <div>시</div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <NumberInput
+                placeholder="분"
+                value={timeMinute}
+                onChange={setTimeMinute}
+                width="lg"
+              />
+              <div>분</div>
+            </div>
+            <div className="flex items-center space-x-2">
+              <NumberInput
+                placeholder="초"
+                value={timeSecond}
+                onChange={setTimeSecond}
+                width="lg"
+              />
+              <div>초</div>
+            </div>
+          </div>
         </Label>
         <Label
           label={'목표 누적 러닝 횟수'}
@@ -143,15 +143,6 @@ export const AddGoalModal = ({
           textStyle="font-semibold"
         >
           <div className="flex flex-col space-y-2">
-            <div className="flex items-center space-x-2">
-              <NumberInput
-                placeholder="시"
-                value={paceHour}
-                onChange={setPaceHour}
-                width="lg"
-              />
-              <div>시</div>
-            </div>
             <div className="flex items-center space-x-2">
               <NumberInput
                 placeholder="분"

@@ -10,8 +10,9 @@ export const fetchCrewMemberInfo = async (
   memberId: number,
 ): Promise<CrewMemberInfoResponse> => {
   const response = await axiosInstance.get<CrewMemberInfoResponse>(
-    `/crew/${crewId}?crewMemberId=${memberId}`,
+    `/crew/${crewId}/member?crewMemberId=${memberId}`,
   );
+  console.log('fetchCrewMemberInfo response', response);
   return response.data;
 };
 

@@ -20,6 +20,7 @@ import {
   mockRunningList,
 } from '@/mocks/mockData/mockRunList';
 import { MyRunningGoalItem, MyRunningGoalResponse } from '@/types/runningTypes';
+import { secondsToTime } from '@/utilities';
 import {
   faPen,
   faPenToSquare,
@@ -67,6 +68,10 @@ const MyPage = () => {
     console.log('loginUser', loginUser);
   }, [loginUser]);
 
+  useEffect(() => {
+    console.log('runningGoal', runningGoal);
+  }, [runningGoal]);
+
   // if (!loginUser) {
   //   return (
   //     <div className="h-[60vh] flex justify-center items-center">
@@ -77,7 +82,7 @@ const MyPage = () => {
 
   return (
     <div className="flex flex-col items-center w-full">
-      <TitleBanner>🏃🏻내 정보</TitleBanner>
+      <TitleBanner>🏃🏻내 러닝</TitleBanner>
       {/* 총 거리 */}
       <Wrapper>
         <div className="flex flex-col w-full">
@@ -89,7 +94,7 @@ const MyPage = () => {
                 isOn={isRunningProfileOn}
               />
             </div>
-            <div className="flex flex-col items-center space-y-1">
+            {/* <div className="flex flex-col items-center space-y-1">
               <div className="text-[128px] font-extrabold">
                 {totalRunningRecord?.distance ?? 123.4} km
               </div>
@@ -108,6 +113,16 @@ const MyPage = () => {
                 record={String(totalRunningRecord?.distance ?? '123.4')}
                 name={'총 거리 **'}
               />
+            </div> */}
+            <div className="flex items-center justify-center w-full py-16">
+              <div className="flex flex-col space-y-4">
+                <div className="font-semibold text-[20px]">
+                  나의 누적 기록이 없습니다.
+                </div>
+                <button className="btn" onClick={addGoalModal.handleOpenModal}>
+                  등록하기
+                </button>
+              </div>
             </div>
             <button
               className="text-[14px] text-gray-400 underline underline-offset-4"
@@ -123,7 +138,7 @@ const MyPage = () => {
       <Wrapper>
         <div className="flex flex-col space-y-16">
           <div className="flex flex-col">
-            {runningGoal ? (
+            {runningGoal?.[0]?.createdAt ? (
               <div className="flex flex-col w-full">
                 <MyGoalItem
                   title={'월간 목표'}
@@ -137,15 +152,22 @@ const MyPage = () => {
                     onButtonClick={() =>
                       setIsRunningProfileOn(!isRunningProfileOn)
                     }
-                    isOn={runningGoal?.[0].isPublic === 1}
+                    isOn={runningGoal?.[0]?.isPublic === 1}
                   />
                 </div>
               </div>
             ) : (
               <div className="flex items-center justify-center w-full py-16">
                 <div className="flex flex-col space-y-4">
-                  <div>나의 월간 목표가 없습니다.</div>
-                  <button className="btn">등록하기</button>
+                  <div className="font-semibold text-[20px]">
+                    나의 월간 목표가 없습니다.
+                  </div>
+                  <button
+                    className="btn"
+                    onClick={addGoalModal.handleOpenModal}
+                  >
+                    등록하기
+                  </button>
                 </div>
               </div>
             )}
@@ -187,7 +209,7 @@ const MyPage = () => {
                   연간
                 </Button>
               </div>
-              <div className="flex items-center space-x-3">
+              {/* <div className="flex items-center space-x-3">
                 <div className="font-bold">프로필 공개</div>
                 <ToggleButton
                   onButtonClick={() =>
@@ -195,10 +217,10 @@ const MyPage = () => {
                   }
                   isOn={isRunningRecordProfileOn}
                 />
-              </div>
+              </div> */}
             </div>
             <div className="w-full h-1 bg-gray-100"></div>
-            {recordTab === 'round' && (
+            {/* {recordTab === 'round' && (
               <>
                 {mockRunningList.data.map((item, index) => (
                   <RunningRecordItem
@@ -214,8 +236,8 @@ const MyPage = () => {
                   />
                 ))}
               </>
-            )}
-            {/* {recordTab === 'round' &&
+            )} */}
+            {recordTab === 'round' &&
               (runningList?.data && runningList?.data?.length > 0 ? (
                 <div className="flex flex-col space-y-4">
                   {runningList?.data.map((item, index) => (
@@ -236,7 +258,7 @@ const MyPage = () => {
                 <div className="w-full py-10 text-center">
                   데이터가 없습니다.
                 </div>
-              ))} */}
+              ))}
             {recordTab === 'week' && (
               <div className="flex flex-col space-y-4">
                 {[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map((_, index) => (
@@ -295,9 +317,7 @@ const MyPage = () => {
         <AddGoalModal
           isOpen={addGoalModal.isModalOpen}
           onClose={addGoalModal.handleCloseModal}
-          onSuccess={() => {
-            //
-          }}
+          onSuccess={router.refresh}
         />
       )}
       {editRecordModal.isModalOpen && (
@@ -309,7 +329,7 @@ const MyPage = () => {
       )}
       {addRecordModal.isModalOpen && (
         <AddRecordModal
-          goalId={runningGoal?.[0].id ?? 0}
+          goalId={runningGoal?.[0]?.id ?? 0}
           isOpen={addRecordModal.isModalOpen}
           onClose={addRecordModal.handleCloseModal}
           onSuccess={() => {
@@ -396,19 +416,38 @@ const MyGoalItem = ({
         </div>
         <div className="flex items-center pt-8 space-x-7">
           <MyGoalInnerItem
-            record={`${String(runningGoal?.totalDistance)}km`}
+            record={
+              runningGoal?.totalDistance
+                ? `${String(runningGoal?.totalDistance)}km`
+                : '없음'
+            }
             name={'목표 누적거리'}
           />
           <MyGoalInnerItem
-            record={`${String(runningGoal?.runCount)}회`}
+            record={
+              runningGoal?.runCount
+                ? `${String(runningGoal?.runCount)}회`
+                : '없음'
+            }
             name={'목표 누적횟수'}
           />
           <MyGoalInnerItem
-            record={String(runningGoal?.totalRunningTime ?? '없음')}
+            record={String(
+              runningGoal?.totalRunningTime
+                ? secondsToTime(runningGoal?.totalRunningTime)
+                : '없음',
+            )}
             name={'목표 러닝시간'}
           />
           <MyGoalInnerItem
-            record={runningGoal?.averagePace?.replace('PT', '') ?? '없음'}
+            record={
+              runningGoal?.averagePace
+                ? secondsToTime(Number(runningGoal?.averagePace)).replace(
+                    '00h',
+                    '',
+                  )
+                : '없음'
+            }
             name={'목표 평균페이스'}
           />
         </div>

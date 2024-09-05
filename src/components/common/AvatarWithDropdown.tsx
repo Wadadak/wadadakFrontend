@@ -89,7 +89,7 @@ const AvatarWithDropdown = ({ src }: AvatarWithDropdownProps) => {
       {(isHovered || isDropdownHovered) && (
         <div
           ref={dropdownRef}
-          className="absolute w-[120px] p-2 transform -translate-x-1/2 bg-white border rounded-md shadow-lg left-1/2 top-full"
+          className="absolute w-[140px] p-2 transform -translate-x-1/2 bg-white border rounded-md shadow-lg left-1/2 top-full"
           onMouseEnter={handleDropdownMouseEnter}
           onMouseLeave={handleDropdownMouseLeave}
         >

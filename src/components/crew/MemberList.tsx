@@ -15,7 +15,7 @@ const MemberList = ({ crewId, members, children }: MemberListProps) => {
 
   // TODO url 변경
   const handleProfileClick = (memberId: number) => {
-    router.push(`/crew/${crewId}/profile?memberId=${memberId}`);
+    router.push(`/my-crews/${crewId}/profile?memberId=${memberId}`);
   };
 
   useEffect(() => {
@@ -34,7 +34,7 @@ const MemberList = ({ crewId, members, children }: MemberListProps) => {
         <div
           key={member.memberNickName}
           className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm"
-          onClick={() => handleProfileClick(member.memberId)}
+          onClick={() => handleProfileClick(member.crewMemberId)}
         >
           <div className="flex items-center gap-4">
             <Avatar

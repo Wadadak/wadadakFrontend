@@ -25,7 +25,7 @@ const SignUpPage = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>();
   const [name, setName] = useState<string>();
   const [nickName, setNickName] = useState<string>();
-  const [profileImage, setProfileImage] = useState<File>();
+  const [profileImage, setProfileImage] = useState<File | string>();
   const [phoneNumber, setPhoneNumber] = useState<string>();
   const [gender, setGender] = useState<string[]>([]);
   const [birthYear, setBirthYear] = useState<number | undefined>();
@@ -168,7 +168,14 @@ const SignUpPage = () => {
               {/* P.image */}
               <Label label={'프로필 이미지'} textSize="sm">
                 <div className="flex items-center space-x-5">
-                  <Avatar size="w-24" />
+                  <Avatar
+                    size="w-24"
+                    src={
+                      profileImage instanceof File
+                        ? URL.createObjectURL(profileImage)
+                        : (profileImage as string)
+                    }
+                  />
                   <ImageUpload onImageChange={setProfileImage} />
                 </div>
               </Label>

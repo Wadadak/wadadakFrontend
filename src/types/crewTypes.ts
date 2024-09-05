@@ -65,13 +65,13 @@ export interface CrewInfoResponse {
 //크루원 정보 조회 응답 본분
 
 export interface CrewMemberInfoResponse {
-  memberNickName: string;
-  memberProfileImage: string;
+  nickName: string;
+  imageUrl: string;
   name?: string;
   phoneNumber?: string;
   birthYear?: string;
-  memberGender?: genderType;
-  memberActivityRegion: string;
+  gender?: genderType;
+  activityRegion: string;
   role: string;
   joinedAt: string;
 }
