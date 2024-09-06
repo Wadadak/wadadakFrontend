@@ -113,7 +113,15 @@ export interface JoinedCrewSummary {
   activityRegion: string;
 }
 
-// 정기 러닝 응답
+export interface RunningInfoRequest {
+  week: number;
+  count: number;
+  dayOfWeek: string[];
+  activityRegion: string;
+  time?: string;
+}
+
+// 정기 러닝 생성 응답
 export interface RunningInfo {
   id: number;
   week: number;
@@ -123,17 +131,16 @@ export interface RunningInfo {
   time?: string;
 }
 
-export interface RunningInfoRequest {
-  week: number;
-  count: number;
-  dayOfWeek: string[];
-  activityRegion: string;
-  time?: string;
-}
-
+// 크루의 정기 러닝 정보 (id 포함)
 export interface CrewRunningInfo {
   crewId: number;
   data: RunningInfo[];
+}
+
+// 정기 러닝 정보 전체 응답 타입
+export interface CrewRunningInfoResponse {
+  content: CrewRunningInfo;
+  totalPages: number;
 }
 
 export interface ScheduleRequest {
@@ -173,6 +180,7 @@ export interface UpcomingSchedule {
   memo: string;
   location: string;
   participant: number;
+  isAuthor: boolean;
 }
 
 export interface UpcomingScheduleResponse {

@@ -32,7 +32,7 @@ const CrewCard = ({
     data: regularRunningInfo,
     isLoading,
     isError,
-  } = useCrewRunningInfo(crewId);
+  } = useCrewRunningInfo(crewId, 0, 5);
 
   // myCrew가 true일 때만 권한 정보를 호출
   const {
@@ -143,7 +143,7 @@ const CrewCard = ({
                 )}
                 {!isLoading && !isError && (
                   <RegularRunningInfoTable
-                    regularRunningInfo={regularRunningInfo?.data}
+                    regularRunningInfo={regularRunningInfo?.content.data || []}
                   />
                 )}
               </div>

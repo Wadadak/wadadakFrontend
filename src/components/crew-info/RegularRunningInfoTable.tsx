@@ -2,17 +2,34 @@ import React from 'react';
 import { RunningInfo } from '@/types/crewTypes';
 import Button from '../common/Button';
 
+const weekdayMap: { [key: string]: string } = {
+  monday: '월요일',
+  tuesday: '화요일',
+  wednesday: '수요일',
+  thursday: '목요일',
+  friday: '금요일',
+  saturday: '토요일',
+  sunday: '일요일',
+};
+
+// 요일 ID를 한글 요일명으로 변환하는 함수
+const getKoreanDayNames = (dayIds: string[]) => {
+  return dayIds.map((dayId) => weekdayMap[dayId]);
+};
+
 interface RegularRunningInfoTableProps {
   regularRunningInfo?: RunningInfo[];
   userRole?: 'LEADER' | 'STAFF' | 'MEMBER';
   onEditRunningInfo?: (info: RunningInfo) => void;
   onDeleteRunningInfo?: (id: number) => void;
+  myCrew?: boolean;
 }
 const RegularRunningInfoTable = ({
   regularRunningInfo = [],
   userRole,
   onDeleteRunningInfo,
   onEditRunningInfo,
+  myCrew,
 }: RegularRunningInfoTableProps) => {
   return (
     <div>
@@ -25,7 +42,9 @@ const RegularRunningInfoTable = ({
                 <th>주기</th>
                 <th>요일</th>
                 <th>시간</th>
-                {userRole !== 'MEMBER' && <th className="w-[120px]"></th>}
+                {userRole !== 'MEMBER' && myCrew && (
+                  <th className="w-[120px]"></th>
+                )}
               </tr>
             </thead>
             <tbody>
@@ -35,12 +54,12 @@ const RegularRunningInfoTable = ({
                   <td>
                     {info.week}주에 {info.count}번
                   </td>
-                  <td>{info.dayOfWeek?.join(', ')}</td>
-
+                  <td>{getKoreanDayNames(info.dayOfWeek)?.join(', ')}</td>
                   <td>{info.time || '시간 미정'}</td>
-                  {userRole && (
+                  {userRole !== 'MEMBER' && myCrew && (
                     <td className="flex gap-2 justify-end items-center max-w-[120px] min-w-[60px]">
-                      {onEditRunningInfo && info.id !== undefined && (
+                      {/* {onEditRunningInfo && info.id !== undefined && ( */}
+                      {onEditRunningInfo && (
                         <Button
                           size="sm"
                           onClick={() => onEditRunningInfo(info)}
@@ -48,7 +67,7 @@ const RegularRunningInfoTable = ({
                           수정
                         </Button>
                       )}
-                      {onDeleteRunningInfo && info.id !== undefined && (
+                      {onDeleteRunningInfo && (
                         <Button
                           outline
                           size="sm"

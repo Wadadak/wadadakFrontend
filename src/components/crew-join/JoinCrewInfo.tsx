@@ -40,7 +40,7 @@ const JoinCrewInfo = ({ crewId }: { crewId: number }) => {
     data: runningInfoData,
     isLoading: runningInfoLoading,
     isError: runningInfoError,
-  } = useCrewRunningInfo(crewId);
+  } = useCrewRunningInfo(crewId, 0, 5);
 
   const mutation = useApplyForCrew();
 
@@ -93,7 +93,10 @@ const JoinCrewInfo = ({ crewId }: { crewId: number }) => {
 
   return (
     <Wrapper>
-      <CrewDetailInfo crew={crewData} runningInfo={runningInfoData?.data || []}>
+      <CrewDetailInfo
+        crew={crewData}
+        runningInfo={runningInfoData?.content.data || []}
+      >
         {!crewData?.joined && (
           <Button onClick={handleJoinClick}>가입 신청</Button>
         )}

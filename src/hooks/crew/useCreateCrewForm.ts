@@ -13,7 +13,7 @@ export const useCreateCrewForm = () => {
   const [crewCapacity, setCrewCapacity] = useState<number>();
   const [activityRegion, setActivityRegion] = useState<string>();
   const [crewImage, setCrewImage] = useState<File>();
-  const [runRecordOpen, setRunRecordOpen] = useState<boolean>();
+  const [runRecordOpen, setRunRecordOpen] = useState<boolean>(false);
   const [minYear, setMinYear] = useState<number>();
   const [maxYear, setMaxYear] = useState<number>();
   const [gender, setGender] = useState<string>();
@@ -39,7 +39,7 @@ export const useCreateCrewForm = () => {
       newErrors.activityRegion = '활동 지역을 선택하세요.';
     }
 
-    if (!runRecordOpen) {
+    if (runRecordOpen === null || runRecordOpen === undefined) {
       newErrors.runRecordOpen = '선택하세요.';
     }
 
@@ -63,7 +63,7 @@ export const useCreateCrewForm = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['crewList'] });
       alert('크루가 생성되었습니다!');
-      router.push(`/my-crews`);
+      router.push(`/joined-crews`);
     },
     onError: (error: Error) => {
       console.error('크루 작업 중 오류 발생:', error);

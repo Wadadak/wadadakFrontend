@@ -1,7 +1,6 @@
 import axiosInstance from '@/apis/axiosInstance';
 import { RunningInfo, RunningInfoRequest } from '@/types/crewTypes';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 
 export const createRunningInfo = async (
   crewId: number,
@@ -14,8 +13,10 @@ export const createRunningInfo = async (
   return response.data;
 };
 
-export const useCreateRunningInfo = (crewId: number) => {
-  const router = useRouter();
+export const useCreateRunningInfo = (
+  crewId: number,
+  handleCloseModal: () => void,
+) => {
   const queryClient = useQueryClient();
 
   return useMutation<RunningInfo, Error, RunningInfoRequest>({
@@ -26,7 +27,7 @@ export const useCreateRunningInfo = (crewId: number) => {
       queryClient.invalidateQueries({
         queryKey: ['crewRunningInfo', crewId],
       });
-      router.push(`/my-crews/${crewId}/info`);
+      handleCloseModal();
     },
     onError: (error) => {
       alert(`등록 중 오류가 발생했습니다: ${error.message}`);

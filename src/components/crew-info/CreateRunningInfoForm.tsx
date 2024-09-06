@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import Button from '../common/Button';
 import CheckBox from '../common/CheckBox';
 import Dropdown from '../common/Dropdown';
@@ -8,8 +8,8 @@ import TimePicker from '../common/TimePicker';
 import RegionDropdown from '../common/RegionDropdown';
 import Label from '../common/Label';
 import { RunningInfoRequest } from '@/types/crewTypes';
+import { useParams } from 'next/navigation';
 import { useCreateRunningInfo } from '@/hooks/crew/useCreateRunningInfo';
-import { useParams, useRouter } from 'next/navigation';
 
 // 주기 옵션
 const frequencyOptions = [
@@ -49,11 +49,15 @@ const weekdayOptions = [
   { id: 'sunday', name: '일' },
 ];
 
-const RunningInfoForm = () => {
+interface CreateRunningInfoFormProps {
+  onSuccess: () => void; // 모달을 닫기 위한 콜백
+}
+
+const CreateRunningInfoForm = ({ onSuccess }: CreateRunningInfoFormProps) => {
   const { crewId } = useParams(); // useParams로 crewId 가져오기
   const crewIdNumber = parseInt(crewId as string, 10); // 숫자로 변환
 
-  const { mutate } = useCreateRunningInfo(crewIdNumber);
+  const { mutate } = useCreateRunningInfo(crewIdNumber, onSuccess);
 
   const [activityRegion, setActivityRegion] = useState<string>();
   const [week, setWeek] = useState<number>();
@@ -180,4 +184,4 @@ const RunningInfoForm = () => {
   );
 };
 
-export default RunningInfoForm;
+export default CreateRunningInfoForm;

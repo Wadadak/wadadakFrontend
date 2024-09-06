@@ -64,8 +64,8 @@ const RunningScheduleForm = () => {
     ): Promise<ScheduleResponse> =>
       createRunningSchedule(crewIdNumber, newSchedule),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['scheduleList'] });
       alert('일정이 성공적으로 등록되었습니다!');
+      queryClient.invalidateQueries({ queryKey: ['upcomingRunningSchedules'] });
       router.push(`/my-crews/${crewId}/schedule`);
     },
     onError: (error: Error) => {
@@ -164,12 +164,7 @@ const RunningScheduleForm = () => {
         </Label>
       </div>
       <div className="flex w-full justify-end">
-        <Button
-          wide={true}
-          color="accent"
-          onClick={handleSubmit}
-          type="submit"
-        >
+        <Button wide={true} color="accent" onClick={handleSubmit} type="submit">
           제출하기
         </Button>
       </div>

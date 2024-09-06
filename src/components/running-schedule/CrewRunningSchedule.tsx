@@ -47,12 +47,9 @@ const CrewRunningSchedule = () => {
   const totalPages = schedulesData?.totalPages || 1;
 
   // 일정 생성자, 스탭, 리더만 수정 및 삭제 가능
-  const canManageSchedule = (schedule: UpcomingSchedule) => {
-    if (!userRoleData) return false;
-    return (
-      // schedule.author === currentUser ||
-      role === 'LEADER' || role === 'STAFF'
-    );
+  const canManageSchedule = (schedule: UpcomingSchedule): boolean => {
+    if (!userRoleData || !schedule) return false;
+    return role === 'LEADER' || role === 'STAFF' || schedule.isAuthor === true;
   };
 
   const handleAddSchedule = () => {
@@ -102,7 +99,10 @@ const CrewRunningSchedule = () => {
       </div>
       {schedules?.length > 0 ? (
         <>
-          <ScheduleTable schedules={schedules} />
+          <ScheduleTable
+            schedules={schedules}
+            canManageSchedule={canManageSchedule}
+          />
           <Pagination
             totalPages={totalPages}
             currentPage={currentPage}

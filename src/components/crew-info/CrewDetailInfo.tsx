@@ -1,12 +1,7 @@
 import React, { useState } from 'react';
 import RegularRunningInfoTable from './RegularRunningInfoTable';
 import Button from '../common/Button';
-import {
-  RunningInfo,
-  CrewInfoResponse,
-  UpcomingSchedule,
-} from '@/types/crewTypes';
-import ScheduleTable from '../running-schedule/ScheduleTable';
+import { RunningInfo, CrewInfoResponse } from '@/types/crewTypes';
 import SimpleSchedule from '../running-schedule/SimpleSchedule';
 
 interface CrewDetailInfoProps {
@@ -14,8 +9,9 @@ interface CrewDetailInfoProps {
   runningInfo: RunningInfo[]; // 상위 컴포넌트에서 전달받은 정기 러닝 정보
   userRole?: 'LEADER' | 'STAFF' | 'MEMBER'; // 상위 컴포넌트에서 전달받은 사용자 권한
   children: React.ReactNode;
-  onDeleteRunningInfo?: (id: number) => void; // 삭제 핸들러 함수
-  onEditRunningInfo?: (info?: RunningInfo) => void; // 추가 및 수정 핸들러 함수
+  onCreateRunningInfo?: () => void; // 정기 러닝 생성 핸들러
+  onDeleteRunningInfo?: (id: number) => void; // 정기 러닝 삭제 핸들러
+  onEditRunningInfo?: (info?: RunningInfo) => void; // 정기 러닝 수정 핸들러
   myCrew?: boolean;
 }
 
@@ -24,6 +20,7 @@ const CrewDetailInfo = ({
   runningInfo,
   userRole,
   children,
+  onCreateRunningInfo,
   onDeleteRunningInfo,
   onEditRunningInfo,
   myCrew = false,
@@ -115,34 +112,33 @@ const CrewDetailInfo = ({
             )}
             {/* NOTE 가입 승인 */}
             {/* {crew.approvalRequired && <p className="text-lg">가입 승인 필요</p>} */}
+            <p className="text-lg ">리더 : {crew.leader}</p>
           </div>
           <div className="flex flex-col items-start gap-4 lg:gap-2">
-            <p className="card-title">크루 소개</p>
+            <p className="card-title font-bold">크루 소개</p>
             <p className="leading-loose text-justify">{crew.description}</p>
           </div>
         </div>
       </div>
-      <div className="mb-8">
+      <div className="divider divider-primary py-5" />
+      <div className="mb-12">
         <div className="flex justify-between items-center pb-2">
           <p className="card-title">정기 러닝 정보</p>
           {myCrew && canManage && (
-            <Button
-              onClick={() => onEditRunningInfo?.()}
-              size="sm"
-              color="accent"
-            >
+            <Button onClick={onCreateRunningInfo} size="sm" color="accent">
               정기 러닝 정보 추가
             </Button>
           )}
         </div>
+
         <RegularRunningInfoTable
           regularRunningInfo={runningInfo}
           userRole={userRole}
           onEditRunningInfo={canManage ? onEditRunningInfo : undefined}
           onDeleteRunningInfo={canManage ? onDeleteRunningInfo : undefined}
+          myCrew={myCrew}
         />
       </div>
-
       <div className="mb-4">
         <SimpleSchedule />
       </div>

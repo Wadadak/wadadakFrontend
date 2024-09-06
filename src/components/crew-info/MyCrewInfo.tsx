@@ -6,13 +6,13 @@ import Button from '../common/Button';
 import SimpleModal from '../common/SimpleModal';
 import { useParams, useRouter } from 'next/navigation';
 import useModal from '@/hooks/useModal';
-import RunningInfoForm from './RunningInfoForm';
+import CreateRunningInfoForm from './CreateRunningInfoForm';
 import { useUserRoles } from '@/hooks/crew/useUserRoles';
-import { RunningInfo } from '@/types/crewTypes';
 import { useCrewInfo } from '@/hooks/crew/useCrewInfo';
 import { useCrewRunningInfo } from '@/hooks/crew/useCrewRunningInfo';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
+import { RunningInfo } from '@/types/crewTypes';
 
 const MyCrewInfo = () => {
   const { crewId } = useParams(); // useParams로 crewId 가져오기
@@ -23,9 +23,10 @@ const MyCrewInfo = () => {
   const deleteModal = useModal();
   const runningInfoEditModal = useModal();
   const runningInfoDeleteModal = useModal();
+  const runningInfoCreateModal = useModal();
 
   // 상태 관리
-  const [selectedInfo, setSelectedInfo] = useState<RunningInfo>();
+  const [selectedInfo, setSelectedInfo] = useState<RunningInfo | undefined>();
 
   // 권한 조회
   const { data: userRoleData } = useUserRoles(crewIdNumber);
@@ -43,7 +44,7 @@ const MyCrewInfo = () => {
     data: runningInfoData,
     isLoading: runningInfoLoading,
     isError: runningInfoError,
-  } = useCrewRunningInfo(crewIdNumber);
+  } = useCrewRunningInfo(crewIdNumber, 0, 5);
 
   if (crewLoading || runningInfoLoading) {
     return <LoadingSpinner />;
@@ -60,41 +61,45 @@ const MyCrewInfo = () => {
     router.push('/');
   };
 
-  const handleSaveRunningInfo = (info: RunningInfo) => {
-    // TODO 추가/수정 API 연동
-    console.log('저장된 정보:', info);
-    runningInfoEditModal.handleCloseModal();
-  };
-
   const openEditRunningInfoModal = (info: RunningInfo) => {
     setSelectedInfo(info);
     runningInfoEditModal.handleOpenModal();
   };
 
   const openDeleteRunningInfoModal = (info: RunningInfo) => {
-    if (info && info.id !== undefined) {
+    if (info?.id) {
       setSelectedInfo(info);
       runningInfoDeleteModal.handleOpenModal();
     }
   };
 
-  const handleDeleteRunningInfoById = (id: number | undefined) => {
-    if (id !== undefined) {
-      const info = crew.regularRunningInfo?.find((info) => info.id === id);
-      if (info) {
-        openDeleteRunningInfoModal(info);
-      }
-    }
+  const handleSaveRunningInfo = () => {
+    // refetchRunningInfo();
+    runningInfoCreateModal.handleCloseModal();
   };
 
-  // 모달에서 삭제하는 함수
-  const handleDeleteRunningInfo = () => {
-    if (selectedInfo && selectedInfo.id !== undefined) {
-      // TODO 삭제 API 연동
-      console.log(`${selectedInfo.id}번 정기 러닝 정보를 삭제합니다.`);
-      runningInfoDeleteModal.handleCloseModal();
-    }
+  const handleCreateRunningInfo = () => {
+    runningInfoCreateModal.handleOpenModal();
   };
+
+  // // FIXME
+  // const handleDeleteRunningInfoById = (id: number | undefined) => {
+  //   if (id !== undefined) {
+  //     const info = runningInfoData?.data.data.find((info) => info.id === id);
+  //     if (info) {
+  //       openDeleteRunningInfoModal(info);
+  //     }
+  //   }
+  // };
+
+  // // 모달에서 삭제하는 함수
+  // const handleDeleteRunningInfo = () => {
+  //   if (selectedInfo && selectedInfo.id) {
+  //     // TODO 삭제 API 연동
+  //     console.log(`${selectedInfo.id}번 정기 러닝 정보를 삭제합니다.`);
+  //     runningInfoDeleteModal.handleCloseModal();
+  //   }
+  // };
 
   return (
     <>
@@ -102,14 +107,17 @@ const MyCrewInfo = () => {
         crew={crewData}
         myCrew={true}
         userRole={userRole}
-        runningInfo={runningInfoData?.data || []}
+        runningInfo={runningInfoData?.content.data || []}
+        onCreateRunningInfo={handleCreateRunningInfo}
         onEditRunningInfo={openEditRunningInfoModal}
         onDeleteRunningInfo={(id: number) =>
-          openDeleteRunningInfoModal(runningInfoData?.crewId)
+          console.log(`${id}번 정기 러닝 삭제`)
         }
       >
         {(userRole === 'LEADER' || userRole === 'STAFF') && (
-          <Button>수정하기</Button>
+          <>
+            <Button>수정하기</Button>
+          </>
         )}
         <Button outline onClick={deleteModal.handleOpenModal}>
           탈퇴하기
@@ -143,21 +151,28 @@ const MyCrewInfo = () => {
         </SimpleModal>
       )}
 
-      {/* 정기 러닝 정보 추가 or 수정 모달 */}
-      {runningInfoEditModal.isModalOpen && (
+      {/* 정기 러닝 정보 추가 모달 */}
+      {runningInfoCreateModal.isModalOpen && (
+        <SimpleModal
+          isOpen={runningInfoCreateModal.isModalOpen}
+          onClose={runningInfoCreateModal.handleCloseModal}
+          title="정기 러닝 정보 추가"
+        >
+          <CreateRunningInfoForm onSuccess={handleSaveRunningInfo} />
+        </SimpleModal>
+      )}
+
+      {/* {runningInfoEditModal.isModalOpen && (
         <SimpleModal
           isOpen={runningInfoEditModal.isModalOpen}
           onClose={runningInfoEditModal.handleCloseModal}
           title={selectedInfo ? '정기 러닝 정보 수정' : '정기 러닝 정보 추가'}
         >
-          <RunningInfoForm
-            initialInfo={selectedInfo}
-            onSave={handleSaveRunningInfo}
-          />
+          <CreateRunningInfoForm onSuccess={handleSaveRunningInfo} />
         </SimpleModal>
-      )}
+      )}  */}
 
-      {/* 정기 러닝 정보 삭제 확인 모달 */}
+      {/* 정기 러닝 정보 삭제 확인 모달
       {runningInfoDeleteModal.isModalOpen && (
         <SimpleModal
           isOpen={runningInfoDeleteModal.isModalOpen}
@@ -182,7 +197,7 @@ const MyCrewInfo = () => {
             </Button>
           </div>
         </SimpleModal>
-      )}
+      )} */}
     </>
   );
 };

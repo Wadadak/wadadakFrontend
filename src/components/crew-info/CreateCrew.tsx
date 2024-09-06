@@ -49,7 +49,7 @@ const CreateCrew = () => {
             placeholder="크루명을 입력하세요"
             required
             maxLength={30}
-            error={errors.name}
+            error={errors.crewName}
           />
         </Label>
         <Label label="크루 소개" required>
@@ -68,7 +68,7 @@ const CreateCrew = () => {
             selectedRegion={activityRegion}
             required
             onRegionChange={(value) => setActivityRegion(value as string)}
-            errorMessage={errors.location}
+            errorMessage={errors.activityRegion}
           />
         </Label>
         <Label label="가입 신청자의 러닝 프로필 공개 여부" required>
@@ -78,7 +78,8 @@ const CreateCrew = () => {
               { id: 'false', name: '선택' },
             ]}
             selectedValues={runRecordOpen ? ['true'] : ['false']}
-            onChange={(values) => setRunRecordOpen(values?.includes('true'))}
+            onChange={(values) => setRunRecordOpen(values!.includes('true'))}
+            error={errors.runRecordOpen}
           />
         </Label>
         {/* // FIXME */}
@@ -122,6 +123,7 @@ const CreateCrew = () => {
             minAge={minYear}
             onMaxAgeChange={(age) => setMaxYear(age)}
             onMinAgeChange={(age) => setMinYear(age)}
+            errorMessage={errors.yearRange}
           />
         </Label>
         <Label label="대표 이미지">
