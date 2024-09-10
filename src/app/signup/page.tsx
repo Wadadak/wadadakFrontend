@@ -14,7 +14,7 @@ import { useSignup } from '@/hooks/user/useSignup';
 import { useRegions } from '@/hooks/useRegions';
 import { loginState } from '@/recoil/atoms/userState';
 import { genderType, SignupRequest } from '@/types/userTypes';
-import { validateEmail, validatePassword } from '@/utilities';
+import { validateEmail, validatePassword } from '@/utils/utilities';
 import { useRouter } from 'next/navigation';
 import React, { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
@@ -274,7 +274,6 @@ const Title = ({ title, htmlFor, required }: TitleProps) => {
     </label>
   );
 };
-
 
 // {
 //   "id": 20,

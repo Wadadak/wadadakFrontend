@@ -8,7 +8,7 @@ import {
   ChangePasswordRequest,
 } from '@/types/userTypes';
 import axios from 'axios';
-import { appendFormData } from '@/utilities';
+import { appendFormData } from '@/utils/utilities';
 import { extractUserIdFromToken } from '@/app/login/page';
 import { get } from 'http';
 import { getAccessToken } from '@/apis/authService';

@@ -4,7 +4,7 @@ import axiosInstance from '@/apis/axiosInstance';
 import { useMutation } from '@tanstack/react-query';
 import { EditProfileResponse, EditProfileRequest } from '@/types/userTypes';
 import axios from 'axios';
-import { appendFormData } from '@/utilities';
+import { appendFormData } from '@/utils/utilities';
 import { extractUserIdFromToken } from '@/app/login/page';
 import { get } from 'http';
 import { getAccessToken } from '@/apis/authService';

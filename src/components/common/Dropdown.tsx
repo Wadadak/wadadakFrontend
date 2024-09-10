@@ -21,13 +21,13 @@ const Dropdown = ({
   onChange,
   placeholder = '',
   required = false,
-  selectedValue,
+  selectedValue = '',
   width = 'xs',
   disabled = true,
   errorMessage,
 }: DropdownProps) => {
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    onChange(e.target.value);
+    onChange(e.target.value || undefined);
   };
   const widthClass = `max-w-${width}`;
 

@@ -12,8 +12,15 @@ import RegionDropdown from '../common/RegionDropdown';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
 import { useUpdateCrewForm } from '@/hooks/crew/useUpdateCrewForm';
+import { getCrewIdFromParams } from '@/utils/getCrewIdFromParams';
 
-const CreateCrew = () => {
+const UpdateCrew = () => {
+  const crewId = getCrewIdFromParams();
+
+  if (crewId === null) {
+    return <ErrorComponent message="유효하지 않은 크루 ID입니다." />; // 유효하지 않은 경우 처리
+  }
+
   const {
     crewName,
     setCrewName,
@@ -37,40 +44,12 @@ const CreateCrew = () => {
     setGender,
     handleSubmit,
     errors,
-    isRoleLoading,
-    isInfoLoading,
-    isRoleError,
-    isInfoError,
-    roleError,
-    infoError,
-  } = useUpdateCrewForm();
-
-  if (isRoleLoading || isInfoLoading) {
-    return <LoadingSpinner />;
-  }
-
-  if (isRoleError) {
-    return (
-      <ErrorComponent
-        message={roleError?.message || '권한을 확인하지 못했습니다.'}
-      />
-    );
-  }
-
-  if (isInfoError) {
-    return (
-      <ErrorComponent
-        message={infoError?.message || '크루 정보를 불러오는 데 실패했습니다.'}
-      />
-    );
-  }
+  } = useUpdateCrewForm(crewId);
 
   return (
     <>
       <div className="pb-5">
-        <Label label="크루명" required>
-          <div className="text-2xl font-bold">{crewName}</div>
-        </Label>
+        <div className="text-4xl font-bold text-center mb-6">{crewName}</div>
         <Label label="크루 소개" required>
           <TextInput
             value={description}
@@ -97,20 +76,19 @@ const CreateCrew = () => {
               { id: 'false', name: '선택' },
             ]}
             selectedValues={runRecordOpen ? ['true'] : ['false']}
-            onChange={(values) => setRunRecordOpen(values.includes('true'))}
+            onChange={(values) => setRunRecordOpen(values!.includes('true'))}
           />
         </Label>
-        // FIXME
-        {/* <Label label="가입 승인 여부" required>
+        <Label label="가입 승인 여부" required>
           <CheckBox
             options={[
               { id: 'true', name: '승인 필요' },
               { id: 'false', name: '자동 가입' },
             ]}
             selectedValues={leaderRequired ? ['true'] : ['false']}
-            onChange={(values) => setLeaderRequired(values.includes('true'))}
+            onChange={(values) => setLeaderRequired(values!.includes('true'))}
           />
-        </Label> */}
+        </Label>
         <Label label="크루 정원">
           <NumberInput
             value={crewCapacity}
@@ -121,11 +99,18 @@ const CreateCrew = () => {
         <Label label="성별 제한">
           <CheckBox
             options={[
-              { id: 'male', name: '남성' },
-              { id: 'female', name: '여성' },
+              { id: 'MALE', name: '남성' },
+              { id: 'FEMALE', name: '여성' },
             ]}
-            selectedValues={[gender || '']}
-            onChange={(values) => setGender(values[0])}
+            selectedValues={gender ? [gender] : undefined}
+            onChange={(values) => {
+              if (values && values.length > 0) {
+                const selectedGender = values[0] as 'MALE' | 'FEMALE';
+                setGender(selectedGender);
+              } else {
+                setGender(undefined);
+              }
+            }}
           />
         </Label>
         <Label label="연령대 제한">
@@ -149,4 +134,4 @@ const CreateCrew = () => {
   );
 };
 
-export default CreateCrew;
+export default UpdateCrew;

@@ -23,7 +23,7 @@ import {
   EditProfileRequest,
   genderType,
 } from '@/types/userTypes';
-import { genderList, validatePassword } from '@/utilities';
+import { genderList, validatePassword } from '@/utils/utilities';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 

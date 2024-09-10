@@ -82,17 +82,16 @@ const CreateCrew = () => {
             error={errors.runRecordOpen}
           />
         </Label>
-        {/* // FIXME */}
-        {/* <Label label="가입 승인 여부" required>
+        <Label label="가입 승인 여부" required>
           <CheckBox
             options={[
               { id: 'true', name: '승인 필요' },
               { id: 'false', name: '자동 가입' },
             ]}
             selectedValues={leaderRequired ? ['true'] : ['false']}
-            onChange={(values) => setLeaderRequired(values.includes('true'))}
+            onChange={(values) => setLeaderRequired(values!.includes('true'))}
           />
-        </Label> */}
+        </Label>
         <Label label="크루 정원">
           <NumberInput
             value={crewCapacity}

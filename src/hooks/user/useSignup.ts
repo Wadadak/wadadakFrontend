@@ -4,7 +4,7 @@ import axiosInstance from '@/apis/axiosInstance';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { SignupRequest, SignupResponse } from '@/types/userTypes';
 import axios from 'axios';
-import { appendFormData } from '@/utilities';
+import { appendFormData } from '@/utils/utilities';
 
 // 사용자 회원 가입 API 호출
 export const signup = async (body: SignupRequest): Promise<SignupResponse> => {

@@ -1,7 +1,8 @@
 import React from 'react';
+import UpdateCrew from '@/components/crew-info/UpdateCrew';
 
 const CrewInfoEditPage = () => {
-  return <div>CrewInfoEditPage</div>;
+  return <UpdateCrew />;
 };
 
 export default CrewInfoEditPage;

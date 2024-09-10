@@ -18,7 +18,7 @@ import { useRegions } from '@/hooks/useRegions';
 import { mockActivityRegions } from '@/mocks/mockData/mockActivityRegions';
 import { mockMyInfo } from '@/mocks/mockData/mockMyInfo';
 import { EditProfileRequest, genderType } from '@/types/userTypes';
-import { genderList } from '@/utilities';
+import { genderList } from '@/utils/utilities';
 import { useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 

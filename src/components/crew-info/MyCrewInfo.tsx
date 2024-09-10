@@ -54,6 +54,10 @@ const MyCrewInfo = () => {
     return <ErrorComponent message="크루 정보를 불러오는데 실패했습니다." />;
   }
 
+  const handleClickUpdateButton = () => {
+    router.push(`/my-crews/${crewId}/info/update`);
+  };
+
   const handleLeaveCrew = () => {
     // TODO 크루 탈퇴 API 연동
     alert('크루에서 탈퇴하셨습니다.');
@@ -116,7 +120,7 @@ const MyCrewInfo = () => {
       >
         {(userRole === 'LEADER' || userRole === 'STAFF') && (
           <>
-            <Button>수정하기</Button>
+            <Button onClick={handleClickUpdateButton}>수정하기</Button>
           </>
         )}
         <Button outline onClick={deleteModal.handleOpenModal}>

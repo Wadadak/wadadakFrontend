@@ -1,38 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useParams } from 'next/navigation';
-import { useUserRoles } from './useUserRoles';
-import { useCrewInfo } from './useCrewInfo';
 import { CrewResponse, UpdateCrewData } from '@/types/crewTypes';
 import { updateCrew } from '@/apis/crew/crewApi';
+import { fetchCrewInfo } from './useCrewInfo';
 import { useRouter } from 'next/navigation';
+import { useRegions } from '../useRegions';
+import { se } from 'date-fns/locale/se';
 
-export const useUpdateCrewForm = () => {
-  const crewId = Number(useParams().crewId);
+export const useUpdateCrewForm = (crewId: number) => {
+  const { data: regions } = useRegions();
   const router = useRouter();
   const queryClient = useQueryClient();
-
-  // 권한 확인
-  const {
-    data: userRole,
-    isLoading: isRoleLoading,
-    isError: isRoleError,
-    error: roleError,
-  } = useUserRoles(crewId);
-
-  // 크루 정보 조회
-  const {
-    data: crewInfo,
-    isLoading: isInfoLoading,
-    isError: isInfoError,
-    error: infoError,
-  } = useCrewInfo(crewId);
-
-  const [crewName, setCrewName] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
+  const [crewName, setCrewName] = useState<string>();
+  const [description, setDescription] = useState<string>();
   const [crewCapacity, setCrewCapacity] = useState<number>();
-  const [activityRegion, setActivityRegion] = useState<string>('');
-  const [crewImage, setCrewImage] = useState<File | string>(); // URL 또는 파일 형식
+  const [activityRegion, setActivityRegion] = useState<string>();
+  const [crewImage, setCrewImage] = useState<string | File>();
   const [runRecordOpen, setRunRecordOpen] = useState<boolean>(false);
   const [minYear, setMinYear] = useState<number>();
   const [maxYear, setMaxYear] = useState<number>();
@@ -40,34 +23,39 @@ export const useUpdateCrewForm = () => {
   const [leaderRequired, setLeaderRequired] = useState<boolean>(false);
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-  // NOTE 권한 확인
-  useEffect(() => {
-    if (
-      !isRoleLoading &&
-      userRole &&
-      !['LEADER', 'STAFF'].includes(userRole.role)
-    ) {
-      alert('수정 권한이 없습니다');
-      router.push('/my-crews');
-    }
-  }, [userRole, isRoleLoading, router]);
+  // // NOTE 권한 확인
+  // useEffect(() => {
+  //   if (
+  //     !isRoleLoading &&
+  //     userRole &&
+  //     !['LEADER', 'STAFF'].includes(userRole.role)
+  //   ) {
+  //     alert('수정 권한이 없습니다');
+  //     router.push('/my-crews');
+  //   }
+  // }, [userRole, isRoleLoading, router]);
 
   // useEffect로 초기값 설정
   useEffect(() => {
-    if (crewInfo) {
-      setCrewName(crewInfo.crewName); // 크루 이름 설정 (읽기 전용)
-      setDescription(crewInfo.description);
-      setCrewCapacity(crewInfo.crewCapacity);
-      setActivityRegion(crewInfo.activityRegion);
-      setRunRecordOpen(crewInfo.limit.runRecordOpen);
-      // FIXME 일단 false로 고정
-      setLeaderRequired(false);
-      setMinYear(crewInfo.limit.minYear);
-      setMaxYear(crewInfo.limit.maxYear);
-      setGender(crewInfo.limit.gender);
-      setCrewImage(crewInfo.crewImage);
-    }
-  }, [crewInfo]);
+    const loadCrewData = async () => {
+      try {
+        const crewInfo = await fetchCrewInfo(crewId);
+        setCrewName(crewInfo.crewName); // 크루 이름 설정 (읽기 전용)
+        setDescription(crewInfo.description);
+        setCrewCapacity(crewInfo.crewCapacity);
+        setActivityRegion(crewInfo.activityRegion);
+        setRunRecordOpen(crewInfo.limit.runRecordOpen);
+        setLeaderRequired(crewInfo.limit.leaderRequired);
+        setMinYear(crewInfo.limit.minYear);
+        setMaxYear(crewInfo.limit.maxYear);
+        setGender(crewInfo.limit.gender);
+        setCrewImage(crewInfo.crewImage);
+      } catch (error) {
+        console.error('크루 데이터를 불러오는 중 오류 발생:', error);
+      }
+    };
+    loadCrewData();
+  }, [crewId]);
 
   const validateForm = () => {
     const newErrors: { [key: string]: string } = {};
@@ -82,12 +70,12 @@ export const useUpdateCrewForm = () => {
       newErrors.activityRegion = '활동 지역을 선택하세요.';
     }
 
-    if (!runRecordOpen) {
+    if (runRecordOpen === null || runRecordOpen === undefined) {
       newErrors.runRecordOpen = '선택하세요.';
     }
 
     // FIXME 일단은 고정
-    if (!leaderRequired) {
+    if (runRecordOpen === null || runRecordOpen === undefined) {
       newErrors.leaderRequired = '선택하세요.';
     }
 
@@ -122,9 +110,19 @@ export const useUpdateCrewForm = () => {
     e.preventDefault();
 
     if (validateForm()) {
+      // // 기존 선택된 activityRegion의 name을 id로 변환
+      // let regionId = activityRegion;
+
+      // const selectedRegion = regions?.find(
+      //   (region) => region.name === activityRegion,
+      // );
+      // if (selectedRegion) {
+      //   regionId = selectedRegion.id;
+      // }
+
       const crewData: UpdateCrewData = {
-        description,
-        activityRegion,
+        description: description!,
+        activityRegion: activityRegion!,
         runRecordOpen,
         leaderRequired,
         crewCapacity,
@@ -171,11 +169,5 @@ export const useUpdateCrewForm = () => {
     setGender,
     handleSubmit, // 폼 제출 핸들러
     errors, // 유효성 검사 오류
-    isRoleError,
-    isRoleLoading,
-    roleError,
-    isInfoError,
-    isInfoLoading,
-    infoError,
   };
 };
