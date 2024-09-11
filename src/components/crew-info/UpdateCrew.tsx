@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import TextInput from '@/components/common/TextInput';
 import NumberInput from '@/components/common/NumberInput';
 import Label from '@/components/common/Label';
@@ -8,22 +8,25 @@ import CheckBox from '@/components/common/CheckBox';
 import Button from '@/components/common/Button';
 import MinMaxYearSelector from '@/components/crew/MinMaxYearSelector';
 import ImageUpload from '../common/ImageUpload';
-import RegionDropdown from '../common/RegionDropdown';
 import LoadingSpinner from '../common/LoadingSpinner';
 import ErrorComponent from '../common/ErrorComponent';
 import { useUpdateCrewForm } from '@/hooks/crew/useUpdateCrewForm';
 import { getCrewIdFromParams } from '@/utils/getCrewIdFromParams';
+import { useCrewInfo } from '@/hooks/crew/useCrewInfo';
+import RegionDropdown from '../common/RegionDropdown';
 
 const UpdateCrew = () => {
+  // 크루 ID 가져오기
   const crewId = getCrewIdFromParams();
 
   if (crewId === null) {
-    return <ErrorComponent message="유효하지 않은 크루 ID입니다." />; // 유효하지 않은 경우 처리
+    return <ErrorComponent message="유효하지 않은 크루 ID입니다." />;
   }
+  const { data: crewInfo, isLoading: isCrewInfoLoading } = useCrewInfo(crewId);
 
+  // 크루 업데이트 폼 훅
   const {
     crewName,
-    setCrewName,
     description,
     setDescription,
     activityRegion,
@@ -35,7 +38,7 @@ const UpdateCrew = () => {
     crewCapacity,
     setCrewCapacity,
     crewImage,
-    handleImageUpload,
+    setCrewImage,
     minYear,
     setMinYear,
     maxYear,
@@ -43,8 +46,11 @@ const UpdateCrew = () => {
     gender,
     setGender,
     handleSubmit,
+    handleImageUpload,
     errors,
-  } = useUpdateCrewForm(crewId);
+  } = useUpdateCrewForm(crewId, crewInfo);
+
+  if (isCrewInfoLoading) return <LoadingSpinner />;
 
   return (
     <>
@@ -66,7 +72,6 @@ const UpdateCrew = () => {
             selectedRegion={activityRegion}
             required
             onRegionChange={(value) => setActivityRegion(value as string)}
-            errorMessage={errors.location}
           />
         </Label>
         <Label label="가입 신청자의 러닝 프로필 공개 여부" required>
@@ -122,7 +127,10 @@ const UpdateCrew = () => {
           />
         </Label>
         <Label label="대표 이미지">
-          <ImageUpload onImageChange={handleImageUpload} />
+          <ImageUpload
+            onImageChange={handleImageUpload}
+            imgUrl={typeof crewImage === 'string' ? crewImage : undefined}
+          />
         </Label>
       </div>
       <div className="flex w-full justify-end">

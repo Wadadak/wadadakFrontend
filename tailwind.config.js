@@ -8,7 +8,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#BEE5FA',
+        // primary: '#e9ff70',
+        primary: 'black',
       },
     },
   },
@@ -17,9 +18,11 @@ module.exports = {
     themes: [
       {
         mytheme: {
-          primary: '#BEE5FA', // 와다닥 메인 컬러
+          // primary: '#BEE5FA', // 와다닥 메인 컬러
+          primary: '#e9ff70', // 와다닥 메인 컬러
           secondary: '#aac7e7', // 보조 컬러
-          accent: '#9fa8d0', // 강조 색상
+          // accent: '#9fa8d0', // 강조 색상
+          accent: '#e9ff70', // 강조 색상
           neutral: '#2a2e37', // 중립 색상
           charcoal: '#333333', // 메인컬러와 어울리는 회색
 

@@ -8,8 +8,7 @@ interface AvatarProps {
   onAvatarClick?: () => void; // 아바타를 클릭했을 때의 이벤트를 받기 위해 props 추가
 }
 
-const defaultAvatar =
-  'https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp'; // 디폴트 이미지 URL
+const defaultAvatar = '/images/default.png'; // 디폴트 이미지 URL
 
 const Avatar = ({
   src,

@@ -37,7 +37,7 @@ const RegionDropdown = ({
     <Dropdown
       options={regions || []}
       onChange={onRegionChange}
-      selectedValue={selectedRegion}
+      selectedValue={selectedRegion ?? ''}
       placeholder={placeholder}
       required={required}
       disabled={disabled}

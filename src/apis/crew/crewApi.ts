@@ -6,24 +6,25 @@ import {
   UpdateCrewData,
   CrewResponse,
 } from '@/types/crewTypes';
+import { appendFormData } from '@/utils/utilities';
 
-// FormData에 속성을 추가하는 유틸리티 함수
-const appendFormData = (
-  formData: FormData,
-  key: string,
-  value: string | Blob | number | boolean | undefined,
-) => {
-  if (value !== undefined && value !== null) {
-    if (typeof value === 'boolean') {
-      formData.append(key, value ? 'true' : 'false'); // 불리언 값을 문자열로 변환
-    } else if (typeof value === 'object' && value instanceof Blob) {
-      // 파일(Blob이나 File 객체)은 그대로 추가
-      formData.append(key, value);
-    } else {
-      formData.append(key, value.toString());
-    }
-  }
-};
+// // FormData에 속성을 추가하는 유틸리티 함수
+// const appendFormData = (
+//   formData: FormData,
+//   key: string,
+//   value: string | Blob | number | boolean | undefined,
+// ) => {
+//   if (value !== undefined && value !== null) {
+//     if (typeof value === 'boolean') {
+//       formData.append(key, value ? 'true' : 'false'); // 불리언 값을 문자열로 변환
+//     } else if (typeof value === 'object' && value instanceof Blob) {
+//       // 파일(Blob이나 File 객체)은 그대로 추가
+//       formData.append(key, value);
+//     } else {
+//       formData.append(key, value.toString());
+//     }
+//   }
+// };
 
 // 크루 생성
 export const createCrew = async (
@@ -65,10 +66,14 @@ export const updateCrew = async (
   appendFormData(formData, 'runRecordOpen', newCrewData.runRecordOpen);
   appendFormData(formData, 'leaderRequired', newCrewData.leaderRequired);
   appendFormData(formData, 'crewCapacity', newCrewData.crewCapacity);
-  appendFormData(formData, 'crewImage', newCrewData.crewImage);
   appendFormData(formData, 'minYear', newCrewData.minYear);
   appendFormData(formData, 'maxYear', newCrewData.maxYear);
   appendFormData(formData, 'gender', newCrewData.gender);
+
+  // 이미지가 파일일 경우에만 추가
+  if (newCrewData.crewImage instanceof File) {
+    appendFormData(formData, 'crewImage', newCrewData.crewImage);
+  }
 
   const response = await axiosInstance.put<CrewResponse>(
     `/crew/${crewId}`,

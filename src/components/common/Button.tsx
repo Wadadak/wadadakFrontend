@@ -22,7 +22,7 @@ interface ButtonProps {
 const Button = ({
   outline = false,
   color = 'primary',
-  textColor = 'white',
+  textColor = 'black',
   size = 'md',
   wide = false,
   disabled = false,
